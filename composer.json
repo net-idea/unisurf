@@ -29,7 +29,7 @@
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
-    "phpunit/phpunit": "10.5.x-dev",
+    "phpunit/phpunit": "11.0.4",
     "friendsofphp/php-cs-fixer": "dev-master",
     "phpstan/phpstan": "2.0.x-dev"
   },
