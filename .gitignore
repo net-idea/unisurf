@@ -1,0 +1,21 @@
+# System files
+Icon
+.DS_Store
+
+## PHPStorm
+/.idea
+
+## VisualStudioCode
+/.vscode
+*.code-workspace
+
+## Composer
+composer.phar
+/vendor/*
+!/vendor/.htaccess
+!/vendor/index.html
+
+## Yarn
+/node_modules/*
+!/node_modules/.htaccess
+!/node_modules/index.html

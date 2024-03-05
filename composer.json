@@ -1,0 +1,59 @@
+{
+  "name": "unisurf/website",
+  "description": "UniSurf Website",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Adam Ibrom",
+      "email": "adam@net-i.de"
+    }
+  ],
+  "homepage": "https://unisurf.de/",
+  "require": {
+    "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
+    "ext-SimpleXML": "*",
+    "ext-ctype": "*",
+    "ext-curl": "*",
+    "ext-dom": "*",
+    "ext-filter": "*",
+    "ext-hash": "*",
+    "ext-iconv": "*",
+    "ext-json": "*",
+    "ext-libxml": "*",
+    "ext-mbstring": "*",
+    "ext-openssl": "*",
+    "composer/semver": "^3.4",
+    "psr/log": "^3.0",
+    "monolog/monolog": "^3.5",
+    "erusev/parsedown": "^1.7"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master",
+    "phpunit/phpunit": "10.5.x-dev",
+    "friendsofphp/php-cs-fixer": "dev-master",
+    "phpstan/phpstan": "2.0.x-dev"
+  },
+  "replace": {
+    "symfony/polyfill-php72": "*"
+  },
+  "suggest": {
+    "ext-PDO": "Support for using databases",
+    "ext-apcu": "Support for the Apcu cache driver",
+    "ext-exif": "Support for exif information from images",
+    "ext-fileinfo": "Improved mime type detection for files",
+    "ext-intl": "Improved i18n number formatting",
+    "ext-memcached": "Support for the Memcached cache driver",
+    "ext-sodium": "Support for the crypto class and more robust session handling",
+    "ext-zip": "Support for ZIP archive file functions",
+    "ext-zlib": "Sanitization and validation for svgz files"
+  },
+  "autoload": {
+    "psr-4": {
+      "Unisurf\\Website\\": "src/"
+    },
+    "files": [
+      "src/helpers.php"
+    ]
+  }
+}
