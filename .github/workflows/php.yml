@@ -1,0 +1,29 @@
+name: Basic checks
+
+on: [ push ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate composer.json and composer.lock
+        working-directory: ./
+        run: composer validate
+
+      - name: Install dependencies
+        working-directory: ./
+        run: composer --no-progress --optimize-autoloader --classmap-authoritative --prefer-dist --ignore-platform-reqs --verbose install
+
+      - name: Run PHP coding standards fixer
+        working-directory: ./
+        run: php ./vendor/bin/php-cs-fixer check -n
+
+      - name: Run PHPStan static analysis
+        working-directory: ./
+        run: php ./vendor/bin/phpstan analyze src tests
+
+      - name: Run PHPUnit tests
+        working-directory: ./
+        run: php ./vendor/bin/phpunit tests
