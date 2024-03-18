@@ -5,7 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "bootstrap": "^5.3.3",
-    "sass": "^1.71.1"
+    "sass": "^1.72.0"
   },
   "scripts": {
     "build": "sass frontend/styles/main.scss assets/css/main.css",
