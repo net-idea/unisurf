@@ -1,6 +1,6 @@
 # Services
 
-Als umfassende Internet-Agentur bieten wir eine Vielzahl von Dienstleistungen an, um die digitale Präsenz von Unternehmen zu stärken und deren Online-Ziele zu erreichen. Hier sind einige Kernservices, die wir als Full-Service Agentur anbieten:
+Als umfassende Internet-Agentur bieten wir eine Vielzahl von Dienstleistungen an, um die digitale Präsenz von Unternehmen zu stärken und deren Online-Ziele zu erreichen. Hier sind einige Kernservices, die wir als Full-Service-Agentur anbieten:
 
 ## Web-Entwicklung
 
@@ -11,10 +11,10 @@ Als umfassende Internet-Agentur bieten wir eine Vielzahl von Dienstleistungen an
 
 ## Web-Hosting
 
-**Infrastruktur-Konzeption:** Planung und Konzeptionierung von Hosting-Infrastrukturen basierend auf Kundenanforderungen.
-**Namhafte Partner und Technologien:** Zusammenarbeit mit vertrauenswürdigen Hosting-Partnern und Einsatz bewährter Technologien.
-**Cloud-basiertes Hosting:** Einrichtung und Betrieb von Hosting-Lösungen in der Cloud für Flexibilität und Skalierbarkeit.
-**Support und Betreuung:** Kundenzentrierter Support und laufende Betreuung für sicheren und zuverlässigen Hosting-Betrieb.
+* **Infrastruktur-Konzeption:** Planung und Konzeptionierung von Hosting-Infrastrukturen basierend auf Kundenanforderungen.
+* **Namhafte Partner und Technologien:** Zusammenarbeit mit vertrauenswürdigen Hosting-Partnern und Einsatz bewährter Technologien.
+* **Cloud-basiertes Hosting:** Einrichtung und Betrieb von Hosting-Lösungen in der Cloud für Flexibilität und Skalierbarkeit.
+* **Support und Betreuung:** Kundenzentrierter Support und laufende Betreuung für sicheren und zuverlässigen Hosting-Betrieb.
 
 ## Digitales Marketing
 
