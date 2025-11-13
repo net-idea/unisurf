@@ -1,0 +1,19 @@
+/* UniSurf - Main Application Styles */
+/* This file contains only minimal custom overrides */
+/* Bootstrap is imported via app.js, theme styles are in theme.css */
+
+/* Ensure smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom utility classes if needed */
+.text-green {
+    color: #008000 !important;
+}
+
+.bg-green {
+    background-color: #008000 !important;
+}
+
+/* Any additional global overrides can go here */

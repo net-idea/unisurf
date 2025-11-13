@@ -1,0 +1,23 @@
+/* UniSurf - Form Styles (Light Theme) */
+
+[data-bs-theme="light"] .form-control,
+[data-bs-theme="light"] .form-select {
+    background-color: #ffffff;
+    color: #212529;
+    border-color: #dee2e6;
+}
+
+[data-bs-theme="light"] .form-control:focus,
+[data-bs-theme="light"] .form-select:focus {
+    background-color: #ffffff;
+    color: #212529;
+}
+
+[data-bs-theme="light"] .form-control::placeholder {
+    color: #6c757d;
+    opacity: 0.7;
+}
+
+[data-bs-theme="light"] .form-label {
+    color: #212529;
+}

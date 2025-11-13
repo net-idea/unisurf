@@ -1,0 +1,14 @@
+{
+  "name": "UniSurf",
+  "version": "4.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "sass": "^1.71.1"
+  },
+  "scripts": {
+    "build": "sass frontend/styles/main.scss assets/css/main.css",
+    "watch": "sass --watch frontend/styles/main.scss assets/css/main.css"
+  }
+}
