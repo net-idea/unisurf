@@ -19,10 +19,11 @@
         <meta property="og:type" content="website">
     {% endblock %}
 
-    <link rel="icon" href="/logo/favicon.svg" type="image/svg+xml">
+    {# Primary SVG favicon with ICO fallback #}
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
 
-    <!-- Font Awesome icons (free version)-->
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    {# Font Awesome is bundled via Webpack; CDN removed #}
 
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
