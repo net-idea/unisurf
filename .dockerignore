@@ -31,6 +31,18 @@ vendor/
 # Node modules (if any)
 node_modules/
 
+# MariaDB
+mariadb
+
+# PostgreSQL
+postgresql
+
+# Redis
+redis
+
+## OpenSSL
+openssl
+
 # Documentation
-README.md
-LICENSE
+readme.md
+license

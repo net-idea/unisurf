@@ -123,11 +123,24 @@ All configuration is via environment variables. Typical keys:
 
 Security: Do not commit production secrets. Prefer real env vars or Symfony Secrets Vault for prod.
 
-## 🐳 Docker development (optional)
+## 🐳 Docker development
 
 If you prefer Docker for a fully containerized setup, see:
 
 - docs/docker.md
+
+### Docker and Docker Compose
+
+To start the application with services like *MariaDB*, *Adminer* and *PHPMyAdmin*  the **Docker Compose** is used:
+
+```shell
+# Start only the basic web application
+docker compose -p unisurf -f docker-compose.yml up -d --build --force-recreate
+# Start the basic web application with MariaDB
+docker compose -p unisurf -f docker-compose.yml -f docker-compose.mariadb.yml up -d --build --force-recreate
+# Start the full environment with MariaDB, Adminer and PHPMyAdmin
+docker compose -p unisurf -f docker-compose.yml -f docker-compose.mariadb.yml -f docker-compose.adminer.yml -f docker-compose.phpmyadmin.yml up -d --build --force-recreate
+```
 
 ## 🧹 Code Quality & Linting
 
