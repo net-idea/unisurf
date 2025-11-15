@@ -1,6 +1,6 @@
 name: Basic checks
 
-on: [ push ]
+on: [push]
 
 jobs:
   build-test:

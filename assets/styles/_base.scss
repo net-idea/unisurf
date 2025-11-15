@@ -1,0 +1,112 @@
+/* ============================================================================
+   UniSurf - Base Styles
+   ============================================================================ */
+
+// ============================================================================
+// HTML & Body
+// ============================================================================
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: $scroll-padding-top;
+}
+
+body {
+  position: relative;
+}
+
+// ============================================================================
+// Typography Base
+// ============================================================================
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6,
+p,
+ul li,
+ol li {
+  margin-bottom: $heading-margin-bottom;
+}
+
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+  margin-top: $heading-margin-top;
+}
+
+h1,
+.h1 {
+  font-size: $font-size-h1;
+}
+
+h2,
+.h2 {
+  font-size: $font-size-h2;
+}
+
+h3,
+.h3 {
+  font-size: $font-size-h3;
+}
+
+p,
+ul li {
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+}
+
+// ============================================================================
+// Page Sections
+// ============================================================================
+.page-section {
+  padding: $section-padding;
+
+  h2.section-heading,
+  .section-heading.h2 {
+    font-size: $font-size-h1;
+    margin-top: 0;
+    margin-bottom: $heading-margin-bottom;
+  }
+
+  h3.section-subheading,
+  .section-subheading.h3 {
+    font-size: 1rem;
+    font-weight: 400;
+    font-style: italic;
+    font-family: $font-family-secondary;
+    margin-bottom: 4rem;
+  }
+}
+
+@media (min-width: 768px) {
+  section {
+    padding: $section-padding-md;
+  }
+}
+
+// ============================================================================
+// Utility Classes
+// ============================================================================
+.text-green {
+  color: $unisurf-green-primary !important;
+}
+
+.bg-green {
+  background-color: $unisurf-green-primary !important;
+}

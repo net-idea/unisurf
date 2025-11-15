@@ -4,17 +4,17 @@ Wir bieten eine umfassende Palette von Dienstleistungen, um Ihre digitale Präse
 
 ## [Entwicklung](/entwicklung)
 
-* Internetseiten, die beeindrucken
-* Leistungsstarke Webshops für Ihren E-Commerce-Erfolg
-* Maßgeschneiderte Portale für effiziente Zusammenarbeit
-* Skalierbare Plattformen, die mit Ihrem Unternehmen wachsen
+- Internetseiten, die beeindrucken
+- Leistungsstarke Webshops für Ihren E-Commerce-Erfolg
+- Maßgeschneiderte Portale für effiziente Zusammenarbeit
+- Skalierbare Plattformen, die mit Ihrem Unternehmen wachsen
 
 ## [Web-Hosting](/hosting)
 
-* Individuelle Konzeption und Infrastruktur
-* Namhafte Partner und bewährte Technologien
-* Cloud-basiertes Hosting für Flexibilität
-* Kundenzentrierte Betreuung für Sicherheit und Zuverlässigkeit
+- Individuelle Konzeption und Infrastruktur
+- Namhafte Partner und bewährte Technologien
+- Cloud-basiertes Hosting für Flexibilität
+- Kundenzentrierte Betreuung für Sicherheit und Zuverlässigkeit
 
 Bei **UniSurf** stehen Kundenzufriedenheit, Innovation und individuelle Anpassung im Mittelpunkt unserer Dienstleistungen. Entdecken Sie die digitale Revolution mit uns!
 

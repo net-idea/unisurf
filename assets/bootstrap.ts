@@ -5,8 +5,4 @@ import { startStimulusApp } from '@symfony/stimulus-bridge';
 declare const require: any;
 
 // Registers Stimulus controllers from controllers.json and in the controllers/ directory
-export const app = startStimulusApp(require.context(
-  '@symfony/stimulus-bridge/lazy-controller-loader!./controllers',
-  true,
-  /\.tsx?$/
-));
+export const app = startStimulusApp(require.context('@symfony/stimulus-bridge/lazy-controller-loader!./controllers', true, /\.tsx?$/));

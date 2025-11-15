@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tests\Service;
@@ -28,12 +29,12 @@ class FormContactServiceTest extends TestCase
         $session = new Session(new MockArraySessionStorage());
         $session->start();
         $session->set('cf_data', [
-            'name'         => 'Alice',
+            'name' => 'Alice',
             'emailAddress' => 'alice@example.com',
-            'phone'        => '123',
-            'message'      => 'Hi there',
-            'consent'      => true,
-            'copy'         => true,
+            'phone' => '123',
+            'message' => 'Hi there',
+            'consent' => true,
+            'copy' => true,
         ]);
 
         $request = new Request();

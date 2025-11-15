@@ -3,18 +3,18 @@
 //
 
 // Import variables
-@import "./variables.scss";
+@import './variables.scss';
 
 // Import Bootstrap
-@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+@import '../../node_modules/bootstrap/scss/bootstrap.scss';
 
 // Global CSS
-@import "./global.scss";
+@import './global.scss';
 
 // Components
-@import "./components/buttons.scss";
-@import "./components/navbar.scss";
+@import './components/buttons.scss';
+@import './components/navbar.scss';
 
 // Sections
-@import "./sections/masthead.scss";
-@import "./sections/footer.scss";
+@import './sections/masthead.scss';
+@import './sections/footer.scss';

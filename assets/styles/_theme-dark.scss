@@ -1,0 +1,55 @@
+/* ============================================================================
+   UniSurf - Dark Theme Overrides
+   ============================================================================ */
+
+[data-bs-theme='dark'] {
+  // Navigation - Dark Theme
+  #mainNav {
+    background-color: #343a40;
+
+    .navbar-brand {
+      color: $unisurf-green-light;
+    }
+
+    .navbar-nav .nav-item .nav-link {
+      color: #dee2e6;
+
+      &.active,
+      &:hover {
+        color: $unisurf-green-light;
+      }
+    }
+  }
+
+  // Form Controls - Dark Theme
+  .form-control,
+  .form-select {
+    background-color: #343a40;
+    color: #dee2e6;
+    border-color: #495057;
+
+    &:focus {
+      background-color: #2b3035;
+      color: #dee2e6;
+      border-color: $unisurf-green-light;
+      box-shadow: 0 0 0 0.25rem rgba(102, 179, 102, 0.25);
+    }
+
+    &::placeholder {
+      color: #adb5bd;
+      opacity: 0.7;
+    }
+  }
+
+  .form-label {
+    color: #dee2e6;
+  }
+
+  .invalid-feedback {
+    color: #ea868f;
+  }
+
+  .valid-feedback {
+    color: $unisurf-green-light;
+  }
+}

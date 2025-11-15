@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -33,7 +34,7 @@ class MainController extends AbstractBaseController
     )]
     public function page(string $slug = 'start'): Response
     {
-        $projectDir = (string)$this->getParameter('kernel.project_dir');
+        $projectDir = (string) $this->getParameter('kernel.project_dir');
 
         // 1) if a Twig page template exists (templates/pages/{slug}.html.twig), render it
 
@@ -43,7 +44,7 @@ class MainController extends AbstractBaseController
             return $this->render(
                 'pages/' . ('' !== $slug ? $slug : 'start') . '.html.twig',
                 [
-                    'slug'     => $slug,
+                    'slug' => $slug,
                     'navItems' => $this->navigation->getItems(),
                     'pageMeta' => $this->loadPageMetadata($slug),
                 ]
@@ -55,15 +56,15 @@ class MainController extends AbstractBaseController
         $contentFile = $projectDir . '/content/' . ('' !== $slug ? $slug : 'start') . '.md';
 
         if (is_file($contentFile)) {
-            $markdown = (string)file_get_contents($contentFile);
+            $markdown = (string) file_get_contents($contentFile);
             $parsedown = new \Parsedown();
             $html = $parsedown->text($markdown);
 
             return $this->render(
                 'pages/content.html.twig',
                 [
-                    'content'  => $html,
-                    'slug'     => $slug,
+                    'content' => $html,
+                    'slug' => $slug,
                     'navItems' => $this->navigation->getItems(),
                     'pageMeta' => $this->loadPageMetadata($slug),
                 ]

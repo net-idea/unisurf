@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Service;
@@ -56,8 +57,8 @@ readonly class MailManService
 
             $this->mailer->send($emailOwner);
             $this->logger->info('Contact mail sent to owner', [
-                'to'    => $to->getAddress(),
-                'name'  => $to->getName(),
+                'to' => $to->getAddress(),
+                'name' => $to->getName(),
                 'email' => $contact->getEmailAddress(),
             ]);
 
@@ -75,7 +76,7 @@ readonly class MailManService
 
                 $this->mailer->send($emailVisitor);
                 $this->logger->info('Contact mail sent to visitor', [
-                    'to'   => $contact->getEmailAddress(),
+                    'to' => $contact->getEmailAddress(),
                     'name' => $contact->getName(),
                 ]);
             }
@@ -97,7 +98,7 @@ readonly class MailManService
         $toVisitor = new Address($booking->getParentEmail(), $booking->getParentName());
 
         $context = [
-            'booking'    => $booking,
+            'booking' => $booking,
             'confirmUrl' => $confirmUrl,
         ];
 
@@ -105,8 +106,8 @@ readonly class MailManService
         $this->logger->info(
             'Preparing booking confirmation request',
             [
-                'to'    => $toVisitor->getAddress(),
-                'name'  => $toVisitor->getName(),
+                'to' => $toVisitor->getAddress(),
+                'name' => $toVisitor->getName(),
                 'token' => substr($booking->getConfirmationToken(), 0, 6) . '…',
             ]
         );
@@ -126,13 +127,13 @@ readonly class MailManService
 
             $this->mailer->send($email);
             $this->logger->info('Booking confirmation request sent successfully', [
-                'to'        => $toVisitor->getAddress(),
+                'to' => $toVisitor->getAddress(),
                 'bookingId' => $booking->getId(),
             ]);
         } catch (TransportExceptionInterface $e) {
             $this->logger->error('Mailer transport failed', [
                 'exception' => $e->getMessage(),
-                'to'        => $toVisitor->getAddress(),
+                'to' => $toVisitor->getAddress(),
                 'bookingId' => $booking->getId(),
             ]);
 
@@ -140,7 +141,7 @@ readonly class MailManService
         } catch (\Exception $e) {
             $this->logger->error('Email preparation or sending failed', [
                 'exception' => $e->getMessage(),
-                'to'        => $toVisitor->getAddress(),
+                'to' => $toVisitor->getAddress(),
                 'bookingId' => $booking->getId(),
             ]);
 
@@ -172,8 +173,8 @@ readonly class MailManService
             ->html($html);
 
         $this->logger->info('Sending booking owner notification', [
-            'to'        => $toOwner->getAddress(),
-            'name'      => $toOwner->getName(),
+            'to' => $toOwner->getAddress(),
+            'name' => $toOwner->getName(),
             'bookingId' => $booking->getId(),
         ]);
 

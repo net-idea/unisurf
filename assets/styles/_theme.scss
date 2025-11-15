@@ -1,0 +1,164 @@
+/* ============================================================================
+   UniSurf - Theme Components
+   ============================================================================ */
+
+// ============================================================================
+// Buttons
+// ============================================================================
+.btn-xl {
+  padding: $btn-xl-padding;
+  font-family: $font-family-primary;
+  font-size: $btn-xl-font-size;
+  font-weight: 700;
+}
+
+.btn-social {
+  height: $btn-social-size;
+  width: $btn-social-size;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 100%;
+}
+
+// ============================================================================
+// Navigation
+// ============================================================================
+#mainNav {
+  padding: $nav-padding-y 0;
+  background-color: $nav-bg;
+
+  .navbar-toggler {
+    padding: $nav-toggler-padding;
+    font-size: $nav-toggler-font-size;
+    font-family: $font-family-primary;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .navbar-brand {
+    color: $unisurf-green-primary;
+    font-family: $font-family-primary;
+    font-weight: 700;
+    letter-spacing: $nav-link-letter-spacing;
+    text-transform: uppercase;
+
+    img {
+      height: $nav-logo-height;
+    }
+  }
+
+  .navbar-nav .nav-item .nav-link {
+    font-family: $font-family-primary;
+    font-size: $nav-link-font-size;
+    color: #fff;
+    letter-spacing: $nav-link-letter-spacing;
+
+    &.active,
+    &:hover {
+      color: $unisurf-green-primary;
+    }
+  }
+}
+
+// Desktop Navigation
+@media (min-width: 992px) {
+  #mainNav {
+    padding: $nav-padding-y-lg 0;
+    border: none;
+    background-color: transparent;
+    transition: padding $nav-transition-speed ease-in-out;
+
+    .navbar-brand {
+      font-size: 1.5em;
+      transition: font-size $nav-transition-speed ease-in-out;
+
+      img {
+        height: $nav-logo-height-lg;
+        transition: height $nav-transition-speed ease-in-out;
+      }
+    }
+
+    &.navbar-shrink {
+      padding: $nav-padding-y 0;
+      background-color: $nav-bg;
+      opacity: $nav-opacity-shrink;
+      backdrop-filter: $nav-blur;
+
+      .navbar-brand {
+        font-size: 2.5em;
+
+        svg,
+        img {
+          height: $nav-logo-height-shrink;
+        }
+      }
+    }
+
+    .navbar-nav .nav-item {
+      margin-right: $nav-item-margin-right;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+// ============================================================================
+// Masthead
+// ============================================================================
+header.masthead {
+  padding: $masthead-padding-y;
+  text-align: center;
+  color: #fff;
+  background-image: url('../images/header-bg.jpg');
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-position: center center;
+  background-size: cover;
+
+  .masthead-subheading {
+    font-size: $masthead-subheading-font-size;
+    font-style: italic;
+    line-height: $masthead-subheading-font-size;
+    margin-bottom: $masthead-subheading-margin-bottom;
+    font-family: $font-family-secondary;
+  }
+
+  .masthead-heading {
+    font-size: $masthead-heading-font-size;
+    font-weight: 700;
+    line-height: $masthead-heading-font-size;
+    margin-bottom: $masthead-heading-margin-bottom;
+    font-family: $font-family-primary;
+  }
+}
+
+@media (min-width: 768px) {
+  header.masthead {
+    padding: $masthead-padding-y-md;
+
+    .masthead-subheading {
+      font-size: $masthead-subheading-font-size-md;
+      line-height: $masthead-subheading-font-size-md;
+      margin-bottom: $masthead-subheading-margin-bottom-md;
+    }
+
+    .masthead-heading {
+      font-size: $masthead-heading-font-size-md;
+      line-height: $masthead-heading-font-size-md;
+      margin-bottom: $masthead-heading-margin-bottom-md;
+    }
+  }
+}
+
+// ============================================================================
+// Footer
+// ============================================================================
+.footer {
+  text-align: center;
+  font-size: $footer-font-size;
+  font-family: $font-family-primary;
+}

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Form;
@@ -19,106 +20,106 @@ class FormContactType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label'       => 'Name',
-                'required'    => true,
+                'label' => 'Name',
+                'required' => true,
                 'constraints' => [
                     new Assert\NotBlank(message: 'Bitte geben Sie Ihren Namen an.'),
                     new Assert\Length(max: 120, maxMessage: 'Bitte verwenden Sie höchstens {{ limit }} Zeichen.'),
                 ],
                 'attr' => [
                     'autocomplete' => 'name',
-                    'maxlength'    => 120,
-                    'class'        => 'form-control',
+                    'maxlength' => 120,
+                    'class' => 'form-control',
                 ],
                 'label_attr' => ['class' => 'form-label'],
             ])
             ->add('email', EmailType::class, [
-                'label'         => 'E‑Mail',
-                'required'      => true,
+                'label' => 'E‑Mail',
+                'required' => true,
                 'property_path' => 'emailAddress',
-                'constraints'   => [
+                'constraints' => [
                     new Assert\NotBlank(message: 'Bitte geben Sie Ihre E‑Mail‑Adresse an.'),
                     new Assert\Email(message: 'Bitte geben Sie eine gültige E‑Mail‑Adresse an.'),
                     new Assert\Length(max: 200, maxMessage: 'Bitte verwenden Sie höchstens {{ limit }} Zeichen.'),
                 ],
                 'attr' => [
                     'autocomplete' => 'email',
-                    'maxlength'    => 200,
-                    'class'        => 'form-control',
+                    'maxlength' => 200,
+                    'class' => 'form-control',
                 ],
                 'label_attr' => ['class' => 'form-label'],
             ])
             ->add('phone', TextType::class, [
-                'label'       => 'Telefon (optional)',
-                'required'    => false,
-                'empty_data'  => '',
+                'label' => 'Telefon (optional)',
+                'required' => false,
+                'empty_data' => '',
                 'constraints' => [
                     new Assert\Length(max: 40, maxMessage: 'Bitte verwenden Sie höchstens {{ limit }} Zeichen.'),
                 ],
                 'attr' => [
                     'autocomplete' => 'tel',
-                    'maxlength'    => 40,
-                    'class'        => 'form-control',
+                    'maxlength' => 40,
+                    'class' => 'form-control',
                 ],
                 'label_attr' => ['class' => 'form-label'],
             ])
             ->add('message', TextareaType::class, [
-                'label'       => 'Nachricht',
-                'required'    => true,
+                'label' => 'Nachricht',
+                'required' => true,
                 'constraints' => [
                     new Assert\NotBlank(message: 'Bitte geben Sie eine Nachricht ein.'),
                     new Assert\Length(min: 10, max: 5000, minMessage: 'Bitte geben Sie mindestens {{ limit }} Zeichen ein.', maxMessage: 'Bitte verwenden Sie höchstens {{ limit }} Zeichen.'),
                 ],
                 'attr' => [
-                    'rows'        => 6,
-                    'minlength'   => 10,
-                    'maxlength'   => 5000,
+                    'rows' => 6,
+                    'minlength' => 10,
+                    'maxlength' => 5000,
                     'placeholder' => 'Nachricht...',
-                    'class'       => 'form-control',
+                    'class' => 'form-control',
                 ],
                 'label_attr' => ['class' => 'form-label'],
             ])
             // consent must be true
             ->add('consent', CheckboxType::class, [
-                'label'       => 'Ich willige in die Verarbeitung meiner Angaben zum Zweck der Kontaktaufnahme ein.',
-                'required'    => true,
-                'mapped'      => true,
+                'label' => 'Ich willige in die Verarbeitung meiner Angaben zum Zweck der Kontaktaufnahme ein.',
+                'required' => true,
+                'mapped' => true,
                 'constraints' => [
                     new Assert\IsTrue(message: 'Bitte stimmen Sie der Datenverarbeitung zu.'),
                 ],
-                'attr'       => ['class' => 'form-check-input'],
+                'attr' => ['class' => 'form-check-input'],
                 'label_attr' => ['class' => 'form-check-label'],
             ])
             ->add('copy', CheckboxType::class, [
-                'label'      => 'Kopie an mich senden',
-                'required'   => false,
-                'attr'       => ['class' => 'form-check-input'],
+                'label' => 'Kopie an mich senden',
+                'required' => false,
+                'attr' => ['class' => 'form-check-input'],
                 'label_attr' => ['class' => 'form-check-label'],
             ])
             // spam traps
             ->add('emailrep', TextType::class, [
-                'label'      => false,
-                'required'   => false,
+                'label' => false,
+                'required' => false,
                 'empty_data' => '',
-                'attr'       => [
+                'attr' => [
                     'autocomplete' => 'off',
-                    'tabindex'     => '-1',
-                    'class'        => 'visually-hidden',
-                    'aria-hidden'  => 'true',
-                    'style'        => 'position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;',
+                    'tabindex' => '-1',
+                    'class' => 'visually-hidden',
+                    'aria-hidden' => 'true',
+                    'style' => 'position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;',
                 ],
             ])
             ->add('website', TextType::class, [
-                'label'      => false,
-                'mapped'     => false,
-                'required'   => false,
+                'label' => false,
+                'mapped' => false,
+                'required' => false,
                 'empty_data' => '',
-                'attr'       => [
+                'attr' => [
                     'autocomplete' => 'off',
-                    'tabindex'     => '-1',
-                    'class'        => 'visually-hidden',
-                    'aria-hidden'  => 'true',
-                    'style'        => 'position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;',
+                    'tabindex' => '-1',
+                    'class' => 'visually-hidden',
+                    'aria-hidden' => 'true',
+                    'style' => 'position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;',
                 ],
             ]);
     }
@@ -126,7 +127,7 @@ class FormContactType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'      => FormContactEntity::class,
+            'data_class' => FormContactEntity::class,
             'csrf_protection' => true,
         ]);
     }

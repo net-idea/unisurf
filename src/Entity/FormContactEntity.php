@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -169,7 +170,7 @@ class FormContactEntity
      */
     public function getMessageHtml(): string
     {
-        return nl2br(htmlentities($this->message, ENT_QUOTES|ENT_SUBSTITUTE, 'UTF-8'));
+        return nl2br(htmlentities($this->message, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
     }
 
     /**

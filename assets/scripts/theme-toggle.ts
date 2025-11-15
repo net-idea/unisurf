@@ -9,9 +9,7 @@ type Theme = 'light' | 'dark' | 'system';
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     const mql = window.matchMedia('(prefers-color-scheme: dark)');
-    const theme = (stored === THEME_LIGHT || stored === THEME_DARK)
-      ? stored
-      : (mql.matches ? THEME_DARK : THEME_LIGHT);
+    const theme = stored === THEME_LIGHT || stored === THEME_DARK ? stored : mql.matches ? THEME_DARK : THEME_LIGHT;
     document.documentElement.setAttribute('data-bs-theme', theme);
   } catch (e) {
     // Ignore localStorage errors
