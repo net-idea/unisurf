@@ -34,7 +34,7 @@
     "@babel/preset-env": "^7.26.0",
     "@popperjs/core": "^2.11.8",
     "@zackad/prettier-plugin-twig": "^0.16.0",
-    "babel-loader": "^9.2.1",
+    "babel-loader": "^10.0.0",
     "bootstrap": "^5.3.3",
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^9.0.2",
