@@ -1,0 +1,115 @@
+/* ============================================================================
+   UniSurf - SCSS Variables Configuration
+   ============================================================================ */
+
+// ============================================================================
+// UniSurf Brand Colors
+// ============================================================================
+$unisurf-green-primary: #008000;
+$unisurf-green-light: #66b366;
+$unisurf-green-dark: #006600;
+$unisurf-green-lighter: #85c285;
+
+// ============================================================================
+// Bootstrap Variable Overrides
+// ============================================================================
+
+// Primary Colors
+$primary: $unisurf-green-primary;
+$success: $unisurf-green-light;
+
+// Enable/Disable Features
+$enable-shadows: false;
+$enable-gradients: false;
+
+// Border Radius
+$border-radius: 0.375rem;
+$border-radius-sm: 0.25rem;
+$border-radius-lg: 0.5rem;
+
+// ============================================================================
+// Typography Variables
+// ============================================================================
+
+// Font Families (simplified - system fonts as fallback)
+$font-family-primary:
+  'Montserrat',
+  system-ui,
+  -apple-system,
+  sans-serif;
+$font-family-secondary: 'Roboto Slab', Georgia, serif;
+
+// Font Sizes
+$font-size-h1: 2.5rem;
+$font-size-h2: 1.6rem;
+$font-size-h3: 1.4rem;
+$font-size-base: 1.26rem;
+$line-height-base: 1.75;
+
+// ============================================================================
+// Spacing Variables
+// ============================================================================
+$scroll-padding-top: 4.5rem;
+$section-padding: 6rem 0;
+$section-padding-md: 9rem 0;
+$heading-margin-top: 0.5rem;
+$heading-margin-bottom: 1rem;
+
+// ============================================================================
+// Navigation Variables
+// ============================================================================
+$nav-padding-y: 1rem;
+$nav-padding-y-lg: 1.5rem;
+$nav-bg: #212529;
+$nav-logo-height: 2.5rem;
+$nav-logo-height-lg: 5rem;
+$nav-logo-height-shrink: 3.5rem;
+$nav-opacity-shrink: 0.9;
+$nav-blur: blur(20px);
+$nav-toggler-padding: 0.75rem;
+$nav-toggler-font-size: 0.75rem;
+$nav-link-font-size: 0.95rem;
+$nav-link-letter-spacing: 0.0625em;
+$nav-item-margin-right: 1rem;
+$nav-transition-speed: 0.3s;
+
+// ============================================================================
+// Button Variables
+// ============================================================================
+$btn-xl-padding: 1.25rem 2.5rem;
+$btn-xl-font-size: 1.125rem;
+$btn-social-size: 2.5rem;
+
+// ============================================================================
+// Masthead Variables
+// ============================================================================
+$masthead-padding-y: 6.5rem 2rem;
+$masthead-padding-y-md: 10.5rem 6rem;
+$masthead-subheading-font-size: 1.5rem;
+$masthead-subheading-font-size-md: 2.25rem;
+$masthead-subheading-margin-bottom: 25px;
+$masthead-subheading-margin-bottom-md: 2rem;
+$masthead-heading-font-size: 3.25rem;
+$masthead-heading-font-size-md: 4.5rem;
+$masthead-heading-margin-bottom: 2rem;
+$masthead-heading-margin-bottom-md: 4rem;
+
+// ============================================================================
+// Footer Variables
+// ============================================================================
+$footer-font-size: 0.9rem;
+
+// ============================================================================
+// Form Variables
+// ============================================================================
+$form-control-border-radius: 0.375rem;
+$form-control-padding: 0.75rem 1rem;
+$form-control-font-size: 1rem;
+$form-control-transition:
+  border-color 0.15s ease-in-out,
+  box-shadow 0.15s ease-in-out;
+$form-label-margin-bottom: 0.5rem;
+$form-label-font-weight: 500;
+$form-group-margin-bottom: 1.5rem;
+$form-feedback-margin-top: 0.25rem;
+$form-feedback-font-size: 0.875rem;

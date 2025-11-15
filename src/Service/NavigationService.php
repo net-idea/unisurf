@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Service;
@@ -27,17 +28,17 @@ readonly class NavigationService
             /** @var array<string, array> $pages */
             $pages = require $pagesFile;
             foreach ($pages as $slug => $meta) {
-                $showInNav = (bool)($meta['nav'] ?? false);
+                $showInNav = (bool) ($meta['nav'] ?? false);
                 if (!$showInNav) {
                     continue;
                 }
-                $label = (string)($meta['nav_label'] ?? $meta['title'] ?? $slug);
-                $order = (int)($meta['nav_order'] ?? 0);
+                $label = (string) ($meta['nav_label'] ?? $meta['title'] ?? $slug);
+                $order = (int) ($meta['nav_order'] ?? 0);
                 $url = '/' . ('start' === $slug ? '' : $slug);
                 $items[] = [
-                    'slug'  => (string)$slug,
+                    'slug' => (string) $slug,
                     'label' => $label,
-                    'url'   => $url,
+                    'url' => $url,
                     'order' => $order,
                 ];
             }

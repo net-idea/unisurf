@@ -28,7 +28,6 @@ abstract class AbstractFormService
     /**
      * Persist a sanitized snapshot of the current form data for redirect restoration.
      * Implement this in each concrete service.
-     *
      */
     abstract protected function storeFormDataForRedirect(mixed $data): void;
 
@@ -99,7 +98,7 @@ abstract class AbstractFormService
     protected function getHoneypotValue(FormInterface $form, string $field = 'website'): string
     {
         if ($form->has($field)) {
-            return (string)$form->get($field)->getData();
+            return (string) $form->get($field)->getData();
         }
 
         return '';
@@ -118,16 +117,16 @@ abstract class AbstractFormService
         int $windowSeconds = 3600
     ): array {
         $now = time();
-        $stored = (array)$session->get($key, []);
-        $times = array_values(array_filter($stored, static fn ($t) => ($now - (int)$t) < $windowSeconds));
+        $stored = (array) $session->get($key, []);
+        $times = array_values(array_filter($stored, static fn ($t) => ($now - (int) $t) < $windowSeconds));
 
-        $lastTs = !empty($times) ? (int)end($times) : null;
+        $lastTs = !empty($times) ? (int) end($times) : null;
         $blocked = (null !== $lastTs && ($now - $lastTs) < $minIntervalSeconds) || count($times) >= $maxPerWindow;
 
         return [
             'blocked' => $blocked,
-            'times'   => $times,
-            'now'     => $now,
+            'times' => $times,
+            'now' => $now,
         ];
     }
 
@@ -135,7 +134,7 @@ abstract class AbstractFormService
      * Append the current timestamp to the rate-limit list and persist it back to the session.
      * Returns the new list of timestamps.
      *
-     * @param array<int,int> $times
+     * @param  array<int,int> $times
      * @return array<int,int>
      */
     protected function rateLimitTick(SessionInterface $session, string $key, array $times, int $now): array

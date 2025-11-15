@@ -5,25 +5,11 @@
  * (and its CSS) in your base layout (base.html.twig).
  */
 
-// Bootstrap CSS (from node_modules – local)
-import 'bootstrap/dist/css/bootstrap.min.css';
+// Import self-hosted web fonts first (Montserrat, Roboto Slab)
+import './styles/fonts.scss';
 
-// any CSS you import will output into a single css file (app.css in this case)
-import './styles/app.css';
-
-// Shared theme styles
-import './styles/theme.css';
-
-// Light and Dark theme styles
-import './styles/theme-dark.css';
-import './styles/theme-light.css';
-
-// Form styles
-import './styles/form.css';
-
-// Light and Dark form styles
-import './styles/form-dark.css';
-import './styles/form-light.css';
+// Main UniSurf styles based and Bootstrap
+import './styles/app.scss';
 
 // Font Awesome (local)
 import '@fortawesome/fontawesome-free/css/all.min.css';

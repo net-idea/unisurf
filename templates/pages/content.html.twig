@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ pageMeta.title|default('UniSurf') }}{% endblock %}
+{% block title %}
+  {{ pageMeta.title|default('UniSurf') }}
+{% endblock %}
 
 {% block body %}
-    {{ content|raw }}
+  {{ content|raw }}
 {% endblock %}

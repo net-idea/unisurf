@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Service;
@@ -78,7 +79,7 @@ class FormContactService extends AbstractFormService
         /** @var FormContactEntity $contactForm */
         $contactForm = $form->getData();
 
-        if ('' !== $honey || '' !== trim((string)$contactForm->getEmailrep())) {
+        if ('' !== $honey || '' !== trim((string) $contactForm->getEmailrep())) {
             $this->rateLimitTickNow($session, self::SESSION_RATE_KEY);
 
             return $this->makeRedirect($this->urls, self::ROUTE_CONTACT, ['submit' => 1], '#contact-success');
@@ -93,8 +94,8 @@ class FormContactService extends AbstractFormService
 
         // Prepare meta-data and persist
         $meta = (new FormSubmissionMetaEntity())
-            ->setIp((string)($request->server->get('REMOTE_ADDR', '')))
-            ->setUserAgent((string)($request->server->get('HTTP_USER_AGENT', '')))
+            ->setIp((string) ($request->server->get('REMOTE_ADDR', '')))
+            ->setUserAgent((string) ($request->server->get('HTTP_USER_AGENT', '')))
             ->setTime(date('c'))
             ->setHost($request->getHost());
         $contactForm->setMeta($meta);
@@ -134,12 +135,12 @@ class FormContactService extends AbstractFormService
         $this->assertSessionStarted($session);
 
         $session->set(self::SESSION_DATA_KEY, [
-            'name'         => $data->getName(),
+            'name' => $data->getName(),
             'emailAddress' => $data->getEmailAddress(),
-            'phone'        => $data->getPhone(),
-            'message'      => $data->getMessage(),
-            'consent'      => $data->getConsent(),
-            'copy'         => $data->getCopy(),
+            'phone' => $data->getPhone(),
+            'message' => $data->getMessage(),
+            'consent' => $data->getConsent(),
+            'copy' => $data->getCopy(),
             // Note: do not persist honeypots or meta
         ]);
     }
@@ -162,7 +163,7 @@ class FormContactService extends AbstractFormService
             return null;
         }
 
-        $data = (array)$session->get(self::SESSION_DATA_KEY, []);
+        $data = (array) $session->get(self::SESSION_DATA_KEY, []);
         $session->remove(self::SESSION_DATA_KEY);
 
         $contact = new FormContactEntity();
@@ -170,8 +171,8 @@ class FormContactService extends AbstractFormService
         $contact->setEmailAddress($data['emailAddress'] ?? '');
         $contact->setPhone($data['phone'] ?? '');
         $contact->setMessage($data['message'] ?? '');
-        $contact->setConsent(isset($data['consent']) && (bool)$data['consent']);
-        $contact->setCopy(isset($data['copy']) && (bool)$data['copy']);
+        $contact->setConsent(isset($data['consent']) && (bool) $data['consent']);
+        $contact->setCopy(isset($data['copy']) && (bool) $data['copy']);
 
         return $contact;
     }
