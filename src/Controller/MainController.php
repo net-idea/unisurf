@@ -44,7 +44,7 @@ class MainController extends AbstractBaseController
             return $this->render(
                 'pages/' . ('' !== $slug ? $slug : 'start') . '.html.twig',
                 [
-                    'slug' => $slug,
+                    'slug'     => $slug,
                     'navItems' => $this->navigation->getItems(),
                     'pageMeta' => $this->loadPageMetadata($slug),
                 ]
@@ -63,8 +63,8 @@ class MainController extends AbstractBaseController
             return $this->render(
                 'pages/content.html.twig',
                 [
-                    'content' => $html,
-                    'slug' => $slug,
+                    'content'  => $html,
+                    'slug'     => $slug,
                     'navItems' => $this->navigation->getItems(),
                     'pageMeta' => $this->loadPageMetadata($slug),
                 ]

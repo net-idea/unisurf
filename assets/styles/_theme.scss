@@ -25,7 +25,7 @@
 // ============================================================================
 // Navigation
 // ============================================================================
-#mainNav {
+#main-nav {
   padding: $nav-padding-y 0;
   background-color: $nav-bg;
 
@@ -64,7 +64,7 @@
 
 // Desktop Navigation
 @media (min-width: 992px) {
-  #mainNav {
+  #main-nav {
     padding: $nav-padding-y-lg 0;
     border: none;
     background-color: transparent;

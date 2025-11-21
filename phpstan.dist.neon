@@ -1,8 +1,7 @@
 parameters:
     level: 6
-    paths:
-        - bin/
-        - config/
-        - public/
-        - src/
-        - tests/
+    ignoreErrors:
+        # Doctrine generated IDs are assigned by the ORM at persist/flush time
+        -
+            identifier: property.unusedType
+            message: '#^Property .+::\$id .+ is never assigned int#'

@@ -135,12 +135,12 @@ class FormContactService extends AbstractFormService
         $this->assertSessionStarted($session);
 
         $session->set(self::SESSION_DATA_KEY, [
-            'name' => $data->getName(),
+            'name'         => $data->getName(),
             'emailAddress' => $data->getEmailAddress(),
-            'phone' => $data->getPhone(),
-            'message' => $data->getMessage(),
-            'consent' => $data->getConsent(),
-            'copy' => $data->getCopy(),
+            'phone'        => $data->getPhone(),
+            'message'      => $data->getMessage(),
+            'consent'      => $data->getConsent(),
+            'copy'         => $data->getCopy(),
             // Note: do not persist honeypots or meta
         ]);
     }

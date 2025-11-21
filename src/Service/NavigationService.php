@@ -25,7 +25,7 @@ readonly class NavigationService
 
         $items = [];
         if (is_file($pagesFile)) {
-            /** @var array<string, array> $pages */
+            /** @var array<string, array<string, mixed>> $pages */
             $pages = require $pagesFile;
             foreach ($pages as $slug => $meta) {
                 $showInNav = (bool) ($meta['nav'] ?? false);
@@ -36,9 +36,9 @@ readonly class NavigationService
                 $order = (int) ($meta['nav_order'] ?? 0);
                 $url = '/' . ('start' === $slug ? '' : $slug);
                 $items[] = [
-                    'slug' => (string) $slug,
+                    'slug'  => (string) $slug,
                     'label' => $label,
-                    'url' => $url,
+                    'url'   => $url,
                     'order' => $order,
                 ];
             }

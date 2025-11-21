@@ -35,7 +35,13 @@ $config
     // An empty line feed must precede any configured statement.
     'blank_line_before_statement' => true,
     // The body of each structure MUST be enclosed by braces. Braces should be properly placed. Body of braces should be properly indented.
-    'braces' => ['allow_single_line_closure' => true],
+    'single_space_around_construct' => true,
+    'control_structure_braces' => true,
+    'control_structure_continuation_position' => true,
+    'declare_parentheses' => true,
+    'no_multiple_statements_per_line' => true,
+    'braces_position' => ['allow_single_line_anonymous_functions' => true],
+    'statement_indentation' => true,
     // Class, trait and interface elements must be separated with one blank line.
     'class_attributes_separation' => false,
     // Whitespace around the keywords of a class, trait or interfaces definition should be one space.
@@ -45,7 +51,7 @@ $config
     // Calling `unset` on multiple items should be done in one call.
     'combine_consecutive_unsets' => true,
     // Remove extra spaces in a nullable typehint.
-    'compact_nullable_typehint' => true,
+    'compact_nullable_type_declaration' => true,
     // Concatenation should be spaced according configuration.
     'concat_space' => ['spacing' => 'one'],
     // Equal sign in declare statement should be surrounded by spaces or not following configuration.
@@ -69,7 +75,7 @@ $config
     // Spaces should be properly placed in a function declaration.
     'function_declaration' => true,
     // Ensure single space between function's argument and its typehint.
-    'function_typehint_space' => true,
+    'type_declaration_spaces' => true,
     // Configured annotations should be omitted from PHPDoc.
     'general_phpdoc_annotation_remove' => true,
     // Code MUST use configured indentation type.
@@ -99,9 +105,9 @@ $config
     // Forbid multi-line whitespace before the closing semicolon or move the semicolon to the new line for chained calls.
     'multiline_whitespace_before_semicolons' => true,
     // Native type hints for functions should use the correct case.
-    'native_function_type_declaration_casing' => true,
-    // All instances created with new keyword must be followed by braces.
-    'new_with_braces' => true,
+    'native_type_declaration_casing' => true,
+    // All instances created with new keyword must be followed by parentheses.
+    'new_with_parentheses' => true,
     // Master functions shall be used instead of aliases.
     'no_alias_functions' => true,
     // Replace control structure alternative syntax to use braces.
@@ -147,21 +153,19 @@ $config
     // There MUST NOT be spaces around offset braces.
     'no_spaces_around_offset' => true,
     // There MUST NOT be a space after the opening parenthesis. There MUST NOT be a space before the closing parenthesis.
-    'no_spaces_inside_parenthesis' => true,
+    'spaces_inside_parentheses' => false,
     // Removes `@param`, `@return` and `@var` tags that don't provide any useful information.
     'no_superfluous_phpdoc_tags' => true,
-    // Remove trailing commas in list function calls.
-    'no_trailing_comma_in_list_call' => true,
-    // PHP single-line arrays should not have trailing comma.
-    'no_trailing_comma_in_singleline_array' => true,
+    // Remove trailing commas in list function calls and single-line arrays.
+    'no_trailing_comma_in_singleline' => true,
     // Remove trailing whitespace at the end of non-blank lines.
     'no_trailing_whitespace' => true,
     // There MUST be no trailing spaces inside comment or PHPDoc.
     'no_trailing_whitespace_in_comment' => true,
     // Removes unneeded parentheses around control statements.
     'no_unneeded_control_parentheses' => true,
-    // Removes unneeded curly braces that are superfluous and aren't part of a control structure's body.
-    'no_unneeded_curly_braces' => true,
+    // Removes unneeded braces that are superfluous and aren't part of a control structure's body.
+    'no_unneeded_braces' => true,
     // Variables must be set `null` instead of using `(unset)` casting.
     'no_unset_cast' => true,
     // Properties should be set to `null` instead of using `unset`.
@@ -195,7 +199,7 @@ $config
     // A PHP file without end tag must always end with a single empty line feed.
     'single_blank_line_at_eof' => true,
     // There should be exactly one blank line before a namespace declaration.
-    'single_blank_line_before_namespace' => true,
+    'blank_lines_before_namespace' => true,
     // There MUST NOT be more than one property or constant declared per statement.
     'single_class_element_per_statement' => true,
     // There MUST be one use keyword per declaration.
@@ -221,7 +225,7 @@ $config
     // Arrays should be formatted like function/method arguments, without leading or trailing single line space.
     'trim_array_spaces' => true,
     // Visibility MUST be declared on all properties and methods; `abstract` and `final` MUST be declared before the visibility; `static` MUST be declared after the visibility.
-    'visibility_required' => true,
+    'modifier_keywords' => true,
     // Add `void` return type to functions with missing or empty return statements, but priority is given to `@return` annotations. Requires PHP >= 7.1.
     'void_return' => true,
     // In array declaration, there MUST be a whitespace after each comma.

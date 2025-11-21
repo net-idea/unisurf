@@ -62,9 +62,9 @@ class FormContactEntity
         return $this->createdAt;
     }
 
-    public function setName($name): self
+    public function setName(string $name): self
     {
-        $this->name = (string) $name;
+        $this->name = $name;
 
         return $this;
     }
@@ -105,9 +105,9 @@ class FormContactEntity
         return $this->email;
     }
 
-    public function setPhone($phone): self
+    public function setPhone(string $phone): self
     {
-        $this->phone = (string) $phone;
+        $this->phone = $phone;
 
         return $this;
     }
@@ -129,9 +129,9 @@ class FormContactEntity
         return $this->consent;
     }
 
-    public function setMessage($message): self
+    public function setMessage(string $message): self
     {
-        $this->message = (string) $message;
+        $this->message = $message;
 
         return $this;
     }
@@ -153,9 +153,9 @@ class FormContactEntity
         return $this->copy;
     }
 
-    public function setEmailrep($emailrep): self
+    public function setEmailrep(string $emailrep): self
     {
-        $this->emailrep = (string) $emailrep;
+        $this->emailrep = $emailrep;
 
         return $this;
     }
@@ -170,7 +170,7 @@ class FormContactEntity
      */
     public function getMessageHtml(): string
     {
-        return nl2br(htmlentities($this->message, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+        return nl2br(htmlentities($this->message, ENT_QUOTES|ENT_SUBSTITUTE, 'UTF-8'));
     }
 
     /**

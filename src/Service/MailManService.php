@@ -43,7 +43,7 @@ readonly class MailManService
         $context = ['contact' => $contact];
 
         try {
-            $ownerSubject = 'Seepferdchen Garde — Neue Kontaktanfrage';
+            $ownerSubject = 'UniSurf — Neue Kontaktanfrage';
             $ownerText = $this->twig->render('email/contact_owner.txt.twig', $context);
             $ownerHtml = $this->twig->render('email/contact_owner.html.twig', $context);
 
@@ -57,13 +57,13 @@ readonly class MailManService
 
             $this->mailer->send($emailOwner);
             $this->logger->info('Contact mail sent to owner', [
-                'to' => $to->getAddress(),
-                'name' => $to->getName(),
+                'to'    => $to->getAddress(),
+                'name'  => $to->getName(),
                 'email' => $contact->getEmailAddress(),
             ]);
 
             if ($contact->getCopy()) {
-                $visitorSubject = 'Seepferdchen Garde — Ihre Kontaktanfrage';
+                $visitorSubject = 'UniSurf — Ihre Kontaktanfrage';
                 $visitorText = $this->twig->render('email/contact_visitor.txt.twig', $context);
                 $visitorHtml = $this->twig->render('email/contact_visitor.html.twig', $context);
 
@@ -76,7 +76,7 @@ readonly class MailManService
 
                 $this->mailer->send($emailVisitor);
                 $this->logger->info('Contact mail sent to visitor', [
-                    'to' => $contact->getEmailAddress(),
+                    'to'   => $contact->getEmailAddress(),
                     'name' => $contact->getName(),
                 ]);
             }
@@ -90,15 +90,16 @@ readonly class MailManService
 
     /**
      * Send a confirmation request to the visitor with a unique link.
+     *
      * @throws TransportExceptionInterface|RuntimeError|LoaderError|SyntaxError
      */
     public function sendBookingVisitorConfirmationRequest(FormBookingEntity $booking, string $confirmUrl): void
     {
         $from = new Address($this->fromAddress, $this->fromName);
-        $toVisitor = new Address($booking->getParentEmail(), $booking->getParentName());
+        $toVisitor = new Address($booking->getEmail(), $booking->getName());
 
         $context = [
-            'booking' => $booking,
+            'booking'    => $booking,
             'confirmUrl' => $confirmUrl,
         ];
 
@@ -106,14 +107,14 @@ readonly class MailManService
         $this->logger->info(
             'Preparing booking confirmation request',
             [
-                'to' => $toVisitor->getAddress(),
-                'name' => $toVisitor->getName(),
+                'to'    => $toVisitor->getAddress(),
+                'name'  => $toVisitor->getName(),
                 'token' => substr($booking->getConfirmationToken(), 0, 6) . '…',
             ]
         );
 
         try {
-            $subject = 'Seepferdchen Garde — Bitte bestätigen Sie Ihre Anmeldung';
+            $subject = 'UniSurf — Bitte bestätigen Sie Ihre Buchung';
             $text = $this->twig->render('email/booking_visitor_confirm_request.txt.twig', $context);
             $html = $this->twig->render('email/booking_visitor_confirm_request.html.twig', $context);
 
@@ -127,13 +128,13 @@ readonly class MailManService
 
             $this->mailer->send($email);
             $this->logger->info('Booking confirmation request sent successfully', [
-                'to' => $toVisitor->getAddress(),
+                'to'        => $toVisitor->getAddress(),
                 'bookingId' => $booking->getId(),
             ]);
         } catch (TransportExceptionInterface $e) {
             $this->logger->error('Mailer transport failed', [
                 'exception' => $e->getMessage(),
-                'to' => $toVisitor->getAddress(),
+                'to'        => $toVisitor->getAddress(),
                 'bookingId' => $booking->getId(),
             ]);
 
@@ -141,7 +142,7 @@ readonly class MailManService
         } catch (\Exception $e) {
             $this->logger->error('Email preparation or sending failed', [
                 'exception' => $e->getMessage(),
-                'to' => $toVisitor->getAddress(),
+                'to'        => $toVisitor->getAddress(),
                 'bookingId' => $booking->getId(),
             ]);
 
@@ -151,6 +152,7 @@ readonly class MailManService
 
     /**
      * Notify the owner when a booking was confirmed by the visitor.
+     *
      * @throws TransportExceptionInterface|RuntimeError|LoaderError|SyntaxError
      */
     public function sendBookingOwnerNotification(FormBookingEntity $booking): void
@@ -160,21 +162,21 @@ readonly class MailManService
 
         $context = ['booking' => $booking];
 
-        $subject = 'Seepferdchen Garde — Buchung bestätigt';
+        $subject = 'UniSurf — Buchung bestätigt';
         $text = $this->twig->render('email/booking_owner_confirmed.txt.twig', $context);
         $html = $this->twig->render('email/booking_owner_confirmed.html.twig', $context);
 
         $email = (new Email())
             ->from($from)
             ->to($toOwner)
-            ->replyTo(new Address($booking->getParentEmail(), $booking->getParentName()))
+            ->replyTo(new Address($booking->getEmail(), $booking->getName()))
             ->subject($subject)
             ->text($text)
             ->html($html);
 
         $this->logger->info('Sending booking owner notification', [
-            'to' => $toOwner->getAddress(),
-            'name' => $toOwner->getName(),
+            'to'        => $toOwner->getAddress(),
+            'name'      => $toOwner->getName(),
             'bookingId' => $booking->getId(),
         ]);
 
