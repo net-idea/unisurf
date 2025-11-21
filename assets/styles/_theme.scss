@@ -68,15 +68,15 @@
     padding: $nav-padding-y-lg 0;
     border: none;
     background-color: transparent;
-    transition: padding $nav-transition-speed ease-in-out;
+    transition: padding #{$nav-transition-speed} ease-in-out;
 
     .navbar-brand {
       font-size: 1.5em;
-      transition: font-size $nav-transition-speed ease-in-out;
+      transition: font-size #{$nav-transition-speed} ease-in-out;
 
       img {
         height: $nav-logo-height-lg;
-        transition: height $nav-transition-speed ease-in-out;
+        transition: height #{$nav-transition-speed} ease-in-out;
       }
     }
 
