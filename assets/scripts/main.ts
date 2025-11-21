@@ -7,7 +7,8 @@ type Nullable<T> = T | null;
 window.addEventListener('DOMContentLoaded', () => {
   // Navbar shrink function
   const navbarShrink = (): void => {
-    const navbarCollapsible = document.querySelector<HTMLElement>('#mainNav');
+    const navbarCollapsible = document.querySelector<HTMLElement>('#main-nav');
+
     if (!navbarCollapsible) return;
 
     if (window.scrollY === 0) {
@@ -24,11 +25,12 @@ window.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('scroll', navbarShrink);
 
   // Activate Bootstrap ScrollSpy on the main nav element
-  const mainNav = document.querySelector<HTMLElement>('#mainNav');
+  const mainNav = document.querySelector<HTMLElement>('#main-nav');
   const Bootstrap: any = (window as any).bootstrap;
+
   if (mainNav && Bootstrap && Bootstrap.ScrollSpy) {
     new Bootstrap.ScrollSpy(document.body, {
-      target: '#mainNav',
+      target: '#main-nav',
       rootMargin: '0px 0px -40%',
     });
   }
@@ -39,8 +41,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
   responsiveNavItems.forEach((responsiveNavItem) => {
     responsiveNavItem.addEventListener('click', () => {
-      if (!navbarToggler) return;
+      if (!navbarToggler) {
+        return;
+      }
+
       const display = window.getComputedStyle(navbarToggler).display;
+
       if (display !== 'none') {
         navbarToggler.click();
       }

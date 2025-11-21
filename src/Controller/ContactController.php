@@ -33,9 +33,9 @@ class ContactController extends AbstractBaseController
         return $this->render(
             'pages/kontakt.html.twig',
             [
-                'slug' => 'kontakt',
+                'slug'     => 'kontakt',
                 'navItems' => $this->navigation->getItems(),
-                'form' => $form->createView(),
+                'form'     => $form->createView(),
             ]
         );
     }

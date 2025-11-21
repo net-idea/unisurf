@@ -1,5 +1,8 @@
 # UniSurf - Web Hosting and Infrastructure Development
 
+[![PHP CI](https://github.com/adamibrom/unisurf/workflows/PHP%20CI/badge.svg)](https://github.com/adamibrom/unisurf/actions/workflows/php.yml)
+[![Node CI](https://github.com/adamibrom/unisurf/workflows/Node%20CI/badge.svg)](https://github.com/adamibrom/unisurf/actions/workflows/node.yml)
+
 A modern Symfony web application for the web hosting and infrastructure development provider UniSurf.
 
 - Framework: Symfony 7.3 (PHP 8.3+)

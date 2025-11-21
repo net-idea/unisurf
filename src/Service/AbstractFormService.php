@@ -76,6 +76,8 @@ abstract class AbstractFormService
 
     /**
      * Create a RedirectResponse to a route with optional hash suffix.
+     *
+     * @param array<string, mixed> $params
      */
     protected function makeRedirect(UrlGeneratorInterface $urls, string $route, array $params = [], string $hash = ''): RedirectResponse
     {
@@ -84,6 +86,8 @@ abstract class AbstractFormService
 
     /**
      * Convenience helper: store current form data, then create a redirect.
+     *
+     * @param array<string, mixed> $params
      */
     protected function makeErrorRedirectWithFormData(UrlGeneratorInterface $urls, FormInterface $form, string $route, array $params = [], string $hash = ''): RedirectResponse
     {
@@ -125,8 +129,8 @@ abstract class AbstractFormService
 
         return [
             'blocked' => $blocked,
-            'times' => $times,
-            'now' => $now,
+            'times'   => $times,
+            'now'     => $now,
         ];
     }
 

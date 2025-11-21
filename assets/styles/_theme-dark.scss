@@ -4,7 +4,7 @@
 
 [data-bs-theme='dark'] {
   // Navigation - Dark Theme
-  #mainNav {
+  #main-nav {
     background-color: #343a40;
 
     .navbar-brand {
@@ -32,7 +32,7 @@
       background-color: #2b3035;
       color: #dee2e6;
       border-color: $unisurf-green-light;
-      box-shadow: 0 0 0 0.25rem rgba(102, 179, 102, 0.25);
+      box-shadow: 0 0 0 0.25rem rgb(102 179 102 / 25%);
     }
 
     &::placeholder {
