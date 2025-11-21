@@ -20,8 +20,5 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 // Start the Stimulus application (TypeScript)
 import './bootstrap';
 
-// The main TypeScript file for project
-import './scripts/main';
-
-// Import TypeScript
+// Import Navbar functionality (TypeScript)
 import './scripts/theme-toggle';

@@ -27,7 +27,9 @@
 // ============================================================================
 #main-nav {
   padding: $nav-padding-y 0;
-  background-color: $nav-bg;
+  background-color: rgb(67 67 67 / 70%);
+  border-bottom: 2px solid rgb(216 213 213 / 14%);
+  backdrop-filter: blur(7px) saturate(180%);
 
   .navbar-toggler {
     padding: $nav-toggler-padding;
@@ -52,12 +54,14 @@
   .navbar-nav .nav-item .nav-link {
     font-family: $font-family-primary;
     font-size: $nav-link-font-size;
-    color: #fff;
     letter-spacing: $nav-link-letter-spacing;
+
+    // Theme dropdown in navigation
+    color: $navbar-color;
 
     &.active,
     &:hover {
-      color: $unisurf-green-primary;
+      color: $navbar-color-hover;
     }
   }
 }
@@ -66,8 +70,6 @@
 @media (min-width: 992px) {
   #main-nav {
     padding: $nav-padding-y-lg 0;
-    border: none;
-    background-color: transparent;
     transition: padding #{$nav-transition-speed} ease-in-out;
 
     .navbar-brand {

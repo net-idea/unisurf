@@ -5,22 +5,6 @@
 [data-bs-theme='dark'] {
   // Navigation - Dark Theme
   #main-nav {
-    background-color: #343a40;
-
-    .navbar-brand {
-      color: $unisurf-green-light;
-    }
-
-    .navbar-nav .nav-item .nav-link {
-      color: #dee2e6;
-
-      &.active,
-      &:hover {
-        color: $unisurf-green-light;
-      }
-    }
-
-    // Theme dropdown
     .dropdown-menu {
       background-color: #343a40;
       border-color: #495057;
