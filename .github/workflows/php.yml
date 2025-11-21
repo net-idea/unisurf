@@ -47,8 +47,11 @@ jobs:
       - name: Run PHP CS Fixer (check only)
         run: php ./vendor/bin/php-cs-fixer check -n --config=.php-cs-fixer.dist.php
 
-      - name: Run PHPStan static analysis
-        run: php ./vendor/bin/phpstan analyze src --error-format=github
+      - name: Run PHPStan static analysis on src directory
+        run: php -d memory_limit=-1 ./vendor/bin/phpstan analyze src --error-format=github --no-progress
+
+      - name: Run PHPStan static analysis on tests directory
+        run: php -d memory_limit=-1 ./vendor/bin/phpstan analyze tests --error-format=github --no-progress
 
       - name: Setup Node.js for asset building
         uses: actions/setup-node@v4

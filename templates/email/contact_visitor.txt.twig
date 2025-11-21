@@ -1,0 +1,20 @@
+UniSurf — Bestätigung Ihrer Kontaktanfrage ================================================================================
+
+Hallo {{ contact.name }},
+
+vielen Dank für Ihre Kontaktanfrage über unisurf.de. Wir haben Ihre Nachricht erhalten und werden uns so schnell wie möglich bei Ihnen melden.
+
+IHRE KONTAKTDATEN ──────────────────────────────────────────────────────────────────────────────── Name: {{ contact.name }}
+E‑Mail: {{ contact.emailAddress }}
+{% if contact.phone %}
+  Telefon: {{ contact.phone }}
+{% endif %}IHRE NACHRICHT ────────────────────────────────────────────────────────────────────────────────
+{{ contact.message }}
+
+──────────────────────────────────────────────────────────────────────────────── UniSurf – Unique Surfing Dormagen
+
+Bei Rückfragen erreichen Sie uns unter: E-Mail: info@unisurf.de Web: https://unisurf.de
+
+Mit sportlichen Grüßen Ihr UniSurf-Team
+
+──────────────────────────────────────────────────────────────────────────────── Dies ist eine automatische Bestätigung Ihrer Kontaktanfrage. Ihre Daten werden vertraulich behandelt und nur zum Zweck der Kontaktaufnahme verwendet. Bei Rückfragen können Sie direkt auf diese E‑Mail antworten.

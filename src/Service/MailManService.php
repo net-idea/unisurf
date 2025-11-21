@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Entity\FormBookingEntity;
 use App\Entity\FormContactEntity;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -18,6 +19,8 @@ use Twig\Error\SyntaxError;
 
 readonly class MailManService
 {
+    private const THEME_STORAGE_KEY = 'theme';
+
     public function __construct(
         private MailerInterface $mailer,
         private Twig $twig,
@@ -25,7 +28,8 @@ readonly class MailManService
         private string $fromName,
         private string $toAddress,
         private string $toName,
-        private LoggerInterface $logger
+        private LoggerInterface $logger,
+        private RequestStack $requestStack,
     ) {
     }
 
@@ -39,10 +43,15 @@ readonly class MailManService
     {
         $from = new Address($this->fromAddress, $this->fromName);
         $to = new Address($this->toAddress, $this->toName);
+        $theme = $this->getEmailTheme();
 
-        $context = ['contact' => $contact];
+        $context = [
+            'contact' => $contact,
+            'theme'   => $theme,
+        ];
 
         try {
+            // Send email to owner (always use light theme for admin emails)
             $ownerSubject = 'UniSurf — Neue Kontaktanfrage';
             $ownerText = $this->twig->render('email/contact_owner.txt.twig', $context);
             $ownerHtml = $this->twig->render('email/contact_owner.html.twig', $context);
@@ -60,8 +69,10 @@ readonly class MailManService
                 'to'    => $to->getAddress(),
                 'name'  => $to->getName(),
                 'email' => $contact->getEmailAddress(),
+                'theme' => $theme,
             ]);
 
+            // Send copy to visitor with their preferred theme
             if ($contact->getCopy()) {
                 $visitorSubject = 'UniSurf — Ihre Kontaktanfrage';
                 $visitorText = $this->twig->render('email/contact_visitor.txt.twig', $context);
@@ -76,8 +87,9 @@ readonly class MailManService
 
                 $this->mailer->send($emailVisitor);
                 $this->logger->info('Contact mail sent to visitor', [
-                    'to'   => $contact->getEmailAddress(),
-                    'name' => $contact->getName(),
+                    'to'    => $contact->getEmailAddress(),
+                    'name'  => $contact->getName(),
+                    'theme' => $theme,
                 ]);
             }
         } catch (TransportExceptionInterface $e) {
@@ -189,5 +201,36 @@ readonly class MailManService
 
             throw $e;
         }
+    }
+
+    /**
+     * Determine which email theme to use based on user's preference
+     */
+    private function getEmailTheme(): string
+    {
+        $request = $this->requestStack->getCurrentRequest();
+
+        if (!$request) {
+            return 'light';
+        }
+
+        $session = $request->getSession();
+        $storedTheme = $session->get(self::THEME_STORAGE_KEY);
+
+        // If user explicitly chose dark or light, use that
+        if ('dark' === $storedTheme) {
+            return 'dark';
+        }
+
+        if ('light' === $storedTheme) {
+            return 'light';
+        }
+
+        // If 'system' or not set, check User-Agent for dark mode preference
+        // Note: This is a fallback - in practice, the localStorage value should be used
+        $userAgent = $request->headers->get('User-Agent', '');
+
+        // Default to light theme for emails
+        return 'light';
     }
 }

@@ -57,16 +57,20 @@
     "erusev/parsedown": "^1.7.4"
   },
   "require-dev": {
+    "friendsofphp/php-cs-fixer": "dev-master",
+    "phpstan/phpstan": "^2.1",
+    "phpstan/phpstan-deprecation-rules": "^2.0",
+    "phpstan/phpstan-doctrine": "^2.0",
+    "phpstan/phpstan-strict-rules": "^2.0",
+    "phpstan/phpstan-symfony": "^2.0",
     "phpunit/phpunit": "^12.4.4",
+    "roave/security-advisories": "dev-master",
     "symfony/browser-kit": "7.3.*",
     "symfony/css-selector": "7.3.*",
     "symfony/debug-bundle": "7.3.*",
     "symfony/maker-bundle": "^1.64",
     "symfony/stopwatch": "7.3.*",
-    "symfony/web-profiler-bundle": "7.3.*",
-    "roave/security-advisories": "dev-master",
-    "friendsofphp/php-cs-fixer": "dev-master",
-    "phpstan/phpstan": "2.0.x-dev"
+    "symfony/web-profiler-bundle": "7.3.*"
   },
   "replace": {
     "symfony/polyfill-ctype": "*",

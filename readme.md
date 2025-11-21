@@ -126,24 +126,97 @@ All configuration is via environment variables. Typical keys:
 
 Security: Do not commit production secrets. Prefer real env vars or Symfony Secrets Vault for prod.
 
-## 🐳 Docker development
+---
 
-If you prefer Docker for a fully containerized setup, see:
+## ⚡️ Command Summary
 
-- docs/docker.md
+| Task                   | Local Command                               | Docker Command Example                                                         |
+| ---------------------- | ------------------------------------------- | ------------------------------------------------------------------------------ |
+| Start dev server       | symfony server:start                        | docker compose -p unisurf up -d                                                |
+| Run Symfony console    | php bin/console <cmd>                       | docker compose -p unisurf exec php php bin/console <cmd>                       |
+| Update DB schema       | php bin/console doctrine:schema:update      | docker compose -p unisurf exec php php bin/console doctrine:schema:update      |
+| List contacts (custom) | php bin/console app:list:contacts           | docker compose -p unisurf exec php php bin/console app:list:contacts           |
+| Create migration       | php bin/console make:migration              | docker compose -p unisurf exec php php bin/console make:migration              |
+| Run migrations         | php bin/console doctrine:migrations:migrate | docker compose -p unisurf exec php php bin/console doctrine:migrations:migrate |
+| Run pipeline           | ./pipeline.sh                               | docker compose -p unisurf exec php ./pipeline.sh                               |
 
-### Docker and Docker Compose
+---
 
-To start the application with services like _MariaDB_, _Adminer_ and _PHPMyAdmin_ the **Docker Compose** is used:
+## 🐳 Using Symfony & Doctrine Commands in Docker
 
-```shell
-# Start only the basic web application
-docker compose -p unisurf -f docker-compose.yml up -d --build --force-recreate
-# Start the basic web application with MariaDB
-docker compose -p unisurf -f docker-compose.yml -f docker-compose.mariadb.yml up -d --build --force-recreate
-# Start the full environment with MariaDB, Adminer and PHPMyAdmin
-docker compose -p unisurf -f docker-compose.yml -f docker-compose.mariadb.yml -f docker-compose.adminer.yml -f docker-compose.phpmyadmin.yml up -d --build --force-recreate
+To run Symfony or Doctrine commands inside your Docker PHP container, use:
+
+```bash
+docker compose -p unisurf exec php php bin/console <command>
 ```
+
+**Examples:**
+
+- Update DB schema:
+  ```bash
+  docker compose -p unisurf exec php php bin/console doctrine:schema:update
+  ```
+- List contacts:
+  ```bash
+  docker compose -p unisurf exec php php bin/console app:list:contacts
+  ```
+- Create migration file:
+  ```bash
+  docker compose -p unisurf exec php php bin/console make:migration
+  ```
+- Run migrations:
+  ```bash
+  docker compose -p unisurf exec php php bin/console doctrine:migrations:migrate
+  ```
+
+---
+
+## 🗄️ Database Backends & Migrations
+
+Supported SQL backends:
+
+- **SQLite** (default, file-based, easy for dev)
+- **MariaDB/MySQL** (recommended for production)
+- **PostgreSQL** (fully supported)
+
+**Configure backend via `DATABASE_URL` in `.env` or environment:**
+
+- SQLite:
+  ```env
+  DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_%kernel.environment%.db"
+  ```
+- MariaDB/MySQL:
+  ```env
+  DATABASE_URL="mysql://user:pass@127.0.0.1:3306/db?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
+  ```
+- PostgreSQL:
+  ```env
+  DATABASE_URL="postgresql://user:pass@127.0.0.1:5432/db?serverVersion=16&charset=utf8"
+  ```
+
+**Creating and running migrations:**
+
+1. **Create migration file (after changing entities):**
+   ```bash
+   php bin/console make:migration
+   # or in Docker:
+   docker compose -p unisurf exec php php bin/console make:migration
+   ```
+2. **Review migration file in `migrations/` folder.**
+3. **Run migrations:**
+   ```bash
+   php bin/console doctrine:migrations:migrate
+   # or in Docker:
+   docker compose -p unisurf exec php php bin/console doctrine:migrations:migrate
+   ```
+
+**Notes:**
+
+- You can switch backends by changing `DATABASE_URL` and restarting containers.
+- Migrations are backend-agnostic; Doctrine generates SQL for your configured DB.
+- For production, always backup your database before running migrations.
+
+---
 
 ## 🧹 Code Quality & Linting
 
@@ -284,6 +357,18 @@ SKIP_MIGRATIONS=true ./deploy.sh
 
 # Skip composer auto-scripts (if you need to)
 SKIP_COMPOSER_AUTOSCRIPTS=true ./deploy.sh
+```
+
+### pipeline.sh
+
+Runs the full build, test, and deployment pipeline (lint, tests, build, migrations, cache warmup, etc). Use for CI/CD or local pre-deploy checks.
+
+Usage:
+
+```bash
+./pipeline.sh
+# or in Docker:
+docker compose -p unisurf exec php ./pipeline.sh
 ```
 
 ## 🧰 Symfony commands
