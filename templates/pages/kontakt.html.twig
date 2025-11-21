@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Kontakt - UniSurf
+{% endblock %}
+
+{% block masthead %}
+  <!-- Masthead -->
+  <header class="masthead">
+    <div class="container">
+      <div class="masthead-heading text-uppercase">
+        Kontakt
+      </div>
+      <div class="masthead-subheading">
+        Wir freuen uns auf Ihre Nachricht
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+{% block content %}
+  <section class="page-section" id="contact">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="text-center mb-5">
+            <h2 class="section-heading text-uppercase">Kontaktformular</h2>
+            <h3 class="section-subheading text-muted">Füllen Sie das Formular aus und wir melden uns so schnell wie möglich bei Ihnen.</h3>
+          </div>
+
+          {% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <i class="fas fa-check-circle me-2"></i>{{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+
+          {% for message in app.flashes('error') %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="contact-error">
+              <i class="fas fa-exclamation-circle me-2"></i>{{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+
+          {# <!-- prettier-ignore --> #}
+          {{ form_start(form, { attr: { novalidate: 'novalidate' } }) }}
+
+          <div class="mb-3">
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name) }}
+            {{ form_errors(form.name) }}
+          </div>
+
+          <div class="mb-3">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+            {{ form_errors(form.email) }}
+          </div>
+
+          <div class="mb-3">
+            {{ form_label(form.phone) }}
+            {{ form_widget(form.phone) }}
+            {{ form_errors(form.phone) }}
+          </div>
+
+          <div class="mb-3">
+            {{ form_label(form.message) }}
+            {{ form_widget(form.message) }}
+            {{ form_errors(form.message) }}
+            <div class="form-text">
+              Mindestens 10 Zeichen
+            </div>
+          </div>
+
+          <div class="mb-3 form-check">
+            {{ form_widget(form.consent) }}
+            {{ form_label(form.consent) }}
+            {{ form_errors(form.consent) }}
+          </div>
+
+          <div class="mb-3 form-check">
+            {{ form_widget(form.copy) }}
+            {{ form_label(form.copy) }}
+            {{ form_errors(form.copy) }}
+          </div>
+
+          {# Hidden spam protection fields #}
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            {{ form_row(form.emailrep) }}
+            {{ form_row(form.website) }}
+          </div>
+
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+            <button type="submit" class="btn btn-primary btn-xl text-uppercase"><i class="fas fa-paper-plane me-2"></i>Nachricht senden</button>
+          </div>
+
+          {{ form_end(form) }}
+        </div>
+      </div>
+
+      <div class="row justify-content-center mt-5">
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title"><i class="fas fa-info-circle me-2"></i>Datenschutz</h4>
+              <p class="card-text">
+                Ihre Angaben werden ausschließlich zur Bearbeitung Ihrer Anfrage verwendet und anschließend gelöscht. Weitere Informationen finden Sie in unserer <a href="{{ path('app_page', { slug: 'datenschutz' }) }}">Datenschutzerklärung</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

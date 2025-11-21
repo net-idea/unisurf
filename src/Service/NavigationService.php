@@ -27,11 +27,14 @@ readonly class NavigationService
         if (is_file($pagesFile)) {
             /** @var array<string, array<string, mixed>> $pages */
             $pages = require $pagesFile;
+
             foreach ($pages as $slug => $meta) {
                 $showInNav = (bool) ($meta['nav'] ?? false);
+
                 if (!$showInNav) {
                     continue;
                 }
+
                 $label = (string) ($meta['nav_label'] ?? $meta['title'] ?? $slug);
                 $order = (int) ($meta['nav_order'] ?? 0);
                 $url = '/' . ('start' === $slug ? '' : $slug);

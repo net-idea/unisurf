@@ -19,6 +19,22 @@
         color: $unisurf-green-light;
       }
     }
+
+    // Theme dropdown
+    .dropdown-menu {
+      background-color: #343a40;
+      border-color: #495057;
+
+      .dropdown-item {
+        color: #dee2e6;
+
+        &:hover,
+        &:focus {
+          background-color: #495057;
+          color: $unisurf-green-light;
+        }
+      }
+    }
   }
 
   // Form Controls - Dark Theme

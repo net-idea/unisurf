@@ -140,7 +140,12 @@ main() {
   fi
 
   # 4. PHPStan static analysis
-  if ! run_command "Run PHPStan static analysis" php ./vendor/bin/phpstan analyze src; then
+  if ! run_command "Run PHPStan static analysis" php -d memory_limit=-1 ./vendor/bin/phpstan analyze src; then
+    ((failed_checks++))
+    handle_error || return 1
+  fi
+
+  if ! run_command "Run PHPStan static analysis" php -d memory_limit=-1 ./vendor/bin/phpstan analyze tests; then
     ((failed_checks++))
     handle_error || return 1
   fi
