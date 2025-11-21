@@ -31,9 +31,8 @@ class FormContactRepositoryTest extends KernelTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        if ($this->em) {
-            $this->em->close();
-        }
+
+        $this->em?->close();
         $this->em = null;
     }
 
