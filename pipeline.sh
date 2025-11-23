@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-set -euo pipefail
+
+# set -euo pipefail
+# Removed 'set -e' to allow error handling and continuation
+set -u
+set -o pipefail
 
 # UniSurf CI/CD Pipeline - Local Execution
 # This script runs all checks from GitHub Actions workflows locally
@@ -73,11 +77,13 @@ print_warning() {
 run_command() {
   local description=$1
   shift
+  local cmd=("$@")
 
   print_step "$description"
+  echo -e "${YELLOW}Command:${NC} ${cmd[*]}"
 
   if $VERBOSE; then
-    if "$@"; then
+    if "${cmd[@]}"; then
       print_success "$description - OK"
       return 0
     else
@@ -85,7 +91,7 @@ run_command() {
       return 1
     fi
   else
-    if "$@" > /dev/null 2>&1; then
+    if "${cmd[@]}" > /dev/null 2>&1; then
       print_success "$description - OK"
       return 0
     else
@@ -95,19 +101,43 @@ run_command() {
   fi
 }
 
-handle_error() {
-  if $CONTINUE_ON_ERROR; then
-    print_warning "Error occurred, but continuing due to --continue-on-error flag"
-    return 0
-  else
-    print_error "Pipeline failed. Use --continue-on-error to continue on errors."
-    exit 1
+run_php_cs_fixer_check() {
+  if ! run_command "Run PHP CS Fixer check" php ./vendor/bin/php-cs-fixer check -n --config=.php-cs-fixer.dist.php; then
+    print_warning "Hint: Run './php-cs-fixer.sh' to auto-fix issues"
+
+    while true; do
+      read -p "Do you want to auto-fix with PHP CS Fixer? (y/n): " yn
+
+      case $yn in
+        [Yy]*)
+          print_step "Running PHP CS Fixer auto-fix"
+          php ./vendor/bin/php-cs-fixer fix -n --config=.php-cs-fixer.dist.php
+          break
+          ;;
+        [Nn]*)
+          break
+          ;;
+        *)
+          echo "Please answer y or n."
+          ;;
+      esac
+    done
+
+    return 1
   fi
+
+  return 0
+}
+
+handle_error() {
+  print_warning "Error occurred, but continuing to next step."
+  return 0
 }
 
 # Main pipeline
 main() {
-  local start_time=$(date +%s)
+  local start_time
+  start_time=$(date +%s)
   local failed_checks=0
 
   print_header "UniSurf CI/CD Pipeline"
@@ -123,31 +153,30 @@ main() {
   # 1. Validate composer.json
   if ! run_command "Validate composer.json and composer.lock" composer validate --strict; then
     ((failed_checks++))
-    handle_error || return 1
+    handle_error
   fi
 
   # 2. Install Composer dependencies
   if ! run_command "Install Composer dependencies" composer install --no-progress --no-interaction --prefer-dist --optimize-autoloader; then
     ((failed_checks++))
-    handle_error || return 1
+    handle_error
   fi
 
   # 3. PHP CS Fixer check
-  if ! run_command "Run PHP CS Fixer check" php ./vendor/bin/php-cs-fixer check -n --config=.php-cs-fixer.dist.php; then
+  if ! run_php_cs_fixer_check; then
     ((failed_checks++))
-    print_warning "Hint: Run './php-cs-fixer.sh' to auto-fix issues"
-    handle_error || return 1
+    handle_error
   fi
 
   # 4. PHPStan static analysis
   if ! run_command "Run PHPStan static analysis" php -d memory_limit=-1 ./vendor/bin/phpstan analyze src; then
     ((failed_checks++))
-    handle_error || return 1
+    handle_error
   fi
 
   if ! run_command "Run PHPStan static analysis" php -d memory_limit=-1 ./vendor/bin/phpstan analyze tests; then
     ((failed_checks++))
-    handle_error || return 1
+    handle_error
   fi
 
   echo ""
@@ -160,26 +189,26 @@ main() {
   # 5. Install Yarn dependencies
   if ! run_command "Install Yarn dependencies" yarn install --immutable; then
     ((failed_checks++))
-    handle_error || return 1
+    handle_error
   fi
 
   # 6. TypeScript type checking
   if ! run_command "TypeScript type checking" npx tsc --noEmit; then
     ((failed_checks++))
-    handle_error || return 1
+    handle_error
   fi
 
   # 7. Stylelint CSS/SCSS
   if ! run_command "Lint CSS/SCSS files" npx stylelint 'assets/**/*.{css,scss}'; then
     ((failed_checks++))
     print_warning "Hint: Run 'yarn run lint:css:fix' to auto-fix issues"
-    handle_error || return 1
+    handle_error
   fi
 
   # 8. Build assets (required for PHPUnit tests)
   if ! run_command "Build assets with Webpack Encore" yarn run build; then
     ((failed_checks++))
-    handle_error || return 1
+    handle_error
   fi
 
   echo ""
@@ -192,13 +221,13 @@ main() {
   # 9. PHPUnit tests
   if ! run_command "Run PHPUnit tests" php ./vendor/bin/phpunit tests; then
     ((failed_checks++))
-    handle_error || return 1
+    handle_error
   fi
 
   # 10. Lint Twig templates
   if ! run_command "Lint Twig templates" php bin/console lint:twig templates; then
     ((failed_checks++))
-    handle_error || return 1
+    handle_error
   fi
 
   echo ""
@@ -212,7 +241,7 @@ main() {
   if ! run_command "Check code formatting with Prettier" npx prettier --check .; then
     ((failed_checks++))
     print_warning "Hint: Run 'npx prettier --write .' or './format.sh' to auto-fix issues"
-    handle_error || return 1
+    handle_error
   fi
 
   echo ""
@@ -220,7 +249,8 @@ main() {
   # ============================================
   # Summary
   # ============================================
-  local end_time=$(date +%s)
+  local end_time
+  end_time=$(date +%s)
   local duration=$((end_time - start_time))
 
   print_header "Pipeline Summary"

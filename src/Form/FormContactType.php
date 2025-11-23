@@ -22,6 +22,7 @@ class FormContactType extends AbstractType
             ->add('name', TextType::class, [
                 'label'       => 'Name',
                 'required'    => true,
+                'empty_data'  => '',
                 'constraints' => [
                     new Assert\NotBlank(message: 'Bitte geben Sie Ihren Namen an.'),
                     new Assert\Length(max: 120, maxMessage: 'Bitte verwenden Sie höchstens {{ limit }} Zeichen.'),
@@ -37,6 +38,7 @@ class FormContactType extends AbstractType
                 'label'         => 'E‑Mail',
                 'required'      => true,
                 'property_path' => 'emailAddress',
+                'empty_data'    => '',
                 'constraints'   => [
                     new Assert\NotBlank(message: 'Bitte geben Sie Ihre E‑Mail‑Adresse an.'),
                     new Assert\Email(message: 'Bitte geben Sie eine gültige E‑Mail‑Adresse an.'),
@@ -66,16 +68,16 @@ class FormContactType extends AbstractType
             ->add('message', TextareaType::class, [
                 'label'       => 'Nachricht',
                 'required'    => true,
+                'empty_data'  => '',
                 'constraints' => [
                     new Assert\NotBlank(message: 'Bitte geben Sie eine Nachricht ein.'),
                     new Assert\Length(min: 10, max: 5000, minMessage: 'Bitte geben Sie mindestens {{ limit }} Zeichen ein.', maxMessage: 'Bitte verwenden Sie höchstens {{ limit }} Zeichen.'),
                 ],
                 'attr' => [
-                    'rows'        => 6,
-                    'minlength'   => 10,
-                    'maxlength'   => 5000,
-                    'placeholder' => 'Nachricht...',
-                    'class'       => 'form-control',
+                    'rows'      => 6,
+                    'minlength' => 10,
+                    'maxlength' => 5000,
+                    'class'     => 'form-control',
                 ],
                 'label_attr' => ['class' => 'form-label'],
             ])

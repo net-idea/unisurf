@@ -21,4 +21,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './bootstrap';
 
 // Import Navbar functionality (TypeScript)
-import './scripts/theme-toggle';
+import './scripts/contacts.ts';
+import './scripts/contact-form.ts';
+import './scripts/theme-toggle.ts';

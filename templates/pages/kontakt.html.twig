@@ -43,7 +43,7 @@
           {% endfor %}
 
           {# <!-- prettier-ignore --> #}
-          {{ form_start(form, { attr: { novalidate: 'novalidate' } }) }}
+          {{ form_start(form, { action: path('app_contact'), attr: { class: 'vstack gap-3 mt-3 needs-validation', novalidate: 'novalidate' } }) }}
 
           <div class="mb-3">
             {{ form_label(form.name) }}
