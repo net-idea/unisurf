@@ -54,7 +54,7 @@ jobs:
         run: php -d memory_limit=-1 ./vendor/bin/phpstan analyze tests --error-format=github --no-progress
 
       - name: Setup Node.js for asset building
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '22.x'
 
