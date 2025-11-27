@@ -13,7 +13,7 @@ set -o pipefail
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
+BLUE='\033[1;34m'
 NC='\033[0m' # No Color
 
 # Configuration
@@ -21,6 +21,7 @@ CONTINUE_ON_ERROR=false
 VERBOSE=false
 PHP_VERSION=$(php -r "echo PHP_VERSION;")
 NODE_VERSION=$(node --version)
+
 
 # Parse arguments
 for arg in "$@"; do
@@ -71,7 +72,16 @@ print_success() {
 }
 
 print_warning() {
-  echo -e "${YELLOW}⚠${NC} $1"
+  echo -e "${YELLOW}⚠︎${NC} $1"
+}
+
+print_info() {
+  echo -e "${BLUE}ⓘ${NC} $1"
+}
+
+handle_error() {
+  print_warning "Error occurred, but continuing to next step."
+  return 0
 }
 
 run_command() {
@@ -103,7 +113,7 @@ run_command() {
 
 run_php_cs_fixer_check() {
   if ! run_command "Run PHP CS Fixer check" php ./vendor/bin/php-cs-fixer check -n --config=.php-cs-fixer.dist.php; then
-    print_warning "Hint: Run './php-cs-fixer.sh' to auto-fix issues"
+    print_info "Hint: Run './php-cs-fixer.sh' to auto-fix issues"
 
     while true; do
       read -p "Do you want to auto-fix with PHP CS Fixer? (y/n): " yn
@@ -126,11 +136,6 @@ run_php_cs_fixer_check() {
     return 1
   fi
 
-  return 0
-}
-
-handle_error() {
-  print_warning "Error occurred, but continuing to next step."
   return 0
 }
 
@@ -168,12 +173,13 @@ main() {
     handle_error
   fi
 
-  # 4. PHPStan static analysis
+  # 4. PHPStan static analysis for src
   if ! run_command "Run PHPStan static analysis" php -d memory_limit=-1 ./vendor/bin/phpstan analyze src; then
     ((failed_checks++))
     handle_error
   fi
 
+  # 5. PHPStan static analysis for tests
   if ! run_command "Run PHPStan static analysis" php -d memory_limit=-1 ./vendor/bin/phpstan analyze tests; then
     ((failed_checks++))
     handle_error

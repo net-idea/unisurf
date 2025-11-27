@@ -9,7 +9,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "bash ./deploy.sh",
+    "start": "bash ./develop.sh",
     "dev-server": "encore dev-server",
     "dev": "encore dev",
     "watch": "encore dev --watch",
@@ -18,7 +18,12 @@
     "tsc:check": "tsc --noEmit",
     "tsc:watch": "tsc --noEmit -w",
     "lint:css": "stylelint 'assets/**/*.{css,scss}'",
-    "lint:css:fix": "stylelint 'assets/**/*.{css,scss}' --fix"
+    "lint:css:fix": "stylelint 'assets/**/*.{css,scss}' --fix",
+    "og:build": "node generate-og.js",
+    "lint:html": "prettier \"templates/**/*.html.twig\" --check",
+    "lint:html:fix": "prettier \"templates/**/*.html.twig\" --write",
+    "lint": "yarn run lint:css:fix && yarn run tsc:check && yarn run lint:html",
+    "lint:fix": "yarn run lint:css:fix && yarn run lint:html:fix"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "7.1.0",
