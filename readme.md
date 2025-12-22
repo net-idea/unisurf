@@ -75,16 +75,20 @@ unisurf.de/
 - Composer
 - Node.js 20+ and Yarn
 - Symfony CLI (optional, for local web server)
+- Docker Desktop (for MariaDB container in local mode)
 
 ### Quick start
 
-You can use the helper script which installs dependencies, clears cache, builds assets and starts both the Webpack dev watcher and Symfony server:
+Run the helper and choose your environment:
 
 ```bash
 ./develop.sh
 ```
 
-If you prefer to run steps manually:
+- Option 1: **Local (host tools)** — installs Composer/Yarn locally, starts MariaDB via Docker (`docker-compose.mariadb.yml` + `docker-compose.mariadb.dev.yml`), runs `yarn encore dev --watch`, and launches PHP's built-in server on `http://127.0.0.1:8000`.
+- Option 2: **Docker Compose (dev stack)** — brings up PHP, Nginx, Node Encore watcher, MariaDB, and Mailpit via compose.
+
+If you prefer to run local steps manually:
 
 ```bash
 # 1) Install dependencies
@@ -109,7 +113,33 @@ Open the app:
 http://localhost:8000
 ```
 
-### Configure environment variables
+### Docker dev stack (manual)
+
+```bash
+docker compose -p unisurf \
+  -f docker-compose.yaml \
+  -f docker-compose.dev.yaml \
+  -f docker-compose.mariadb.yml \
+  -f docker-compose.mariadb.dev.yml \
+  up -d --build
+```
+
+Services:
+
+- App: `http://localhost:${NGINX_PORT}`
+- Encore dev server: `http://localhost:${NODE_PORT}`
+- Mailpit: `http://localhost:${MAILER_WEB_PORT}`
+- MariaDB: `localhost:${DB_PORT}` (version 11.4.3)
+
+### Production (compose)
+
+`docker-compose.yaml` is prod-oriented (APP_ENV=prod, no dev mounts). Build assets before deploy, then run:
+
+```bash
+docker compose -p unisurf -f docker-compose.yaml -f docker-compose.mariadb.yml up -d --build
+```
+
+## ✅ Environment variables
 
 All configuration is via environment variables. Typical keys:
 
@@ -119,7 +149,7 @@ All configuration is via environment variables. Typical keys:
 - LOCK_DSN: lock store DSN (default in dev: `flock`). Examples: `flock`, `semaphore`, `redis://localhost:6379`
 - DATABASE_URL: Doctrine DSN
   - SQLite (default): `DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_%kernel.environment%.db"`
-  - MariaDB/MySQL: `DATABASE_URL="mysql://user:pass@127.0.0.1:3306/db?serverVersion=10.11.2-MariaDB&charset=utf8mb4"`
+  - MariaDB/MySQL: `DATABASE_URL="mysql://user:pass@127.0.0.1:3306/db?serverVersion=11.4.3-MariaDB&charset=utf8mb4"`
   - Postgres: `DATABASE_URL="postgresql://user:pass@127.0.0.1:5432/db?serverVersion=16&charset=utf8"`
 - MESSENGER_TRANSPORT_DSN: default `doctrine://default?auto_setup=0` (use `sync://` for simple dev)
 - Mail settings (compose into MAILER_DSN): MAIL_SCHEME, MAIL_HOST, MAIL_ENCRYPTION, MAIL_PORT, MAIL_USER, MAIL_PASSWORD
@@ -187,7 +217,7 @@ Supported SQL backends:
   ```
 - MariaDB/MySQL:
   ```env
-  DATABASE_URL="mysql://user:pass@127.0.0.1:3306/db?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
+  DATABASE_URL="mysql://user:pass@127.0.0.1:3306/db?serverVersion=11.4.3-MariaDB&charset=utf8mb4"
   ```
 - PostgreSQL:
   ```env
@@ -318,12 +348,13 @@ yarn build
 
 ### develop.sh
 
-Local development helper that:
+Local and Docker dev helper that:
 
-- Installs dependencies (Yarn and Composer)
+- Prompts for environment: local host tools + MariaDB via Docker, or full Docker dev stack
+- Installs dependencies (Yarn and Composer) in local mode
 - Clears Symfony cache (dev)
-- Builds front-end assets
-- Starts Webpack Encore watch and Symfony local server in parallel
+- Builds front-end assets (Encore watch)
+- Starts Webpack Encore watch and PHP dev server (local) or Docker dev stack with node watcher
 
 Usage:
 
@@ -333,8 +364,9 @@ Usage:
 
 Notes:
 
-- Requires Node/Yarn (or NPM), PHP and Composer available on your machine.
-- Press Ctrl+C to stop both background processes.
+- Local mode requires Node/Yarn, PHP and Composer available on your machine; Docker is still required for MariaDB.
+- Docker mode uses compose files: `docker-compose.yaml`, `docker-compose.dev.yaml`, `docker-compose.mariadb.yml`, `docker-compose.mariadb.dev.yml`.
+- Press Ctrl+C to stop local background processes; use `docker compose -p unisurf down` to stop the Docker stack.
 
 ### deploy.sh
 
