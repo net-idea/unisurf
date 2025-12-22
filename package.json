@@ -19,11 +19,11 @@
     "tsc:watch": "tsc --noEmit -w",
     "lint:css": "stylelint 'assets/**/*.{css,scss}'",
     "lint:css:fix": "stylelint 'assets/**/*.{css,scss}' --fix",
-    "og:build": "node generate-og.js",
+    "og:build": "node og.js",
     "lint:html": "prettier \"templates/**/*.html.twig\" --check",
     "lint:html:fix": "prettier \"templates/**/*.html.twig\" --write",
-    "lint": "yarn run lint:css:fix && yarn run tsc:check && yarn run lint:html",
-    "lint:fix": "yarn run lint:css:fix && yarn run lint:html:fix"
+    "lint": "prettier --check .",
+    "lint:fix": "prettier --write ."
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "7.1.0",

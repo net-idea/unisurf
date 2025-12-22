@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Lint Stylesheet files
-yarn run lint:css:fix
+# Lint all files
+yarn run lint:fix
 
 # Type check TypeScript files
 yarn run tsc:check

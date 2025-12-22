@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <section class="py-5 border-bottom">
+    <div class="container">
+      <div class="section-kicker">
+        Hosting
+      </div>
+      <h1>Webhosting & Managed Hosting</h1>
+      <p class="lead">
+        Wenn Ihre Website, Ihr Shop oder Ihre Web-Anwendung geschäftskritisch ist, brauchen Sie Hosting, das zuverlässig läuft – sicher, performant und skalierbar. Genau darum kümmert sich UniSurf.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-5">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-12">
+          <h2>Für wen ist UniSurf Hosting ideal?</h2>
+          <ul>
+            <li>KMU, die eine stabile IT-Basis benötigen</li>
+            <li>Agenturen, die Projekte sauber betreiben wollen (ohne Ops-Ballast)</li>
+            <li>Startups, die schnell wachsen möchten – mit planbarer Infrastruktur</li>
+          </ul>
+          <p class="mb-0">
+            Egal ob Single-Server oder Cloud-Setup: Wir liefern eine Lösung, die zu Ihrem Bedarf passt – und die Sie jederzeit nachvollziehen können.
+          </p>
+        </div>
+      </div>
+
+      <hr class="my-5" />
+
+      <div class="row g-4">
+        <div class="col-12">
+          <div class="media-block shadow-sm">
+            <img src="{{ asset('images/webhosting-01.png') }}" alt="Managed Server & Web Hosting" loading="lazy" />
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="page-section-card p-4 h-100">
+            <h3 class="h5">Managed Server & Administration</h3>
+            <p class="mb-0">
+              Monitoring, Updates, Hardening, Backups – und schnelle Hilfe im Ernstfall.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="page-section-card p-4 h-100">
+            <h3 class="h5">PHP-Hosting</h3>
+            <p class="mb-0">
+              Stabile PHP-Umgebungen mit sauberer Konfiguration und Performance-Setups.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="page-section-card p-4 h-100">
+            <h3 class="h5">E-Mail</h3>
+            <p class="mb-0">
+              Zuverlässige Postfächer, Zustellbarkeit und Schutz vor Spam/Phishing.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="page-section-card p-4 h-100">
+            <h3 class="h5">Datenbanken</h3>
+            <p class="mb-0">
+              MySQL/PostgreSQL – sicher betrieben, mit Backups und Performance-Blick.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-section-card p-4 p-lg-5 mt-5">
+        <div class="row align-items-center g-4">
+          <div class="col-12 col-lg-8">
+            <div class="section-kicker">
+              Standard
+            </div>
+            <h2 class="mb-2">Sicherheit, Performance und Skalierung – als Basis</h2>
+            <p class="mb-0">
+              Wir denken Betrieb von Anfang an mit: Patch-Management, Monitoring, Backup/Recovery und klare Zugriffe. So wird Hosting nicht zur Baustelle – sondern zur stabilen Grundlage für Ihr Geschäft.
+            </p>
+          </div>
+          <div class="col-12 col-lg-4 text-lg-end">
+            <a class="btn btn-primary btn-xl text-uppercase" href="/kontakt">Hosting-Bedarf besprechen</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -3,22 +3,48 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {# SEO constants and computed values #}
+    {% set baseUrl = 'https://unisurf.de' %}
+    {% set brandName = 'UniSurf' %}
+    {% set siteName = 'UniSurf - Unique Surfing' %}
+    {% set defaultDescription = 'UniSurf bietet Services für einzigartige Ideen' %}
+    {% set defaultKeywords = 'UniSurf, Webentwicklung, Hosting' %}
+    {% set effectiveSlug = slug|default('start') %}
+    {% set computedCanonical = effectiveSlug in ['', 'start', 'main'] ? '/' : '/' ~ effectiveSlug %}
+    {% set canonicalPath = pageMeta.canonical|default(computedCanonical) %}
+    {% set pageDesc = pageMeta.description|default(defaultDescription) %}
+    {% set pageKeywords = pageMeta.keywords|default(defaultKeywords) %}
+    {% set robots = pageMeta.robots|default('index,follow') %}
+    {% set ogImagePath = pageMeta.og_image|default('/assets/og/start.jpg') %}
+    {% set absolutCanonical = baseUrl ~ canonicalPath %}
+    {% set absolutOgImage = baseUrl ~ ogImagePath %}
+    {% set fullTitle = pageMeta.title|default('UniSurf - Unique Surfing') %}
+
     <title>
-      {% block title %}
-        {{ pageMeta.title|default('UniSurf - Unique Surfing') }}
-      {% endblock %}
+      {{ fullTitle }}
     </title>
 
-    <meta name="description" content="{{ pageMeta.description|default('UniSurf bietet Services für einzigartige Ideen') }}" />
-    <meta name="keywords" content="{{ pageMeta.keywords|default('UniSurf, Webentwicklung, Hosting') }}" />
-    <meta name="robots" content="{{ pageMeta.robots|default('index,follow') }}" />
+    <meta name="description" content="{{ pageDesc }}" />
+    <meta name="keywords" content="{{ pageKeywords }}" />
+    <meta name="robots" content="{{ robots }}" />
 
-    <link rel="canonical" href="{{ url('app_page', { slug: slug|default('start') }) }}" />
+    <link rel="canonical" href="{{ absolutCanonical }}" />
 
-    <meta property="og:title" content="{{ pageMeta.title|default('UniSurf') }}" />
-    <meta property="og:description" content="{{ pageMeta.description|default('') }}" />
-    <meta property="og:image" content="{{ pageMeta.og_image|default('/assets/og/start.jpg') }}" />
+    {# Open Graph #}
+    <meta property="og:site_name" content="{{ siteName }}" />
+    <meta property="og:title" content="{{ fullTitle }}" />
+    <meta property="og:description" content="{{ pageDesc }}" />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ absolutCanonical }}" />
+    <meta property="og:image" content="{{ absolutOgImage }}" />
+    <meta property="og:locale" content="de_DE" />
+
+    {# Twitter Card #}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ fullTitle }}" />
+    <meta name="twitter:description" content="{{ pageDesc }}" />
+    <meta name="twitter:image" content="{{ absolutOgImage }}" />
 
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}" />
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any" />
@@ -36,7 +62,7 @@
 
     {% block masthead %}
       <!-- Masthead -->
-      <header class="masthead">
+      <header class="masthead" style="background-image: url('{{ asset('images/header-bg.jpg') }}');">
         <div class="container">
           <div class="masthead-subheading">
             Wir bieten den Service für einzigartige Ideen
@@ -44,15 +70,15 @@
           <div class="masthead-heading text-uppercase">
             Unique Surfing!
           </div>
-          <a class="btn btn-primary btn-xl text-uppercase" href="#services">Unsere Services</a>
+          <a class="btn btn-primary btn-xl text-uppercase" href="/services">Unsere Services</a>
         </div>
       </header>
     {% endblock %}
 
-    {% block content %}
-      <section class="page-section" id="services">
+    {% block body %}
+      <section class="page-section">
         <div class="container">
-          {% block body %}
+          {% block content %}
 
           {% endblock %}
         </div>

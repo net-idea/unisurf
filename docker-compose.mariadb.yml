@@ -4,8 +4,7 @@ services:
     container_name: '${APP_NAME:-unisurf}_mariadb'
     hostname: database
     restart: unless-stopped
-    command:
-      ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--transaction-isolation=READ-COMMITTED', '--log-bin=binlog', '--binlog-format=ROW']
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--transaction-isolation=READ-COMMITTED', '--log-bin=binlog', '--binlog-format=ROW']
     environment:
       MYSQL_ROOT_PASSWORD: '${DB_ROOT_PASSWORD:-nopassword}'
       MYSQL_DATABASE: '${DB_NAME:-unisurf}'

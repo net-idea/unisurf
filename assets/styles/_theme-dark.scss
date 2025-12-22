@@ -52,4 +52,26 @@
   .valid-feedback {
     color: $unisurf-green-light;
   }
+
+  // Headings - Dark Theme
+  h1,
+  h2,
+  h3,
+  h4,
+  .h1,
+  .h2,
+  .h3,
+  .h4 {
+    color: $unisurf-green-primary;
+    text-shadow:
+      0 1px 0 #23272a,
+      0 2px 8px #0008;
+  }
+
+  // Body - Dark Theme
+  body,
+  .text-body {
+    color: $text-color-dark;
+    background: #23272a;
+  }
 }
