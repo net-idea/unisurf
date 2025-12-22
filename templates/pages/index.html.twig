@@ -1,0 +1,283 @@
+{% extends 'base.html.twig' %}
+
+{% block masthead %}
+  <header class="masthead" style="background-image: url('{{ asset('images/header-bg.jpg') }}');">
+    <div class="container">
+      <div class="masthead-subheading">
+        Managed Webhosting für Teams, die keine Zeit für Server-Drama haben
+      </div>
+      <div class="masthead-heading text-uppercase">
+        Stabil. Sicher. Schnell – aber ohne Ticketschleifen.
+      </div>
+      <p class="lead text-white-50 mx-auto">
+        UniSurf betreibt Ihre Website, Ihren Shop oder Ihre Web-App so, wie es sein soll: klar dokumentiert, sauber abgesichert und proaktiv überwacht. Updates, Backups, Monitoring und Deployments übernehmen wir – Sie behalten den Kopf frei.
+      </p>
+      <div class="d-flex gap-3 justify-content-center flex-wrap mt-4">
+        <a class="btn btn-primary btn-xl text-uppercase" href="/kontakt">Kontakt aufnehmen</a>
+        <a class="btn btn-outline-light btn-xl text-uppercase" href="/services">Leistungen ansehen</a>
+      </div>
+      <p class="small text-white-50 mt-4 mb-0">
+        Für KMU • Agenturen • Entwickler • Startups
+      </p>
+    </div>
+  </header>
+{% endblock %}
+
+{% block body %}
+  {# ============================================================= #}
+  {# Überblick / Value Proposition #}
+  {# ============================================================= #}
+  <section class="py-5" id="home-overview">
+    <div class="container">
+      <div class="row align-items-stretch g-4">
+        <div class="col-12 col-lg-8">
+          <div class="section-kicker">
+            Kurz & klar
+          </div>
+          <h1 class="mb-3">Willkommen bei UniSurf – Ihrem Managed Webhosting Partner</h1>
+          <p class="lead">
+            Wenn Hosting zur Nebensache wird, läuft Ihr Business besser. Wir übernehmen Betrieb und Pflege Ihrer Systeme – von der ersten sauberen Konfiguration über sichere Deployments bis zu Monitoring, Backups und schnellen Rollbacks.
+          </p>
+
+          <ul class="unisurf-feature-list lead mb-0">
+            <li>
+              <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+              <span><strong>Setup & Migration ohne Stress:</strong> Wir übernehmen Umzug, DNS, SSL und die richtige Server-Konfiguration – sauber dokumentiert.</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+              <span><strong>Sicherheit & Updates:</strong> Hardening, Patch-Management und sinnvolle Wartungsfenster – damit Risiken gar nicht erst wachsen.</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+              <span><strong>Backups & Monitoring:</strong> Automatisierte Backups, Restore-Checks und 24/7 Monitoring mit Alarmierung – bevor es kritisch wird.</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+              <span><strong>Persönlicher Support:</strong> Direktkontakt statt Hotline – schnell, verständlich und lösungsorientiert.</span>
+            </li>
+          </ul>
+
+          <div class="row g-3 mt-2">
+            <div class="col-12 col-md-6">
+              <div class="page-section-card p-4 h-100">
+                <h2 class="h5 mb-2">Managed Hosting</h2>
+                <p class="mb-0">
+                  Serverbetrieb, Updates, Hardening, Backups und Monitoring – im Paket, ohne Überraschungen.
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="page-section-card p-4 h-100">
+                <h2 class="h5 mb-2">Performance & Stabilität</h2>
+                <p class="mb-0">
+                  Optimierte Stacks, saubere Deployments und proaktives Monitoring – damit Ihre Seite schnell bleibt.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-3 flex-wrap mt-4">
+            <a class="btn btn-primary" href="/kontakt">Beratung anfragen</a>
+            <a class="btn btn-outline-secondary" href="/services">Hosting vergleichen</a>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-4 d-flex">
+          <div class="media-block shadow-sm w-100 h-100">
+            <img src="{{ asset('images/webhosting.webp') }}" alt="Managed Hosting: Serverbetrieb, Sicherheit und Monitoring" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ============================================================= #}
+  {# Kernleistung: Web Hosting #}
+  {# ============================================================= #}
+  <section class="py-5 bg-body-tertiary" id="hosting">
+    <div class="container">
+      <div class="row g-4 align-items-start">
+        <div class="col-12 col-lg-6">
+          <div class="section-kicker">
+            Kernleistung
+          </div>
+          <h2>Professionelles Web Hosting – zuverlässig, sicher, performant</h2>
+          <p>
+            Sie bekommen eine Umgebung, die zu Ihrem Projekt passt: sauber konfiguriert, dokumentiert und so betrieben, dass Sie nachts ruhig schlafen können.
+          </p>
+          <ul class="mb-0">
+            <li><strong>Sicherheits-Updates</strong> & Hardening (OS, Webserver, PHP, Abhängigkeiten)</li>
+            <li><strong>Backups</strong> & Restore-Strategie (inkl. regelmäßiger Überprüfung)</li>
+            <li><strong>Monitoring</strong> & Alarmierung (Performance, Verfügbarkeit, Ressourcen)</li>
+            <li><strong>Support</strong> mit Ansprechpartner – verständlich, schnell, lösungsorientiert</li>
+          </ul>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="page-section-card p-4">
+                <div class="section-kicker">
+                  Ideal für
+                </div>
+                <p class="mb-0">
+                  Websites, Shops und Web-Apps, die Umsatz bringen – und daher stabil, schnell und sicher laufen müssen.
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="page-section-card p-4 h-100">
+                <h3 class="h6 mb-2">Uptime & Wartung</h3>
+                <p class="mb-0">
+                  Proaktives Patch-Management, klare Wartungsfenster, verlässliche Prozesse.
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="page-section-card p-4 h-100">
+                <h3 class="h6 mb-2">Skalierbarkeit</h3>
+                <p class="mb-0">
+                  Von solider Single-VM bis zu Cloud-Setup – ohne Chaos beim Wachstum.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <a class="btn btn-primary" href="/kontakt">Hosting-Aufwand einschätzen lassen</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ============================================================= #}
+  {# Zusatzleistungen (unterstützend) #}
+  {# ============================================================= #}
+  <section class="py-5" id="extras">
+    <div class="container">
+      <div class="section-kicker">
+        Ergänzend
+      </div>
+      <h2 class="mb-4">Alles, was gutes Hosting komplett macht</h2>
+
+      <div class="row g-4">
+        <div class="col-12 col-lg-3">
+          <div class="page-section-card p-4 h-100">
+            <h3 class="h6 mb-2">Server & Cloud-Management</h3>
+            <p class="mb-0">
+              AWS, Azure, Hetzner Cloud – Beratung, Betrieb und Optimierung passend zu Ihrem Bedarf.
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg-3">
+          <div class="page-section-card p-4 h-100">
+            <h3 class="h6 mb-2">E-Mail & Datenbanken</h3>
+            <p class="mb-0">
+              Zustellbarkeit, SPF/DKIM/DMARC, sichere DB-Setups und saubere Backup-Strategien.
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg-3">
+          <div class="page-section-card p-4 h-100">
+            <h3 class="h6 mb-2">KI / AI-Integrationen</h3>
+            <p class="mb-0">
+              Automatisierung, Chatbots und Support-Workflows – pragmatisch, datenschutzbewusst, wirkungsvoll.
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg-3">
+          <div class="page-section-card p-4 h-100">
+            <h3 class="h6 mb-2">Security & Netzwerk</h3>
+            <p class="mb-0">
+              Zugriffskonzepte, VPN/Intranet, Firewall-Regeln und Grundlagen für sichere IT-Strukturen.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ============================================================= #}
+  {# Zielgruppe & Vertrauen #}
+  {# ============================================================= #}
+  <section class="py-5 bg-body-tertiary" id="target">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-12 col-lg-6">
+          <div class="section-kicker">
+            Für wen
+          </div>
+          <h2>Für Teams ohne eigene IT-Abteilung – und für Agenturen, die liefern wollen</h2>
+          <p>
+            Sie brauchen Hosting, das zuverlässig funktioniert, ohne dass Sie sich in Technik verlieren. Wir übernehmen den Betrieb und halten die Kommunikation klar.
+          </p>
+          <ul class="mb-0">
+            <li><strong>Kleine & mittelständische Unternehmen</strong>, die Stabilität und Sicherheit brauchen</li>
+            <li><strong>Agenturen & Entwickler:innen</strong>, die Projekte sauber betreiben möchten</li>
+            <li><strong>Startups</strong>, die schnell starten und später skalieren wollen</li>
+          </ul>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="section-kicker">
+            Warum UniSurf
+          </div>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <div class="page-section-card p-4 h-100">
+                <h3 class="h6 mb-2">Persönlicher Support</h3>
+                <p class="mb-0">
+                  Keine Ticketschleifen: Sie sprechen mit Menschen, die Verantwortung übernehmen.
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="page-section-card p-4 h-100">
+                <h3 class="h6 mb-2">Saubere Prozesse</h3>
+                <p class="mb-0">
+                  Monitoring, Backups, Updates und Doku – nachvollziehbar und wiederholbar.
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="page-section-card p-4 h-100">
+                <h3 class="h6 mb-2">Sicherheit als Standard</h3>
+                <p class="mb-0">
+                  Hardening, Rechtekonzepte und regelmäßige Pflege – nicht „später mal“.
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="page-section-card p-4 h-100">
+                <h3 class="h6 mb-2">Skalierbar geplant</h3>
+                <p class="mb-0">
+                  Heute pragmatisch starten, morgen sauber wachsen – ohne Rebuild unter Zeitdruck.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ============================================================= #}
+  {# Finaler CTA #}
+  {# ============================================================= #}
+  <section class="py-5" id="cta">
+    <div class="container">
+      <div class="page-section-card p-4 p-lg-5 text-center">
+        <h2 class="mb-3">Lassen Sie uns Ihr Hosting in ruhiges Fahrwasser bringen</h2>
+        <p class="lead mb-4">
+          Wenn Sie möchten, dass jemand den Betrieb Ihrer Systeme ernst nimmt: Melden Sie sich kurz – wir hören zu, stellen die richtigen Fragen und schlagen einen klaren nächsten Schritt vor.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+          <a class="btn btn-primary btn-xl text-uppercase" href="/kontakt">Persönlichen Kontakt herstellen</a>
+          <a class="btn btn-outline-secondary btn-xl text-uppercase" href="/services">Leistungen ansehen</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

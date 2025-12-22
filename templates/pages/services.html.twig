@@ -1,0 +1,158 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <section class="py-5 border-bottom">
+    <div class="container">
+      <div class="section-kicker">
+        Services
+      </div>
+      <h1>Web Hosting & IT-Services – klar, sicher, skalierbar</h1>
+      <p class="lead">
+        UniSurf unterstützt Unternehmen, Agenturen und Startups beim Aufbau und Betrieb ihrer Infrastruktur – mit persönlichem Ansprechpartner und einem Setup, das mitwächst.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-5" id="services">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-12 col-lg-6">
+          <div class="page-section-card p-4 h-100">
+            <div class="section-kicker">
+              Managed
+            </div>
+            <h2 class="h4">Managed Server & Serveradministration</h2>
+            <p>
+              Proaktiver Betrieb statt Feuerwehr: Wir halten Ihre Systeme stabil und sicher.
+            </p>
+            <ul>
+              <li>Monitoring & Störungsreaktion</li>
+              <li>Updates, Patch-Management, Wartung</li>
+              <li>Backup- & Restore-Konzepte</li>
+              <li>Performance-Optimierung & Kapazitätsplanung</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="page-section-card p-4 h-100">
+            <div class="section-kicker">
+              Hosting
+            </div>
+            <h2 class="h4">Webhosting mit PHP-Umgebungen</h2>
+            <p>
+              Stabile PHP-Stacks für Websites und Web-Apps – optimiert auf Performance und Sicherheit.
+            </p>
+            <ul>
+              <li>Umgebungen für moderne PHP-Projekte</li>
+              <li>Saubere Deployments und Konfigurationen</li>
+              <li>Caching- & Performance-Setups</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="page-section-card p-4 h-100">
+            <div class="section-kicker">
+              Communication
+            </div>
+            <h2 class="h4">E-Mail-Hosting & Mailserver-Management</h2>
+            <p>
+              Geschäftskritische Kommunikation – zuverlässig und geschützt.
+            </p>
+            <ul>
+              <li>Postfächer, Domains und DNS-Setup</li>
+              <li>Spam-/Phishing-Schutz</li>
+              <li>Zustellbarkeit (Deliverability) & Monitoring</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="page-section-card p-4 h-100">
+            <div class="section-kicker">
+              Data
+            </div>
+            <h2 class="h4">Datenbank-Hosting (MySQL / PostgreSQL)</h2>
+            <p>
+              Ihre Datenbank ist das Herz vieler Systeme – wir sorgen für Stabilität, Geschwindigkeit und Sicherheit.
+            </p>
+            <ul>
+              <li>Setup, Betrieb und Wartung</li>
+              <li>Backup-Strategien und Wiederherstellungstests</li>
+              <li>Performance-Checks und Optimierung</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="page-section-card p-4 h-100">
+            <div class="section-kicker">
+              Cloud
+            </div>
+            <h2 class="h4">Cloud-Dienste & Beratung (AWS, Azure, Hetzner)</h2>
+            <p>
+              Cloud ohne Chaos: Wir planen, migrieren und optimieren Ihre Umgebung – mit Fokus auf Sicherheit und Kosten.
+            </p>
+            <ul>
+              <li>Architektur- und Migrationsberatung</li>
+              <li>Kostenkontrolle und Optimierung</li>
+              <li>Betriebsmodelle, Monitoring, Backups</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="page-section-card p-4 h-100">
+            <div class="section-kicker">
+              AI
+            </div>
+            <h2 class="h4">KI / AI-Services</h2>
+            <p>
+              KI als praktischer Mehrwert: Integration, Automatisierung und Assistenzfunktionen – nachvollziehbar umgesetzt.
+            </p>
+            <ul>
+              <li>KI-Integration in bestehende Tools und Prozesse</li>
+              <li>Automatisierung (z. B. Support, interne Workflows)</li>
+              <li>Chatbots und Assistenzsysteme</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="page-section-card p-4 h-100">
+            <div class="section-kicker">
+              Security
+            </div>
+            <h2 class="h4">Security & Netzwerk</h2>
+            <p>
+              Sicherheit als Prinzip: Zugriffskonzepte, Firewalls, VPN, Intrusion Prevention.
+            </p>
+            <ul>
+              <li>Security-Reviews und Härtung</li>
+              <li>Rollen- & Rechtekonzepte</li>
+              <li>Logging, Monitoring & Alarmierung</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-section-card p-4 p-lg-5 mt-5">
+        <div class="row align-items-center g-4">
+          <div class="col-12 col-lg-8">
+            <div class="section-kicker">
+              Pragmatismus
+            </div>
+            <h2 class="mb-2">Wir empfehlen nur, was wirklich hilft</h2>
+            <p class="mb-0">
+              Kein Toolzoo, kein Over-Engineering. Wir starten pragmatisch, dokumentieren sauber und sorgen dafür, dass Sie die Kontrolle behalten – fachlich und organisatorisch.
+            </p>
+          </div>
+          <div class="col-12 col-lg-4 text-lg-end">
+            <a class="btn btn-primary btn-xl text-uppercase" href="/kontakt">Vorhaben persönlich besprechen</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

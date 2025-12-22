@@ -17,12 +17,12 @@ class MainController extends AbstractBaseController
 
     #[Route(
         path: '/',
-        name: 'app_main',
+        name: 'app_index',
         methods: ['GET']
     )]
     public function main(): Response
     {
-        return $this->page('start');
+        return $this->page('index');
     }
 
     #[Route(
@@ -32,17 +32,17 @@ class MainController extends AbstractBaseController
         methods: ['GET'],
         priority: -10
     )]
-    public function page(string $slug = 'start'): Response
+    public function page(string $slug = 'index'): Response
     {
         $projectDir = (string) $this->getParameter('kernel.project_dir');
 
         // 1) if a Twig page template exists (templates/pages/{slug}.html.twig), render it
 
-        $twigTemplatePath = $projectDir . '/templates/pages/' . ('' !== $slug ? $slug : 'start') . '.html.twig';
+        $twigTemplatePath = $projectDir . '/templates/pages/' . ('' !== $slug ? $slug : 'index') . '.html.twig';
 
         if (is_file($twigTemplatePath)) {
             return $this->render(
-                'pages/' . ('' !== $slug ? $slug : 'start') . '.html.twig',
+                'pages/' . ('' !== $slug ? $slug : 'index') . '.html.twig',
                 [
                     'slug'     => $slug,
                     'navItems' => $this->navigation->getItems(),
@@ -53,7 +53,7 @@ class MainController extends AbstractBaseController
 
         // 2) Otherwise, If a Markdown file exists under content/{slug}.md, render it via Parsedown
 
-        $contentFile = $projectDir . '/content/' . ('' !== $slug ? $slug : 'start') . '.md';
+        $contentFile = $projectDir . '/content/' . ('' !== $slug ? $slug : 'index') . '.md';
 
         if (is_file($contentFile)) {
             $markdown = (string) file_get_contents($contentFile);

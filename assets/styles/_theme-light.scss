@@ -44,4 +44,24 @@
       color: #212529;
     }
   }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .h1,
+  .h2,
+  .h3,
+  .h4 {
+    color: $unisurf-green-primary;
+    text-shadow:
+      0 1px 0 #fff,
+      0 2px 8px #e9ecef33;
+  }
+
+  body,
+  .text-body {
+    color: $text-color;
+    background: #fff;
+  }
 }

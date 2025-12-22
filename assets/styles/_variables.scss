@@ -20,6 +20,16 @@ $navbar-color-hover: $unisurf-green-lighter;
 $primary: $unisurf-green-primary;
 $success: $unisurf-green-light;
 
+// Container Max Widths (responsive layout)
+// Override Bootstrap's default narrow containers for wider, modern layouts
+$container-max-widths: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+) !default;
+
 // Enable/Disable Features
 $enable-shadows: false;
 $enable-gradients: false;
@@ -42,20 +52,33 @@ $font-family-primary:
 $font-family-secondary: 'Roboto Slab', georgia, serif;
 
 // Font Sizes
-$font-size-h1: 2.5rem;
-$font-size-h2: 1.6rem;
-$font-size-h3: 1.4rem;
-$font-size-base: 1.26rem;
-$line-height-base: 1.75;
+$font-size-h1: 3.2rem;
+$font-size-h2: 2.2rem;
+$font-size-h3: 1.5rem;
+$font-size-h4: 1.18rem;
+$font-size-base: 1.18rem;
+$line-height-base: 1.8;
+$line-height-heading: 1.18;
+
+// Headings
+$heading-font-weight: 800;
+$heading-color: $unisurf-green-primary;
+$heading-letter-spacing: -0.01em;
+$heading-margin-top: 2.2rem;
+$heading-margin-bottom: 1.2rem;
+$heading-margin-bottom-small: 0.7rem;
+
+// Text
+$text-color: #23272a;
+$text-color-dark: #f8f9fa;
+$text-max-width: 800px;
+$text-line-height: 1.8;
+$text-font-weight: 400;
 
 // ============================================================================
 // Spacing Variables
 // ============================================================================
 $scroll-padding-top: 4.5rem;
-$section-padding: 6rem 0;
-$section-padding-md: 9rem 0;
-$heading-margin-top: 0.5rem;
-$heading-margin-bottom: 1rem;
 
 // ============================================================================
 // Navigation Variables
