@@ -1,26 +1,22 @@
-UniSurf — Bestätigung Ihrer Kontaktanfrage
+{% block subject %}
+Ihre Anfrage bei UniSurf
+{% endblock %}
 
-Hallo {{ contact.name }},
+{% block body %}
+Guten Tag {{ data.name }},
 
-vielen Dank für Ihre Kontaktanfrage über unisurf.de. Wir haben Ihre Nachricht erhalten und werden uns so schnell wie möglich bei Ihnen melden.
+vielen Dank für Ihre Nachricht an UniSurf.
 
-Ihre Kontaktdaten:
+Wir haben Ihre Anfrage erhalten und werden sie so schnell wie möglich bearbeiten. Einer unserer Mitarbeiter wird sich persönlich bei Ihnen melden.
 
-Name: {{ contact.name }}
-E‑Mail: {{ contact.emailAddress }}
-{% if contact.phone %}
-  Telefon: {{ contact.phone }}
-{% endif %}
+Hier ist eine Kopie Ihrer Nachricht:
 
-Ihre Nachricht:
-{{ contact.message }}
+--------------------------------------------------
+{{ data.message }}
+--------------------------------------------------
 
-Bei Rückfragen erreichen Sie uns unter:
-E-Mail: info@unisurf.de
+Mit freundlichen Grüßen,
+
+Ihr UniSurf Team
 Web: https://unisurf.de
-
-Mit besten Grüßen
-
-Ihr UniSurf-Team
-
-*Dies ist eine automatische Bestätigung Ihrer Kontaktanfrage. Ihre Daten werden vertraulich behandelt und nur zum Zweck der Kontaktaufnahme verwendet. Bei Rückfragen können Sie direkt auf diese E‑Mail antworten.*
+{% endblock %}

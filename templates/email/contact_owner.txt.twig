@@ -1,26 +1,26 @@
-UniSurf — Neue Kontaktanfrage von der Website
+{% block subject %}
+Anfrage via UniSurf.de: {{ data.subject }}
+{% endblock %}
 
-Sie haben eine neue Anfrage über das Kontaktformular von unisurf.de erhalten.
+{% block body %}
+Guten Tag,
 
-Kontaktdaten:
+es ist eine neue Kontaktanfrage über die Webseite eingegangen.
 
-Name: {{ contact.name }}
-E‑Mail: {{ contact.emailAddress }}
-{% if contact.phone %}
-  Telefon: {{ contact.phone }}
-{% endif %}Datum: {{ contact.createdAt|date('d.m.Y H:i') }} Uhr
+Absender:
+
+Name: {{ data.name }}
+E-Mail: {{ data.email }}
+Telefon: {{ data.phone }}
 
 Nachricht:
-{{ contact.message }}
 
-{% if contact.meta %}
-Technische Informationen:
-IP: {{ contact.meta.ip }}
-User‑Agent: {{ contact.meta.userAgent }}
-Zeit: {{ contact.meta.time }}
-Host: {{ contact.meta.host }}
-{% endif %}
+--------------------------------------------------
+{{ data.message }}
+--------------------------------------------------
 
-Tipp: Sie können direkt auf diese E-Mail antworten, um dem Absender zu antworten.
+Bitte zeitnah bearbeiten.
 
-UniSurf – Unique Surfing Dormagen https://unisurf.de
+Mit freundlichen Grüßen,
+Ihr UniSurf System
+{% endblock %}
