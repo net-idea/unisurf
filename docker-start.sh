@@ -1,39 +1,93 @@
 #!/bin/bash
 
+# Get environment variables
+if [ -f .env ]; then
+  set -o allexport
+  source .env
+  set +o allexport
+fi
+
+# Dynamic container naming based on APP_NAME from .env
+APP_NAME="${APP_NAME:-unisurf}"
+PROJECT_NAME="$APP_NAME"
+DB_ENGINE="${DB_ENGINE:-mariadb}" # mariadb or postgres
+
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-trap 'echo -e "${YELLOW}Stopping containers...${NC}"; docker compose -p unisurf down; exit 0' INT TERM
+COMPOSE_FILES=(
+  -f docker-compose.yaml
+  -f docker-compose.dev.yaml
+)
+
+if [ "$DB_ENGINE" = "postgres" ]; then
+  COMPOSE_FILES+=(
+    -f docker-compose.postgresql.yml
+    -f docker-compose.postgresql.dev.yml
+  )
+else
+  COMPOSE_FILES+=(
+    -f docker-compose.mariadb.yml
+    -f docker-compose.mariadb.dev.yml
+  )
+fi
+
+COMPOSE_FILES+=(
+  -f docker-compose.adminer.yml
+  -f docker-compose.phpmyadmin.yml
+)
+
+trap 'echo -e "${YELLOW}Stopping containers...${NC}"; docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" down; exit 0' INT TERM
 
 echo -e "${GREEN}Starting Docker development environment...${NC}"
 
 # Start services
-docker compose -p unisurf -f docker-compose.yaml -f docker-compose.mariadb.yml -f docker-compose.adminer.yml -f docker-compose.phpmyadmin.yml up -d --build --force-recreate
+docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" up -d --build --force-recreate
 
 # Wait for database to be healthy
 echo -e "${YELLOW}Waiting for database to be ready...${NC}"
-until [ "$(docker compose -p unisurf ps database --format json 2>/dev/null | grep -o '"Health":"[^"]*"' | cut -d'"' -f4)" = "healthy" ] || \
-      [ "$(docker compose -p unisurf ps database --format json 2>/dev/null | grep -o '"State":"[^"]*"' | cut -d'"' -f4)" = "running" ]; do
+DB_WAIT_MAX=120
+DB_WAIT=0
+if [ "$DB_ENGINE" = "postgres" ]; then
+  TARGET_SERVICE=database
+  until docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" ps "$TARGET_SERVICE" --format json 2>/dev/null | grep -q '"State":"running"'; do
     echo -n "."
-    sleep 2
-done
+    sleep 1
+    DB_WAIT=$((DB_WAIT+1))
+    if [ $DB_WAIT -ge $DB_WAIT_MAX ]; then
+      echo ""; echo -e "${RED}Database did not become ready within ${DB_WAIT_MAX}s.${NC}"; exit 1
+    fi
+  done
+else
+  TARGET_SERVICE=database
+  until [ "$(docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" ps "$TARGET_SERVICE" --format json 2>/dev/null | grep -o '"Health":"[^\"]*"' | cut -d'"' -f4)" = "healthy" ] || \
+        [ "$(docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" ps "$TARGET_SERVICE" --format json 2>/dev/null | grep -o '"State":"[^\"]*"' | cut -d'"' -f4)" = "running" ]; do
+      echo -n "."
+      sleep 1
+      DB_WAIT=$((DB_WAIT+1))
+      if [ $DB_WAIT -ge $DB_WAIT_MAX ]; then
+        echo ""; echo -e "${RED}Database did not become ready within ${DB_WAIT_MAX}s.${NC}"; exit 1
+      fi
+  done
+fi
+
 echo ""
 echo -e "${GREEN}Database is ready!${NC}"
 
 # Run Composer install (if not done)
 echo -e "${YELLOW}Running Composer install...${NC}"
-docker compose -p unisurf exec php composer install --prefer-dist --no-progress
+docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" exec php composer install --prefer-dist --no-progress
 
 # Run Yarn install
 echo -e "${YELLOW}Running Yarn install...${NC}"
-docker compose -p unisurf run --rm node yarn install
+docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" run --rm node yarn install
 
 # Clear & warmup cache
 echo -e "${YELLOW}Clearing cache...${NC}"
-docker compose -p unisurf exec php php bin/console cache:clear --no-warmup
-docker compose -p unisurf exec php php bin/console cache:warmup
+docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" exec php php bin/console cache:clear --no-warmup
+docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" exec php php bin/console cache:warmup
 
 # Migrations
 if [ -d "migrations" ] && [ "$(ls -A migrations/*.php 2>/dev/null | wc -l)" -gt 0 ]; then
@@ -42,13 +96,13 @@ if [ -d "migrations" ] && [ "$(ls -A migrations/*.php 2>/dev/null | wc -l)" -gt 
     read -r response
     if [[ "$response" =~ ^[Yy]$ ]]; then
         echo -e "${YELLOW}Running migrations...${NC}"
-        docker compose -p unisurf exec php php bin/console doctrine:migrations:migrate --no-interaction
+        docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" exec php php bin/console doctrine:migrations:migrate --no-interaction
     fi
 fi
 
 # Start Yarn watch in node service
 echo -e "${GREEN}Starting Yarn Encore watch...${NC}"
-docker compose -p unisurf up -d node
+docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" up -d node
 
 echo
 echo -e "${GREEN}Development environment is running!${NC}"

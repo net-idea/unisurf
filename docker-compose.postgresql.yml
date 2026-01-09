@@ -1,5 +1,5 @@
 services:
-  postgres:
+  database:
     image: postgres
     container_name: '${APP_NAME:-unisurf}_postgres'
     hostname: postgres
@@ -7,16 +7,15 @@ services:
     environment:
       LANG: 'de_DE.utf8'
       POSTGRES_INITDB_ARGS: '--locale-provider=icu --icu-locale=de-DE'
-      POSTGRES_USER: '${POSTGRES_USER:-unisurf}'
-      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD:-nopassword}'
-      POSTGRES_DB: '${POSTGRES_DB:-unisurf}'
+      POSTGRES_USER: '${DB_USER:-unisurf}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD:-nopassword}'
+      POSTGRES_DB: '${DB_NAME:-unisurf}'
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -d postgres']
       interval: 30s
       timeout: 10s
       retries: 5
     volumes:
-      - ./postgresql/data:/var/lib/postgresql/data
       - ./postgresql/fixtures:/docker-entrypoint-initdb.d:ro,delegated
     networks:
       - internal

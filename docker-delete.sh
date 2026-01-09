@@ -1,10 +1,18 @@
 #!/bin/bash
 
-# Stop all containers
-docker stop $(docker ps -a -q)
+PROJECT_NAME="${APP_NAME:-unisurf}"
 
-# Delete all images
-docker rmi -f $(docker images -q)
+read -r -p "Delete Docker stack for project '$PROJECT_NAME' (containers, networks, volumes)? [y/N] " confirm
+if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+  echo "Aborted."
+  exit 0
+fi
 
-# Delete all networks and volumes
-docker system prune --all --force --volumes
+echo "Stopping and removing project stack '$PROJECT_NAME'..."
+docker compose -p "$PROJECT_NAME" down -v
+
+echo "Removing database data, logs, and backups..."
+rm -rf mariadb/data mariadb/log mariadb/backup
+rm -rf postgresql/data postgresql/log postgresql/backup
+
+echo "Done."

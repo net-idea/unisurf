@@ -135,7 +135,7 @@ run_local_stack() {
     echo -e "${YELLOW}Press Ctrl+C to stop.${NC}"
     echo
 
-    $YARN_BIN encore dev --watch &
+    $YARN_BIN encore dev-server --host 0.0.0.0 --port 8080 --hot &
     YARN_PID=$!
 
     sleep 2

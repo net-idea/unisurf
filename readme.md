@@ -403,6 +403,32 @@ Usage:
 docker compose -p unisurf exec php ./pipeline.sh
 ```
 
+## Developer database helpers
+
+- `database.sh [--engine mariadb|postgres]` – start only the DB services with the matching compose files (dev variants included) under the current `APP_NAME` compose project. Shows service state after start.
+- `database-init.sh [--engine mariadb|postgres] [--local]` – run Doctrine migrations. Default uses Docker Compose (php service). With `--local`, uses host PHP and your `DATABASE_URL`. Engine switch selects compose files when in compose mode.
+- `database-migrate.sh` – thin wrapper for `database-init.sh`; accepts the same flags.
+- `database-backup.sh [--engine mariadb|postgres] [--output-dir DIR]` – creates a SQL dump via the running DB container into `backups/<app>-<engine>-<timestamp>.sql`.
+
+Examples:
+
+```bash
+# Start MariaDB-only stack
+./database.sh --engine mariadb
+
+# Init/migrate using compose MariaDB
+./database-init.sh --engine mariadb
+
+# Init/migrate using compose Postgres
+./database-init.sh --engine postgres
+
+# Init/migrate using local PHP (DATABASE_URL must point to a running DB)
+./database-init.sh --local
+
+# Backup Postgres to custom dir
+./database-backup.sh --engine postgres --output-dir ./db-dumps
+```
+
 ## 🧰 Symfony commands
 
 Moved to:
