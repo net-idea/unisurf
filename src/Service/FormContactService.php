@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Service;
@@ -17,10 +16,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FormContactService extends AbstractFormService
 {
-    private const ROUTE_CONTACT = 'app_contact';
+    private const string ROUTE_CONTACT = 'app_contact';
 
-    private const SESSION_DATA_KEY = 'cf_data';
-    private const SESSION_RATE_KEY = 'cf_times';
+    private const string SESSION_DATA_KEY = 'cf_data';
+    private const string SESSION_RATE_KEY = 'cf_times';
 
     private ?FormInterface $form = null;
 
@@ -52,7 +51,8 @@ class FormContactService extends AbstractFormService
      */
     public function handle(): ?RedirectResponse
     {
-        $boot = $this->bootstrapFormHandling($this->requests);
+        $boot = $this->handleFormRequest($this->requests);
+
         if (null === $boot) {
             return null;
         }
@@ -79,7 +79,7 @@ class FormContactService extends AbstractFormService
         /** @var FormContactEntity $contactForm */
         $contactForm = $form->getData();
 
-        if ('' !== $honey || '' !== trim((string) $contactForm->getEmailrep())) {
+        if ('' !== $honey || '' !== trim((string)$contactForm->getEmailrep())) {
             $this->rateLimitTickNow($session, self::SESSION_RATE_KEY);
 
             return $this->makeRedirect($this->urls, self::ROUTE_CONTACT, ['submit' => 1], '#contact-success');
@@ -92,17 +92,25 @@ class FormContactService extends AbstractFormService
         // Store snapshot before attempting to send mail (for repopulate on failure)
         $this->storeFormDataForRedirect($contactForm);
 
-        // Prepare meta-data and persist
+        // Prepare meta-data
         $meta = (new FormSubmissionMetaEntity())
-            ->setIp((string) ($request->server->get('REMOTE_ADDR', '')))
-            ->setUserAgent((string) ($request->server->get('HTTP_USER_AGENT', '')))
+            ->setIp((string)($request->server->get('REMOTE_ADDR', '')))
+            ->setUserAgent((string)($request->server->get('HTTP_USER_AGENT', '')))
             ->setTime(date('c'))
             ->setHost($request->getHost());
         $contactForm->setMeta($meta);
 
-        $this->em->persist($contactForm);
-        $this->em->flush();
+        // Try to persist to database (optional - continue if database is not available)
+        try {
+            $this->em->persist($contactForm);
+            $this->em->flush();
+        } catch (\Exception $dbException) {
+            // Log database error but continue with email sending
+            // Database persistence is optional for contact forms
+            error_log('Contact form database error: ' . $dbException->getMessage());
+        }
 
+        // Send email (this is the critical part)
         try {
             $this->mailMan->sendContactForm($contactForm);
         } catch (TransportExceptionInterface) {
@@ -163,7 +171,7 @@ class FormContactService extends AbstractFormService
             return null;
         }
 
-        $data = (array) $session->get(self::SESSION_DATA_KEY, []);
+        $data = (array)$session->get(self::SESSION_DATA_KEY, []);
         $session->remove(self::SESSION_DATA_KEY);
 
         $contact = new FormContactEntity();
@@ -171,8 +179,8 @@ class FormContactService extends AbstractFormService
         $contact->setEmailAddress($data['emailAddress'] ?? '');
         $contact->setPhone($data['phone'] ?? '');
         $contact->setMessage($data['message'] ?? '');
-        $contact->setConsent(isset($data['consent']) && (bool) $data['consent']);
-        $contact->setCopy(isset($data['copy']) && (bool) $data['copy']);
+        $contact->setConsent(isset($data['consent']) && (bool)$data['consent']);
+        $contact->setCopy(isset($data['copy']) && (bool)$data['copy']);
 
         return $contact;
     }

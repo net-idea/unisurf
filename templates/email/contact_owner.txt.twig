@@ -1,5 +1,5 @@
 {% block subject %}
-Anfrage via UniSurf.de: {{ data.subject }}
+Anfrage via UniSurf.de von {{ contact.name }}
 {% endblock %}
 
 {% block body %}
@@ -9,14 +9,14 @@ es ist eine neue Kontaktanfrage über die Webseite eingegangen.
 
 Absender:
 
-Name: {{ data.name }}
-E-Mail: {{ data.email }}
-Telefon: {{ data.phone }}
+Name: {{ contact.name }}
+E-Mail: {{ contact.emailAddress }}
+{% if contact.phone %}Telefon: {{ contact.phone }}{% endif %}
 
 Nachricht:
 
 --------------------------------------------------
-{{ data.message }}
+{{ contact.message }}
 --------------------------------------------------
 
 Bitte zeitnah bearbeiten.

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -7,27 +6,37 @@ namespace App\Entity;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: 'App\\Repository\\FormContactRepository')]
 #[ORM\Table(name: 'form_contact')]
 class FormContactEntity
 {
     #[ORM\Column(type: 'string', length: 160)]
+    #[Assert\NotBlank(message: 'Bitte geben Sie Ihren Namen an.')]
+    #[Assert\Length(max: 120, maxMessage: 'Bitte verwenden Sie höchstens {{ limit }} Zeichen.')]
     protected string $name = '';
 
     #[ORM\Column(type: 'string', length: 200)]
+    #[Assert\NotBlank(message: 'Bitte geben Sie Ihre E‑Mail‑Adresse an.')]
+    #[Assert\Email(message: 'Bitte geben Sie eine gültige E‑Mail‑Adresse an.')]
+    #[Assert\Length(max: 200, maxMessage: 'Bitte verwenden Sie höchstens {{ limit }} Zeichen.')]
     protected string $emailAddress = '';
 
     // Not persisted; convenience for emails
     protected ?Address $email = null;
 
     #[ORM\Column(type: 'string', length: 40, nullable: true)]
+    #[Assert\Length(max: 40, maxMessage: 'Bitte verwenden Sie höchstens {{ limit }} Zeichen.')]
     protected string $phone = '';
 
     #[ORM\Column(type: 'boolean')]
+    #[Assert\IsTrue(message: 'Bitte stimmen Sie der Datenverarbeitung zu.')]
     protected bool $consent = false;
 
     #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank(message: 'Bitte geben Sie eine Nachricht ein.')]
+    #[Assert\Length(min: 10, max: 5000, minMessage: 'Bitte geben Sie mindestens {{ limit }} Zeichen ein.', maxMessage: 'Bitte verwenden Sie höchstens {{ limit }} Zeichen.')]
     protected string $message = '';
 
     #[ORM\Column(type: 'boolean')]
@@ -62,9 +71,9 @@ class FormContactEntity
         return $this->createdAt;
     }
 
-    public function setName(string $name): self
+    public function setName($name): self
     {
-        $this->name = $name;
+        $this->name = (string) $name;
 
         return $this;
     }
@@ -105,9 +114,9 @@ class FormContactEntity
         return $this->email;
     }
 
-    public function setPhone(string $phone): self
+    public function setPhone($phone): self
     {
-        $this->phone = $phone;
+        $this->phone = (string) $phone;
 
         return $this;
     }
@@ -129,9 +138,9 @@ class FormContactEntity
         return $this->consent;
     }
 
-    public function setMessage(string $message): self
+    public function setMessage($message): self
     {
-        $this->message = $message;
+        $this->message = (string) $message;
 
         return $this;
     }
@@ -153,9 +162,9 @@ class FormContactEntity
         return $this->copy;
     }
 
-    public function setEmailrep(string $emailrep): self
+    public function setEmailrep($emailrep): self
     {
-        $this->emailrep = $emailrep;
+        $this->emailrep = (string) $emailrep;
 
         return $this;
     }

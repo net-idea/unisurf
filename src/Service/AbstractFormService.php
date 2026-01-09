@@ -14,11 +14,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 abstract class AbstractFormService
 {
     // 1 hour sliding window
-    protected const RATE_WINDOW_SECONDS = 3600;
+    protected const int RATE_WINDOW_SECONDS = 3600;
     // at most 1 submission every 30 seconds
-    protected const RATE_MIN_INTERVAL_SECONDS = 30;
+    protected const int RATE_MIN_INTERVAL_SECONDS = 30;
     // max 10 submissions per window
-    protected const RATE_MAX_PER_WINDOW = 10;
+    protected const int RATE_MAX_PER_WINDOW = 10;
 
     /**
      * Child services must provide a form instance.
@@ -52,7 +52,7 @@ abstract class AbstractFormService
      *
      * @return array{0: Request, 1: FormInterface, 2: SessionInterface}|null
      */
-    protected function bootstrapFormHandling(RequestStack $requests): ?array
+    protected function handleFormRequest(RequestStack $requests): ?array
     {
         $request = $requests->getCurrentRequest();
 
@@ -63,7 +63,24 @@ abstract class AbstractFormService
         $form = $this->getForm();
         $form->handleRequest($request);
 
-        if (!$form->isSubmitted()) {
+        // Check if form is submitted
+        // NOTE: For Turbo/AJAX requests, Symfony might not recognize isSubmitted() correctly
+        // So we also check if it's a POST request with form data
+        $isSubmitted = $form->isSubmitted();
+
+        if (!$isSubmitted && $request->isMethod('POST')) {
+            // Check if request contains form data for this form
+            $formName = $form->getName();
+            $hasFormData = $request->request->has($formName) || $request->request->count() > 0;
+
+            if ($hasFormData) {
+                // Force handleRequest again to ensure form is bound
+                $form->handleRequest($request);
+                $isSubmitted = true;
+            }
+        }
+
+        if (!$isSubmitted) {
             return null;
         }
 
@@ -76,8 +93,6 @@ abstract class AbstractFormService
 
     /**
      * Create a RedirectResponse to a route with optional hash suffix.
-     *
-     * @param array<string, mixed> $params
      */
     protected function makeRedirect(UrlGeneratorInterface $urls, string $route, array $params = [], string $hash = ''): RedirectResponse
     {
@@ -86,8 +101,6 @@ abstract class AbstractFormService
 
     /**
      * Convenience helper: store current form data, then create a redirect.
-     *
-     * @param array<string, mixed> $params
      */
     protected function makeErrorRedirectWithFormData(UrlGeneratorInterface $urls, FormInterface $form, string $route, array $params = [], string $hash = ''): RedirectResponse
     {
@@ -102,7 +115,7 @@ abstract class AbstractFormService
     protected function getHoneypotValue(FormInterface $form, string $field = 'website'): string
     {
         if ($form->has($field)) {
-            return (string) $form->get($field)->getData();
+            return (string)$form->get($field)->getData();
         }
 
         return '';
@@ -121,10 +134,10 @@ abstract class AbstractFormService
         int $windowSeconds = 3600
     ): array {
         $now = time();
-        $stored = (array) $session->get($key, []);
-        $times = array_values(array_filter($stored, static fn ($t) => ($now - (int) $t) < $windowSeconds));
+        $stored = (array)$session->get($key, []);
+        $times = array_values(array_filter($stored, static fn ($t) => ($now - (int)$t) < $windowSeconds));
 
-        $lastTs = !empty($times) ? (int) end($times) : null;
+        $lastTs = !empty($times) ? (int)end($times) : null;
         $blocked = (null !== $lastTs && ($now - $lastTs) < $minIntervalSeconds) || count($times) >= $maxPerWindow;
 
         return [
@@ -138,7 +151,7 @@ abstract class AbstractFormService
      * Append the current timestamp to the rate-limit list and persist it back to the session.
      * Returns the new list of timestamps.
      *
-     * @param  array<int,int> $times
+     * @param array<int,int> $times
      * @return array<int,int>
      */
     protected function rateLimitTick(SessionInterface $session, string $key, array $times, int $now): array
@@ -165,6 +178,7 @@ abstract class AbstractFormService
         string $hash
     ): ?RedirectResponse {
         $rl = $this->rateLimitCheck($session, $rateKey, $minIntervalSeconds, $maxPerWindow, $windowSeconds);
+
         if ($rl['blocked']) {
             return $this->makeErrorRedirectWithFormData($urls, $form, $route, ['error' => 'rate'], $hash);
         }

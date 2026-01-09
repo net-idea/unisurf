@@ -26,61 +26,126 @@
             <h2 class="section-heading text-uppercase">Nachricht senden</h2>
             <h3 class="section-subheading text-muted">Erzählen Sie uns von Ihrem Vorhaben oder Ihrer aktuellen Situation. Wir hören zu und schauen gemeinsam, wie wir Sie unterstützen können.</h3>
           </div>
+          {# anchors used by redirects #}
+          {% set submit = app.request.query.get('submit') %}
+          {% set error = app.request.query.get('error') %}
 
+          {# Flash messages from controller #}
           {% for message in app.flashes('success') %}
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-              <i class="fas fa-check-circle me-2"></i>{{ message }}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="alert alert-success mb-3" role="alert" id="contact-success">
+              {{ message }}
             </div>
           {% endfor %}
 
           {% for message in app.flashes('error') %}
-            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="contact-error">
-              <i class="fas fa-exclamation-circle me-2"></i>{{ message }}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="alert alert-danger mb-3" role="alert" id="contact-error">
+              {{ message }}
             </div>
           {% endfor %}
 
-          {# <!-- prettier-ignore --> #}
-          {{ form_start(form, { action: path('app_contact'), attr: { class: 'vstack gap-3 mt-3 needs-validation', novalidate: 'novalidate' } }) }}
+          {# Query parameter messages (for redirects) #}
+          {% if submit %}
+            <div id="contact-success-redirect" class="alert alert-success mb-3" role="alert">
+              Vielen Dank! Ihre Nachricht wurde erfolgreich versendet. Ich melde mich zeitnah bei Ihnen.
+            </div>
+          {% endif %}
+
+          {% if error %}
+            <div id="contact-error-redirect" class="alert alert-danger mb-3" role="alert">
+              {% if error == 'rate' %}
+                Bitte warten Sie einen Moment, bevor Sie das Formular erneut absenden.
+              {% elseif error == 'mail' %}
+                Leider konnte die E‑Mail nicht versendet werden. Bitte versuchen Sie es in Kürze erneut.
+              {% else %}
+                Es ist ein Fehler aufgetreten. Bitte prüfen Sie Ihre Eingaben und versuchen Sie es erneut.
+              {% endif %}
+            </div>
+          {% endif %}
+
+          {# Show validation errors only when form is submitted but invalid #}
+          {% if form.vars.submitted and not form.vars.valid %}
+            <div class="alert alert-danger" role="alert">
+              <p>
+                Bitte korrigieren Sie folgende Fehler:
+              </p>
+              <ul class="mb-0">
+                {% for child in form.children %}
+                  {% if (child.vars.errors|length) > 0 %}
+                    {% for error in child.vars.errors %}
+                      <li><strong>{{ child.vars.label }}:</strong> {{ error.message }}</li>
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          {{ form_start(form, { action: path('app_contact'), attr: { class: 'vstack gap-3 mt-3', novalidate: 'novalidate', 'data-turbo': 'false' } }) }}
 
           <div class="mb-3">
-            {{ form_label(form.name) }}
-            {{ form_widget(form.name) }}
-            {{ form_errors(form.name) }}
+            {{ form_label(form.name, null, { label_attr: { class: 'form-label' } }) }}
+            {{ form_widget(form.name, { attr: { class: (form.name.vars.errors|length) > 0 ? 'form-control is-invalid' : 'form-control' } }) }}
+            {% for error in form.name.vars.errors %}
+              <div class="invalid-feedback d-block">
+                {{ error.message }}
+              </div>
+            {% endfor %}
           </div>
 
           <div class="mb-3">
-            {{ form_label(form.email) }}
-            {{ form_widget(form.email) }}
-            {{ form_errors(form.email) }}
+            {{ form_label(form.email, null, { label_attr: { class: 'form-label' } }) }}
+            {{ form_widget(form.email, { attr: { class: (form.email.vars.errors|length) > 0 ? 'form-control is-invalid' : 'form-control' } }) }}
+            {% for error in form.email.vars.errors %}
+              <div class="invalid-feedback d-block">
+                {{ error.message }}
+              </div>
+            {% endfor %}
           </div>
 
           <div class="mb-3">
-            {{ form_label(form.phone) }}
-            {{ form_widget(form.phone) }}
-            {{ form_errors(form.phone) }}
+            {{ form_label(form.phone, null, { label_attr: { class: 'form-label' } }) }}
+            {{ form_widget(form.phone, { attr: { class: (form.phone.vars.errors|length) > 0 ? 'form-control is-invalid' : 'form-control' } }) }}
+            {% for error in form.phone.vars.errors %}
+              <div class="invalid-feedback d-block">
+                {{ error.message }}
+              </div>
+            {% endfor %}
           </div>
 
           <div class="mb-3">
-            {{ form_label(form.message) }}
-            {{ form_widget(form.message) }}
-            {{ form_errors(form.message) }}
+            {{ form_label(form.message, null, { label_attr: { class: 'form-label' } }) }}
+            {{ form_widget(form.message, { attr: { class: (form.message.vars.errors|length) > 0 ? 'form-control is-invalid' : 'form-control' } }) }}
+            {% for error in form.message.vars.errors %}
+              <div class="invalid-feedback d-block">
+                {{ error.message }}
+              </div>
+            {% endfor %}
             <div class="form-text">
               Mindestens 10 Zeichen
             </div>
           </div>
 
+          {# Honeypots (visually hidden) #}
+          <div style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+            {{ form_row(form.website) }}
+            {{ form_row(form.emailrep) }}
+          </div>
+
           <div class="mb-3 form-check">
-            {{ form_widget(form.consent) }}
-            {{ form_label(form.consent) }}
-            {{ form_errors(form.consent) }}
+            {{ form_widget(form.consent, { attr: { class: (form.consent.vars.errors|length) > 0 ? 'form-check-input is-invalid' : 'form-check-input' } }) }}
+            {{ form_label(form.consent, null, { label_attr: { class: 'form-check-label' } }) }}
+            {% for error in form.consent.vars.errors %}
+              <div class="invalid-feedback d-block">
+                {{ error.message }}
+              </div>
+            {% endfor %}
           </div>
 
           <div class="d-grid">
             <button class="btn btn-primary btn-xl text-uppercase" type="submit">Absenden</button>
           </div>
 
+          {{ form_rest(form) }}
           {{ form_end(form) }}
         </div>
       </div>
