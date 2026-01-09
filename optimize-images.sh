@@ -74,6 +74,7 @@ total_errors=0
 while IFS= read -r -d '' file; do
   ext="${file##*.}"
   ext_lc="${ext,,}"
+
   if [[ "$ext_lc" != "png" && "$ext_lc" != "jpg" && "$ext_lc" != "jpeg" ]]; then
     total_skipped=$((total_skipped+1))
     continue
@@ -90,6 +91,7 @@ while IFS= read -r -d '' file; do
 
   # Convert to webp
   echo "Converting: ${file} -> ${webp_file}"
+
   if [ "$CWEBP" -eq 1 ]; then
     if [ "$ext_lc" = "png" ] && [ "$LOSSLESS" -eq 1 ]; then
       cwebp -lossless -q "$QUALITY" "$file" -o "$webp_file" 2>/dev/null || { echo "cwebp failed for $file"; total_errors=$((total_errors+1)); continue; }
@@ -120,8 +122,10 @@ while IFS= read -r -d '' file; do
   total_processed=$((total_processed+1))
 
   # Optionally overwrite original with optimized version
-  if [ "$OVERWRITE" -eq 1 ]; then
+  if [ "$OVERWRITE" -eq 1]; then
     echo "Optimizing original: ${file}"
+
+    # Optimize original PNG files
     if [ "$ext_lc" = "png" ]; then
       if [ "$PNGQUANT" -eq 1 ]; then
         tmp_out="${file}.tmp.png"
@@ -134,7 +138,10 @@ while IFS= read -r -d '' file; do
       else
         echo "No PNG optimizer (pngquant/optipng) found; skipping PNG optimization for $file"
       fi
-    else
+    fi
+
+    # Optimize original JPEG files
+    if [ "$ext_lc" = "jpg" || "$ext_lc" = "jpeg" ]; then
       # jpeg
       if [ "$JPEGOPTIM" -eq 1 ]; then
         jpegoptim --strip-all --max=$QUALITY "$file" >/dev/null 2>&1 || { echo "jpegoptim failed for $file"; total_errors=$((total_errors+1)); continue; }
