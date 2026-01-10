@@ -106,8 +106,11 @@ docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" up -d node
 
 echo
 echo -e "${GREEN}Development environment is running!${NC}"
-echo -e "${YELLOW}   → App: http://localhost:8000${NC}"
-echo -e "${YELLOW}   → Assets: http://localhost:8080 (via Yarn)${NC}"
+echo -e "${YELLOW}   → App:        http://localhost:8000${NC}"
+echo -e "${YELLOW}   → Assets:     http://localhost:8080 (via Yarn)${NC}"
+echo -e "${YELLOW}   → Mailer:     http://localhost:8025${NC}"
+echo -e "${YELLOW}   → Adminer:    http://localhost:8091${NC}"
+echo -e "${YELLOW}   → phpMyAdmin: http://localhost:8092${NC}"
 echo -e "${YELLOW}Press Ctrl+C to stop.${NC}"
 
 # Keep script alive

@@ -6,36 +6,10 @@ namespace App\Tests\Repository;
 
 use App\Entity\FormContactEntity;
 use App\Entity\FormSubmissionMetaEntity;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Tools\SchemaTool;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Tests\DatabaseTestCase;
 
-class FormContactRepositoryTest extends KernelTestCase
+class FormContactRepositoryTest extends DatabaseTestCase
 {
-    private ?EntityManagerInterface $em = null;
-
-    protected function setUp(): void
-    {
-        self::bootKernel();
-        /** @var EntityManagerInterface $em */
-        $em = self::getContainer()->get('doctrine')->getManager();
-        $this->em = $em;
-
-        // Reset schema for a clean slate
-        $metadata = $this->em->getMetadataFactory()->getAllMetadata();
-        $tool = new SchemaTool($this->em);
-        $tool->dropSchema($metadata);
-        $tool->createSchema($metadata);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->em?->close();
-        $this->em = null;
-    }
-
     public function testPersistAndQueryOrderByCreatedAt(): void
     {
         $older = new FormContactEntity();
@@ -49,11 +23,12 @@ class FormContactRepositoryTest extends KernelTestCase
         $newer->setName('Bob')->setEmailAddress('bob@example.com')->setMessage('Hello')->setConsent(true)->setCopy(false);
         $newer->setMeta((new FormSubmissionMetaEntity())->setIp('5.6.7.8')->setUserAgent('UA2')->setTime(date('c'))->setHost('localhost'));
 
-        $this->em->persist($older);
-        $this->em->persist($newer);
-        $this->em->flush();
+        $em = $this->getEntityManager();
+        $em->persist($older);
+        $em->persist($newer);
+        $em->flush();
 
-        $repo = $this->em->getRepository(FormContactEntity::class);
+        $repo = $em->getRepository(FormContactEntity::class);
         $rows = $repo->createQueryBuilder('c')
             ->orderBy('c.createdAt', 'DESC')
             ->addOrderBy('c.id', 'DESC')

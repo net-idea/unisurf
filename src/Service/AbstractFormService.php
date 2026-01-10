@@ -64,23 +64,7 @@ abstract class AbstractFormService
         $form->handleRequest($request);
 
         // Check if form is submitted
-        // NOTE: For Turbo/AJAX requests, Symfony might not recognize isSubmitted() correctly
-        // So we also check if it's a POST request with form data
-        $isSubmitted = $form->isSubmitted();
-
-        if (!$isSubmitted && $request->isMethod('POST')) {
-            // Check if request contains form data for this form
-            $formName = $form->getName();
-            $hasFormData = $request->request->has($formName) || $request->request->count() > 0;
-
-            if ($hasFormData) {
-                // Force handleRequest again to ensure form is bound
-                $form->handleRequest($request);
-                $isSubmitted = true;
-            }
-        }
-
-        if (!$isSubmitted) {
+        if (!$form->isSubmitted()) {
             return null;
         }
 

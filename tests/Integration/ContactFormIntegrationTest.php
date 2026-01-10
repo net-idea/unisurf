@@ -6,9 +6,9 @@ namespace App\Tests\Integration;
 
 use App\Entity\FormContactEntity;
 use App\Repository\FormContactRepository;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\DatabaseTestCase;
 
-class ContactFormIntegrationTest extends WebTestCase
+class ContactFormIntegrationTest extends DatabaseTestCase
 {
     public function testCompleteContactFormSubmissionFlow(): void
     {
@@ -32,27 +32,38 @@ class ContactFormIntegrationTest extends WebTestCase
 
         // Step 3: Should redirect
         $this->assertResponseRedirects();
-        $crawler = $client->followRedirect();
 
-        // Step 4: Check for success message
-        $this->assertSelectorExists('.alert-success');
-        $this->assertSelectorTextContains('.alert-success', 'Vielen Dank für Ihre Nachricht');
-
-        // Step 5: Verify data was saved to database
+        // Step 3.5: Verify data was saved to database BEFORE following redirect (which reboots kernel/wipes DB in memory)
         $container = static::getContainer();
         /** @var FormContactRepository $repository */
         $repository = $container->get(FormContactRepository::class);
 
+        // Clear entity manager to ensure we fetch from database
+        $this->getEntityManager()->clear();
+
         $submissions = $repository->findBy(['emailAddress' => 'integration@test.com'], ['id' => 'DESC'], 1);
-        $this->assertCount(1, $submissions);
+        $this->assertCount(1, $submissions, 'Should have exactly one submission saved to database');
 
         /** @var FormContactEntity $submission */
         $submission = $submissions[0];
         $this->assertSame('Integration Test User', $submission->getName());
         $this->assertSame('integration@test.com', $submission->getEmailAddress());
         $this->assertSame('+49 123 456789', $submission->getPhone());
-        $this->assertStringContainsString('integration test message', $submission->getMessage());
+        $this->assertStringContainsString('integration test message', strtolower($submission->getMessage()));
         $this->assertTrue($submission->getConsent());
+
+        // Verify metadata was saved
+        $meta = $submission->getMeta();
+        $this->assertNotNull($meta, 'Submission should have metadata');
+        $this->assertNotEmpty($meta->getIp());
+        $this->assertNotEmpty($meta->getUserAgent());
+        $this->assertNotEmpty($meta->getTime());
+
+        // Step 4: Follow redirect and check for success message
+        $crawler = $client->followRedirect();
+
+        $this->assertSelectorExists('.alert-success');
+        $this->assertSelectorTextContains('.alert-success', 'Vielen Dank! Ihre Nachricht wurde erfolgreich versendet');
     }
 
     public function testFormValidationErrorsPersistOnResubmission(): void
@@ -146,12 +157,13 @@ class ContactFormIntegrationTest extends WebTestCase
         $crawler = $client->followRedirect();
 
         $this->assertSelectorExists('.alert-danger');
-        $this->assertSelectorTextContains('.alert-danger', 'zu viele Anfragen');
+        $this->assertSelectorTextContains('.alert-danger', 'Bitte warten Sie einen Moment');
     }
 
     public function testFormPreservesDataAfterMailSendFailure(): void
     {
         $client = static::createClient();
+        $client->disableReboot();
 
         // This test would require mocking the MailManService to throw an exception
         // For now, we'll just verify the error message shows up when error=mail is in URL

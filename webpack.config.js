@@ -62,7 +62,18 @@ Encore
   })
 
   // enables Sass/SCSS support
-  .enableSassLoader()
+  .enableSassLoader((options) => {
+    options.sassOptions = {
+      ...options.sassOptions,
+      quietDeps: true,
+      silenceDeprecations: [
+        'import',
+        'global-builtin',
+        'color-functions',
+        // 'mixed-decls', // Obsolete warning if silenced
+      ],
+    };
+  })
 
   // enable TypeScript support
   .enableTypeScriptLoader()
@@ -88,9 +99,6 @@ Encore
     options.liveReload = true;
     options.client = { overlay: true, progress: true };
     options.watchFiles = ['assets/**/*', 'templates/**/*.twig', 'src/**/*.php'];
-    // Bind to localhost for Symfony dev-server auto-detection
-    options.host = 'localhost';
-    options.port = 8080;
     options.headers = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',

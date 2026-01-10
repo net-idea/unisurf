@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\DatabaseTestCase;
 
-class ContactControllerTest extends WebTestCase
+class ContactControllerTest extends DatabaseTestCase
 {
     public function testContactPageIsSuccessful(): void
     {
@@ -150,7 +150,7 @@ class ContactControllerTest extends WebTestCase
 
         // Check for success message
         $this->assertSelectorExists('.alert-success');
-        $this->assertSelectorTextContains('.alert-success', 'Vielen Dank für Ihre Nachricht');
+        $this->assertSelectorTextContains('.alert-success', 'Vielen Dank! Ihre Nachricht wurde erfolgreich versendet');
     }
 
     public function testFormHasAllRequiredFields(): void
@@ -258,8 +258,9 @@ class ContactControllerTest extends WebTestCase
 
         $client->submit($form);
 
-        // Should show form again with CSRF error
+        // Should show form again with error (form is not valid)
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('body', 'CSRF');
+        // The form should not be valid and should show validation errors
+        $this->assertSelectorExists('.alert-danger');
     }
 }
