@@ -168,7 +168,10 @@ a[href^='https://wa.me/'] svg {
     padding: 0.65rem 0.9rem;
     border-radius: 0.85rem;
     position: relative;
-    transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease,
+      transform 0.2s ease;
 
     &::after {
       content: '';
@@ -181,12 +184,14 @@ a[href^='https://wa.me/'] svg {
       transform: scaleX(0);
       transform-origin: left;
       opacity: 0.55;
-      transition: transform 0.25s ease, opacity 0.25s ease;
+      transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
     }
 
     &.active,
     &:hover {
-      background-color: rgba(255, 255, 255, 0.07);
+      background-color: rgb(255 255 255 / 7%);
       color: $navbar-color-hover;
     }
 

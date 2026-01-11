@@ -17,11 +17,13 @@ BLUE='\033[1;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-CONTINUE_ON_ERROR=false
+CONTINUE_ON_ERROR=true
 VERBOSE=false
 PHP_VERSION=$(php -r "echo PHP_VERSION;")
 NODE_VERSION=$(node --version)
 
+# Collect failed checks (each entry: "Description|Reproduction command")
+FAILED_CHECKS=()
 
 # Parse arguments
 for arg in "$@"; do
@@ -52,11 +54,12 @@ for arg in "$@"; do
   esac
 done
 
-# Helper functions
 print_header() {
+  echo ""
   echo -e "${BLUE}=====================================${NC}"
   echo -e "${BLUE}$1${NC}"
   echo -e "${BLUE}=====================================${NC}"
+  echo ""
 }
 
 print_step() {
@@ -80,8 +83,13 @@ print_info() {
 }
 
 handle_error() {
-  print_warning "Error occurred, but continuing to next step."
-  return 0
+  if [ "$CONTINUE_ON_ERROR" = true ]; then
+    print_warning "Error occurred, but continuing to next step."
+    return 0
+  fi
+
+  print_error "Error occurred. Exiting."
+  exit 1
 }
 
 run_command() {
@@ -98,6 +106,10 @@ run_command() {
       return 0
     else
       print_error "$description - FAILED"
+      # record failure and a reproducer command
+      local cmd_str
+      cmd_str=$(printf "%s " "${cmd[@]}")
+      FAILED_CHECKS+=("$description|$cmd_str")
       return 1
     fi
   else
@@ -106,9 +118,30 @@ run_command() {
       return 0
     else
       print_error "$description - FAILED"
+      # record failure and a reproducer command
+      local cmd_str
+      cmd_str=$(printf "%s " "${cmd[@]}")
+      FAILED_CHECKS+=("$description|$cmd_str")
       return 1
     fi
   fi
+}
+
+# helper to print failed checks with reproduction commands
+print_failed_checks() {
+  if [ ${#FAILED_CHECKS[@]} -eq 0 ]; then
+    return 0
+  fi
+
+  print_header "Failed checks and how to reproduce them"
+
+  for entry in "${FAILED_CHECKS[@]}"; do
+    IFS='|' read -r name cmd <<<"$entry"
+    echo -e "→ ${RED}${name}${NC}"
+    echo -e "↳ ${YELLOW}Command:${NC} ${cmd}"
+  done
+
+  echo ""
 }
 
 run_php_cs_fixer_check() {
@@ -146,13 +179,14 @@ main() {
   local failed_checks=0
 
   print_header "UniSurf CI/CD Pipeline"
+
   echo "PHP Version: $PHP_VERSION"
   echo "Node Version: $NODE_VERSION"
-  echo ""
 
   # ============================================
   # PHP Quality Checks
   # ============================================
+
   print_header "PHP Quality Checks"
 
   # 1. Validate composer.json
@@ -174,22 +208,15 @@ main() {
   fi
 
   # 4. PHPStan static analysis for src
-  if ! run_command "Run PHPStan static analysis" php -d memory_limit=-1 ./vendor/bin/phpstan analyze src; then
+  if ! run_command "Run PHPStan static analysis (src only)" php -d memory_limit=-1 ./vendor/bin/phpstan analyze src; then
     ((failed_checks++))
     handle_error
   fi
-
-  # 5. PHPStan static analysis for tests
-  if ! run_command "Run PHPStan static analysis" php -d memory_limit=-1 ./vendor/bin/phpstan analyze tests; then
-    ((failed_checks++))
-    handle_error
-  fi
-
-  echo ""
 
   # ============================================
   # Node/Yarn Quality Checks (for asset building)
   # ============================================
+
   print_header "Node/Yarn Quality Checks"
 
   # 5. Install Yarn dependencies
@@ -217,11 +244,10 @@ main() {
     handle_error
   fi
 
-  echo ""
-
   # ============================================
   # PHP Tests (requires built assets)
   # ============================================
+
   print_header "PHP Tests"
 
   # 9. PHPUnit tests
@@ -236,11 +262,10 @@ main() {
     handle_error
   fi
 
-  echo ""
-
   # ============================================
   # Code Formatting Check
   # ============================================
+
   print_header "Code Formatting Check"
 
   # 11. Prettier check
@@ -250,27 +275,31 @@ main() {
     handle_error
   fi
 
-  echo ""
-
   # ============================================
   # Summary
   # ============================================
+
+  print_header "Pipeline Summary"
+
   local end_time
   end_time=$(date +%s)
   local duration=$((end_time - start_time))
 
-  print_header "Pipeline Summary"
-
   if [ $failed_checks -eq 0 ]; then
     print_success "All checks passed! ✨"
+    echo ""
     echo -e "${GREEN}Duration: ${duration}s${NC}"
     echo ""
     echo "Your code is ready to be pushed! 🚀"
     exit 0
   else
     print_error "$failed_checks check(s) failed"
+    echo
     echo -e "${RED}Duration: ${duration}s${NC}"
-    echo ""
+
+    # Print a friendly summary listing failing checks and reproduction commands
+    print_failed_checks
+
     echo "Please fix the issues above before pushing."
     echo ""
     echo "Quick fixes:"

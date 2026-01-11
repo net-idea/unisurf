@@ -27,6 +27,7 @@ class AppSecretCommand extends Command
             $secret = bin2hex(random_bytes(16));
         } catch (\Exception $e) {
             $io->error('Failed to generate secret: ' . $e->getMessage());
+
             return Command::FAILURE;
         }
 
@@ -37,18 +38,23 @@ class AppSecretCommand extends Command
             // If no env file exists yet, create it with the APP_SECRET line
             $content = "APP_SECRET={$secret}" . PHP_EOL;
             $written = file_put_contents($envFile, $content, LOCK_EX);
-            if ($written === false) {
+
+            if (false === $written) {
                 $io->error('Failed to write new env file: ' . $envFile);
+
                 return Command::FAILURE;
             }
 
             $io->success('Created ' . $envFile . ' and set APP_SECRET: ' . $secret);
+
             return Command::SUCCESS;
         }
 
         $content = file_get_contents($envFile);
-        if ($content === false) {
+
+        if (false === $content) {
             $io->error('Failed to read env file: ' . $envFile);
+
             return Command::FAILURE;
         }
 
@@ -61,8 +67,10 @@ class AppSecretCommand extends Command
         }
 
         $written = file_put_contents($envFile, $newContent, LOCK_EX);
-        if ($written === false) {
+
+        if (false === $written) {
             $io->error('Failed to write env file: ' . $envFile);
+
             return Command::FAILURE;
         }
 

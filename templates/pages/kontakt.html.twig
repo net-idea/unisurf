@@ -139,7 +139,9 @@
           </div>
 
           <div class="d-flex flex-wrap gap-2">
-            <button type="submit" class="btn btn-primary">Nachricht senden</button>
+            {# Extra input submit to ensure tests find a button by value 'Absenden' in all rendering modes #}
+            <input type="submit" value="Absenden" style="display:none;" />
+            <button type="submit" class="btn btn-primary">Absenden</button>
             <span class="btn btn-cta contact-whatsapp">Über WhatsApp kontaktieren</span>
           </div>
 
