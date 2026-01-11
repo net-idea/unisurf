@@ -108,6 +108,26 @@ ol {
   border-radius: 100%;
 }
 
+/* Icons inside buttons follow text color (except WhatsApp brand icon) */
+.btn:not(.contact-whatsapp) svg,
+.btn:not(.contact-whatsapp) svg * {
+  fill: currentcolor;
+}
+
+/* WhatsApp icon sizing (applies to both themes) */
+a[href^='https://wa.me/'] svg {
+  height: 2em;
+  width: auto;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/* Selection colors per theme for readability */
+[data-bs-theme='light'] ::selection {
+  background-color: #0ea5e9;
+  color: #fff;
+}
+
 // ============================================================================
 // Navigation
 // ============================================================================

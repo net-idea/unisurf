@@ -5,7 +5,7 @@
   <header class="masthead" style="background-image: url('{{ asset('images/header-bg.jpg') }}');">
     <div class="container">
       <div class="masthead-subheading">
-        Kontakt
+        UniSurf Kontaktformular
       </div>
       <div class="masthead-heading text-uppercase">
         Wir sind für Sie da
@@ -138,8 +138,9 @@
             {% endfor %}
           </div>
 
-          <div class="d-grid">
-            <button class="btn btn-primary btn-xl text-uppercase" type="submit">Absenden</button>
+          <div class="d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary">Nachricht senden</button>
+            <span class="btn btn-cta contact-whatsapp">Über WhatsApp kontaktieren</span>
           </div>
 
           {{ form_rest(form) }}

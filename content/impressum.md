@@ -11,8 +11,9 @@ Deutschland
 
 ## Kontakt
 
-Telefon: +49 1577 1671353  
-E-Mail: [adam@net-i.de](mailto:adam@net-i.de)
+Telefon: <span id="contact-phone" class="tap-target"></span>&nbsp;<span id="contact-whatsapp" class="tap-target text-decoration-none"></span>  
+E‑Mail: <span id="contact-email" class="tap-target"></span>  
+Kontaktformular: [Zum Kontaktformular](/kontakt)
 
 ## Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV
 

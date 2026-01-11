@@ -1,17 +1,45 @@
 (function () {
   const d: Document = document;
 
-  const emailUser: number[] = [109, 97, 105, 108];
-  const emailDomain: number[] = [115, 101, 101, 112, 102, 101, 114, 100, 99, 104, 101, 110, 45, 103, 97, 114, 100, 101, 46, 100, 101];
+  const emailUser: number[] = [97, 100, 97, 109];
+  const emailDomain: number[] = [110, 101, 116, 45, 105, 46, 100, 101];
+  const phoneNationalCharCodes: number[] = [48, 49, 53, 55, 55, 47, 49, 54, 55, 49, 51, 53, 51];
 
-  const phoneDisplay: number[] = [48, 49, 55, 54, 56, 32, 47, 32, 51, 50, 51, 57, 48, 49, 49];
-  const phoneDigits: number[] = [48, 49, 55, 54, 56, 51, 50, 51, 57, 48, 49, 49];
+  function fromCodes(arr: number[]): string {
+    return String.fromCharCode.apply(null, arr as unknown as number[]);
+  }
 
-  const fromCodes = (arr: number[]): string => String.fromCharCode.apply(null, arr as unknown as number[]);
+  function normalizePhoneToE164Digits(raw: string, countryCallingCodeDigits: string): string {
+    const cleaned = (raw || '').trim();
+    if (!cleaned) return '';
+    const hasPlus = cleaned.startsWith('+');
+    const digitsOnly = cleaned.replace(/\D+/g, '');
+    if (!digitsOnly) return '';
+    if (hasPlus) return digitsOnly;
+    if (digitsOnly.startsWith('00')) return digitsOnly.slice(2);
+    if (digitsOnly.startsWith(countryCallingCodeDigits)) return digitsOnly;
+    const national = digitsOnly.replace(/^0+/, '');
+    return countryCallingCodeDigits + national;
+  }
+
+  function formatGermanDisplayFromNational(rawNational: string): string {
+    const digits = (rawNational || '').replace(/\D+/g, '');
+    const national = digits.replace(/^0+/, '');
+    if (national.length >= 5) {
+      const block1 = national.slice(0, 4);
+      const rest = national.slice(4);
+      return `+49 ${block1} / ${rest}`;
+    }
+    return `+49 ${national}`.trim();
+  }
 
   const email: string = fromCodes(emailUser) + '@' + fromCodes(emailDomain);
-  const phoneText: string = fromCodes(phoneDisplay);
-  const phoneTel: string = fromCodes(phoneDigits);
+
+  // Telefonnummer dekodieren und Formate ableiten
+  const rawPhoneNational: string = fromCodes(phoneNationalCharCodes); // z.B. 01577/1671353
+  const phoneText: string = formatGermanDisplayFromNational(rawPhoneNational);
+  const phoneE164Digits: string = normalizePhoneToE164Digits(rawPhoneNational, '49');
+  const phoneTel: string = phoneE164Digits ? `+${phoneE164Digits}` : '';
 
   // Email links (supports multiple)
   const emailElements = Array.from(d.querySelectorAll<HTMLElement>('.contact-email'));
@@ -35,7 +63,11 @@
 
   phoneElements.forEach((phoneElement) => {
     const a: HTMLAnchorElement = d.createElement('a');
-    a.href = 'tel:' + phoneTel;
+
+    if (phoneTel) {
+      a.href = 'tel:' + phoneTel;
+    }
+
     a.textContent = phoneText;
     a.rel = 'nofollow';
     phoneElement.replaceWith(a);
@@ -45,48 +77,54 @@
   const whatsappElements = Array.from(d.querySelectorAll<HTMLElement>('.contact-whatsapp'));
   const whatsappElementById = d.getElementById('contact-whatsapp');
 
-  if (whatsappElements.length === 0 && whatsappElementById) whatsappElements.push(whatsappElementById);
+  if (whatsappElements.length === 0 && whatsappElementById) {
+    whatsappElements.push(whatsappElementById);
+  }
 
-  if (whatsappElements.length > 0) {
-    const whatsappNumber: string = '49' + phoneTel.replace(/^0+/, '');
+  if (whatsappElements.length > 0 && phoneE164Digits) {
+    // wa.me guideline: digits-only, international format, no leading zeros, no +, no separators.
+    const whatsappNumber: string = phoneE164Digits;
 
     const createAnchor = (): HTMLAnchorElement => {
-      const a: HTMLAnchorElement = d.createElement('a');
-      a.href = 'https://wa.me/' + whatsappNumber;
-      a.target = '_blank';
-      a.rel = 'nofollow noopener';
-      return a;
+      const whatsappAnchor: HTMLAnchorElement = d.createElement('a');
+      whatsappAnchor.href = 'https://wa.me/' + whatsappNumber;
+      whatsappAnchor.target = '_blank';
+      whatsappAnchor.rel = 'nofollow noopener';
+
+      return whatsappAnchor;
     };
 
-    fetch('/assets/icons/whatsapp.svg')
+    fetch('/icons/whatsapp.svg')
       .then((res: Response) => res.text())
       .then((svg: string) => {
         whatsappElements.forEach((whatsappElement) => {
-          const a = createAnchor();
+          const whatsappAnchor = createAnchor();
           // preserve classes from placeholder (so btn styles remain)
-          a.className = whatsappElement.className;
+          whatsappAnchor.className = whatsappElement.className;
 
           // if the placeholder had label text, keep it alongside the icon
           const label = (whatsappElement.textContent || '').trim();
+
           if (svg) {
-            a.innerHTML = svg;
-            if (label) a.appendChild(d.createTextNode(' ' + label));
+            whatsappAnchor.innerHTML = svg;
+
+            if (label) whatsappAnchor.appendChild(d.createTextNode(' ' + label));
           } else if (label) {
-            a.textContent = label;
+            whatsappAnchor.textContent = label;
           } else {
-            a.textContent = 'WhatsApp';
+            whatsappAnchor.textContent = 'WhatsApp';
           }
 
-          whatsappElement.replaceWith(a);
+          whatsappElement.replaceWith(whatsappAnchor);
         });
       })
       .catch(() => {
         whatsappElements.forEach((whatsappElement) => {
-          const a = createAnchor();
-          a.className = whatsappElement.className;
+          const whatsappLink = createAnchor();
+          whatsappLink.className = whatsappElement.className;
           const label = (whatsappElement.textContent || '').trim();
-          a.textContent = label || 'WhatsApp';
-          whatsappElement.replaceWith(a);
+          whatsappLink.textContent = label || 'WhatsApp';
+          whatsappElement.replaceWith(whatsappLink);
         });
       });
   }

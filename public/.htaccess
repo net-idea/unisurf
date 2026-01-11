@@ -1,6 +1,3 @@
-# Symfony front controller (Apache)
-# Place this file in the public/ web root so Apache rewrites "pretty" URLs to index.php
-
 # Use the front controller as the directory index
 DirectoryIndex index.php
 
