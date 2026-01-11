@@ -41,8 +41,12 @@ readonly class MailManService
      */
     public function sendContactForm(FormContactEntity $contact): void
     {
-        $from = new Address($this->fromAddress, $this->fromName);
-        $to = new Address($this->toAddress, $this->toName);
+        // Use fallbacks to avoid failing in test environments where env vars may be empty
+        $fallbackFrom = 'no-reply@localhost';
+        $fallbackTo = 'owner@localhost';
+
+        $from = $this->makeAddressOrFallback($this->fromAddress, $this->fromName, $fallbackFrom);
+        $to = $this->makeAddressOrFallback($this->toAddress, $this->toName, $fallbackTo);
         $theme = $this->getEmailTheme();
 
         $context = [
@@ -56,13 +60,24 @@ readonly class MailManService
             $ownerText = $this->twig->render('email/contact_owner.txt.twig', $context);
             $ownerHtml = $this->twig->render('email/contact_owner.html.twig', $context);
 
-            $emailOwner = (new Email())
+            $emailOwner = new Email()
                 ->from($from)
                 ->to($to)
-                ->replyTo(new Address($contact->getEmailAddress(), $contact->getName()))
                 ->subject($ownerSubject)
                 ->text($ownerText)
                 ->html($ownerHtml);
+
+            // Try to set replyTo if the visitor supplied a valid email
+            try {
+                $visitorEmail = trim($contact->getEmailAddress());
+
+                if ('' !== $visitorEmail) {
+                    $replyTo = new Address($visitorEmail, $contact->getName());
+                    $emailOwner->replyTo($replyTo);
+                }
+            } catch (\Throwable $e) {
+                $this->logger->warning('Invalid visitor email for replyTo; skipping replyTo header', ['email' => $contact->getEmailAddress(), 'exception' => $e]);
+            }
 
             $this->mailer->send($emailOwner);
             $this->logger->info('Contact mail sent to owner', [
@@ -72,25 +87,30 @@ readonly class MailManService
                 'theme' => $theme,
             ]);
 
-            // Send copy to visitor with their preferred theme
+            // Send copy to visitor with their preferred theme if email looks valid
             if ($contact->getCopy()) {
-                $visitorSubject = 'UniSurf — Ihre Kontaktanfrage';
-                $visitorText = $this->twig->render('email/contact_visitor.txt.twig', $context);
-                $visitorHtml = $this->twig->render('email/contact_visitor.html.twig', $context);
+                $visitorEmail = trim($contact->getEmailAddress());
+                if ('' !== $visitorEmail && filter_var($visitorEmail, FILTER_VALIDATE_EMAIL)) {
+                    $visitorSubject = 'UniSurf — Ihre Kontaktanfrage';
+                    $visitorText = $this->twig->render('email/contact_visitor.txt.twig', $context);
+                    $visitorHtml = $this->twig->render('email/contact_visitor.html.twig', $context);
 
-                $emailVisitor = (new Email())
-                    ->from($from)
-                    ->to(new Address($contact->getEmailAddress(), $contact->getName()))
-                    ->subject($visitorSubject)
-                    ->text($visitorText)
-                    ->html($visitorHtml);
+                    $emailVisitor = (new Email())
+                        ->from($from)
+                        ->to(new Address($visitorEmail, $contact->getName()))
+                        ->subject($visitorSubject)
+                        ->text($visitorText)
+                        ->html($visitorHtml);
 
-                $this->mailer->send($emailVisitor);
-                $this->logger->info('Contact mail sent to visitor', [
-                    'to'    => $contact->getEmailAddress(),
-                    'name'  => $contact->getName(),
-                    'theme' => $theme,
-                ]);
+                    $this->mailer->send($emailVisitor);
+                    $this->logger->info('Contact mail sent to visitor', [
+                        'to'    => $visitorEmail,
+                        'name'  => $contact->getName(),
+                        'theme' => $theme,
+                    ]);
+                } else {
+                    $this->logger->warning('Skipping visitor copy: invalid or empty visitor email', ['email' => $contact->getEmailAddress()]);
+                }
             }
         } catch (TransportExceptionInterface $e) {
             // Logs transport failures (bad DSN, auth, SSL, DNS, etc.)
@@ -107,8 +127,8 @@ readonly class MailManService
      */
     public function sendBookingVisitorConfirmationRequest(FormBookingEntity $booking, string $confirmUrl): void
     {
-        $from = new Address($this->fromAddress, $this->fromName);
-        $toVisitor = new Address($booking->getEmail(), $booking->getName());
+        $from = $this->makeAddressOrFallback($this->fromAddress, $this->fromName, 'no-reply@localhost');
+        $toVisitor = $this->makeAddressOrFallback($booking->getEmail(), $booking->getName(), 'visitor@localhost');
 
         $context = [
             'booking'    => $booking,
@@ -169,8 +189,8 @@ readonly class MailManService
      */
     public function sendBookingOwnerNotification(FormBookingEntity $booking): void
     {
-        $from = new Address($this->fromAddress, $this->fromName);
-        $toOwner = new Address($this->toAddress, $this->toName);
+        $from = $this->makeAddressOrFallback($this->fromAddress, $this->fromName, 'no-reply@localhost');
+        $toOwner = $this->makeAddressOrFallback($this->toAddress, $this->toName, 'owner@localhost');
 
         $context = ['booking' => $booking];
 
@@ -178,7 +198,7 @@ readonly class MailManService
         $text = $this->twig->render('email/booking_owner_confirmed.txt.twig', $context);
         $html = $this->twig->render('email/booking_owner_confirmed.html.twig', $context);
 
-        $email = (new Email())
+        $email = new Email()
             ->from($from)
             ->to($toOwner)
             ->replyTo(new Address($booking->getEmail(), $booking->getName()))
@@ -200,6 +220,29 @@ readonly class MailManService
             $this->logger->error('Mailer send failed: ' . $e->getMessage(), ['exception' => $e]);
 
             throw $e;
+        }
+    }
+
+    /**
+     * Safe helper: try to create an Address from the provided email/name and
+     * fall back to a sane default if the value is empty or invalid.
+     */
+    private function makeAddressOrFallback(string $email, string $name, string $fallback): Address
+    {
+        $email = trim($email);
+
+        if ('' === $email) {
+            $this->logger->warning(sprintf('Email is empty, using fallback <%s>', $fallback));
+
+            return new Address($fallback, $name);
+        }
+
+        try {
+            return new Address($email, $name);
+        } catch (\Throwable $e) {
+            $this->logger->warning(sprintf('Invalid email "%s", using fallback <%s>: %s', $email, $fallback, $e->getMessage()), ['exception' => $e]);
+
+            return new Address($fallback, $name);
         }
     }
 

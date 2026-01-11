@@ -5,7 +5,7 @@ Follow these project-specific instructions to ensure code quality, consistency, 
 
 ## 📋 Project Tech Stack
 
-- **Framework**: Symfony 7.3 (PHP 8.3+)
+- **Framework**: Symfony 8 (PHP 8.3+)
 - **Frontend**: Webpack Encore, Bootstrap 5, Stimulus, TypeScript
 - **Database**: MariaDB / MySQL / SQLite / PostgreSQL (Doctrine ORM)
 - **Testing**: PHPUnit, PHPStan (Level 4+)
@@ -28,7 +28,7 @@ Follow these project-specific instructions to ensure code quality, consistency, 
 
 - **Stimulus Controllers**: For any dynamic behavior, create a Stimulus Controller in `assets/controllers/`.
   - ❌ Do not write inline `<script>` tags in Twig templates.
-  - ❌ Do not use jQuery or unrelated vanilla JS files.
+  - ❌ Do not use jQuery or unrelated vanilla JavaScript files.
 - **Bootstrap 5 Utilities**: Prioritize Bootstrap utility classes (e.g., `p-3 mb-4 d-flex gap-2`).
   - Only write custom SCSS in `assets/styles/` if Bootstrap utilities cannot achieve the design.
 - **TypeScript**: Use TypeScript (`.ts`) for all new frontend logic.
@@ -42,12 +42,19 @@ Follow these project-specific instructions to ensure code quality, consistency, 
 
 ## 📂 Key Directories Reference
 
-- `src/Entity/` - Doctrine Entities (Database Schema)
-- `src/Controller/` - HTTP Request Handlers
-- `src/Form/` - Symfony Forms
+- `assets/styles/` - SCSS Stylesheets
+- `assets/scripts/` - TypeScript Scripts
 - `assets/controllers/` - Stimulus Controllers (Frontend Logic)
-- `templates/` - Twig Views
+- `src/Command/` - CLI Commands
+- `src/Controller/` - HTTP Request Handlers
+- `src/Entity/` - Doctrine Entities (Database Schema)
+- `src/Form/` - Symfony Forms
+- `src/Repository/` - Doctrine Repositories
+- `src/Services/` - Services with the main business logic
 - `migrations/` - Database Migrations
+- `templates/` - Twig Views
+- `test/` - PHPUnit Tests for the application and website
+- `translations/` - Translation Strings
 
 ## 🧪 Testing Guidelines
 

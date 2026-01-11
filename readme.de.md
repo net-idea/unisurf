@@ -2,6 +2,16 @@
 
 > Language: Deutsch · Englische Version: [readme.md](readme.md)
 
+[![PHP CI](https://github.com/bassix/unisurf/actions/workflows/php.yml/badge.svg?branch=main)](https://github.com/bassix/unisurf/actions/workflows/php.yml)
+[![Node CI](https://github.com/bassix/unisurf/actions/workflows/node.yml/badge.svg?branch=main)](https://github.com/bassix/unisurf/actions/workflows/node.yml)
+
+Dieses Repository führt Continuous Integration via GitHub Actions aus. Die wichtigsten Workflows sind:
+
+- PHP CI — composer validate, PHP CS Fixer, PHPStan (analysiert `src`), PHPUnit-Tests, Twig-Linting.
+- Node CI — Installation, TypeScript-Typprüfung, Stylelint, Asset-Build (Webpack Encore), Prettier-Checks.
+
+Die oben angezeigten Badges zeigen den Status für den `main`-Branch. Klicken Sie auf ein Badge, um vorige Workflow-Läufe und Logs anzusehen.
+
 UniSurf steht für verlässliche, persönliche und kompetente digitale Infrastruktur: Managed Hosting, Webumgebungen und Entwicklung – aus einer Hand. Dieses Repository enthält die Website und das begleitende Management-System von UniSurf.
 
 Kurz gesagt: Wir planen, betreiben und pflegen stabile Web‑Infrastruktur – von Managed Servern über Webhosting bis hin zu Datenbanken, E‑Mail‑Diensten und sicheren Schnittstellen. Unternehmen bekommen bei uns den direkten Draht, transparente Abläufe und Lösungen mit Augenmaß.
