@@ -25,7 +25,7 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-    command: sh -c "yarn install --immutable && yarn encore dev-server --host 0.0.0.0 --port 8080 --hot --public http://localhost:8080"
+    command: sh -c "yarn install --immutable && yarn encore dev-server --host 0.0.0.0 --port 8080 --hot --public http://127.0.0.1:8080"
     ports:
       - '${NODE_PORT:-8080}:8080'
     networks:

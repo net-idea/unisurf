@@ -120,9 +120,6 @@
                 {{ error.message }}
               </div>
             {% endfor %}
-            <div class="form-text">
-              Mindestens 10 Zeichen
-            </div>
           </div>
 
           {# Honeypots (visually hidden) #}
@@ -131,7 +128,7 @@
             {{ form_row(form.emailrep) }}
           </div>
 
-          <div class="mb-3 form-check">
+          <div class="mb-3">
             {{ form_widget(form.consent, { attr: { class: (form.consent.vars.errors|length) > 0 ? 'form-check-input is-invalid' : 'form-check-input' } }) }}
             {{ form_label(form.consent, null, { label_attr: { class: 'form-check-label' } }) }}
             {% for error in form.consent.vars.errors %}

@@ -1,5 +1,5 @@
 services:
-  database:
+  mariadb:
     volumes:
       - ./mariadb/data:/var/lib/mysql
       - ./mariadb/log:/var/log/mysql

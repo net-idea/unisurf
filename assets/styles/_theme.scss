@@ -2,6 +2,92 @@
    UniSurf - Theme Components
    ============================================================================ */
 
+// =============================
+// Headings & Text
+// =============================
+h1,
+.h1 {
+  font-size: $font-size-h1;
+  font-weight: $heading-font-weight;
+  color: $heading-color;
+  letter-spacing: $heading-letter-spacing;
+  line-height: $line-height-heading;
+  margin-top: $heading-margin-top;
+  margin-bottom: $heading-margin-bottom;
+  font-family: $font-family-primary;
+}
+
+h2,
+.h2 {
+  font-size: $font-size-h2;
+  font-weight: $heading-font-weight;
+  color: $heading-color;
+  letter-spacing: $heading-letter-spacing;
+  line-height: $line-height-heading;
+  margin-top: $heading-margin-top;
+  margin-bottom: $heading-margin-bottom;
+  font-family: $font-family-primary;
+}
+
+h3,
+.h3 {
+  font-size: $font-size-h3;
+  font-weight: 700;
+  color: $heading-color;
+  letter-spacing: 0;
+  line-height: 1.22;
+  margin-top: $heading-margin-top;
+  margin-bottom: $heading-margin-bottom-small;
+  font-family: $font-family-primary;
+}
+
+h4,
+.h4 {
+  font-size: $font-size-h4;
+  font-weight: 600;
+  color: $heading-color;
+  margin-top: $heading-margin-top;
+  margin-bottom: $heading-margin-bottom-small;
+  font-family: $font-family-primary;
+}
+
+body,
+.text-body {
+  color: $text-color;
+  font-size: $font-size-base;
+  font-family: $font-family-primary;
+  line-height: $text-line-height;
+  font-weight: $text-font-weight;
+  width: 100%;
+  max-width: 100%;
+}
+
+// A wrapper to limit long lines of text for better readability
+// Use this sparingly - prefer Bootstrap containers
+.content-narrow {
+  max-width: $text-max-width;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// Ensure paragraphs and lists inside cards don't get max-width
+.page-section-card p,
+.page-section-card ul,
+.page-section-card ol {
+  max-width: none;
+}
+
+// Typography spacing - use Bootstrap defaults
+p {
+  margin-bottom: 1rem;
+  line-height: $text-line-height;
+}
+
+ul,
+ol {
+  margin-bottom: 1rem;
+}
+
 // ============================================================================
 // Buttons
 // ============================================================================
@@ -185,91 +271,4 @@ header.masthead {
   text-align: center;
   font-size: $footer-font-size;
   font-family: $font-family-primary;
-}
-
-// =============================
-// Headings & Text
-// =============================
-
-h1,
-.h1 {
-  font-size: $font-size-h1;
-  font-weight: $heading-font-weight;
-  color: $heading-color;
-  letter-spacing: $heading-letter-spacing;
-  line-height: $line-height-heading;
-  margin-top: $heading-margin-top;
-  margin-bottom: $heading-margin-bottom;
-  font-family: $font-family-primary;
-}
-
-h2,
-.h2 {
-  font-size: $font-size-h2;
-  font-weight: $heading-font-weight;
-  color: $heading-color;
-  letter-spacing: $heading-letter-spacing;
-  line-height: $line-height-heading;
-  margin-top: $heading-margin-top;
-  margin-bottom: $heading-margin-bottom;
-  font-family: $font-family-primary;
-}
-
-h3,
-.h3 {
-  font-size: $font-size-h3;
-  font-weight: 700;
-  color: $heading-color;
-  letter-spacing: 0;
-  line-height: 1.22;
-  margin-top: $heading-margin-top;
-  margin-bottom: $heading-margin-bottom-small;
-  font-family: $font-family-primary;
-}
-
-h4,
-.h4 {
-  font-size: $font-size-h4;
-  font-weight: 600;
-  color: $heading-color;
-  margin-top: $heading-margin-top;
-  margin-bottom: $heading-margin-bottom-small;
-  font-family: $font-family-primary;
-}
-
-body,
-.text-body {
-  color: $text-color;
-  font-size: $font-size-base;
-  font-family: $font-family-primary;
-  line-height: $text-line-height;
-  font-weight: $text-font-weight;
-  width: 100%;
-  max-width: 100%;
-}
-
-// A wrapper to limit long lines of text for better readability
-// Use this sparingly - prefer Bootstrap containers
-.content-narrow {
-  max-width: $text-max-width;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-// Ensure paragraphs and lists inside cards don't get max-width
-.page-section-card p,
-.page-section-card ul,
-.page-section-card ol {
-  max-width: none;
-}
-
-// Typography spacing - use Bootstrap defaults
-p {
-  margin-bottom: 1rem;
-  line-height: $text-line-height;
-}
-
-ul,
-ol {
-  margin-bottom: 1rem;
 }

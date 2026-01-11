@@ -95,6 +95,8 @@ Encore
 
   // dev-server: enable HMR/live reload and watch Twig/PHP changes
   .configureDevServerOptions((options) => {
+    options.host = '127.0.0.1';
+    options.port = 8080;
     options.hot = true;
     options.liveReload = true;
     options.client = { overlay: true, progress: true };

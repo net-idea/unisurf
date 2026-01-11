@@ -11,15 +11,27 @@
 # 2) Docker Compose mode: brings up the full dev stack using Docker Compose
 #    (PHP, Nginx, Node watcher, MariaDB, Mailpit).
 #
-# Usage: ./develop.sh
-# Press Ctrl+C to stop local watchers; use `docker compose -p unisurf down`
-# to stop the Docker Compose stack.
+# Usage: ./develop.sh [-d]
+# -d: Run Docker Compose in detached mode (background)
+#
+# Press Ctrl+C to stop local watchers or the attached Docker stack.
 
 # Colors for output
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
+
+# Parse arguments
+DETACHED=false
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -d|--detach)
+      DETACHED=true; shift ;;
+    *)
+      shift ;; # Ignore other args
+  esac
+done
 
 PROJECT_DIR=$(pwd)
 PHP_BIN=$(which php 2>/dev/null || echo "")
@@ -29,6 +41,7 @@ NODE_BIN=$(which node 2>/dev/null || echo "")
 YARN_BIN=$(which yarn 2>/dev/null || echo "")
 DOCKER_BIN=$(which docker 2>/dev/null || echo "")
 
+# Checks for Docker availability
 require_docker() {
     if [ -z "$DOCKER_BIN" ]; then
         echo -e "${RED}Docker is not installed or not in PATH.${NC}" >&2
@@ -40,22 +53,106 @@ require_docker() {
     fi
 }
 
+# Source docker-list.sh for compose args/services
+load_compose_args() {
+    if [ ! -x "$PROJECT_DIR/docker-list.sh" ]; then
+        echo -e "${RED}Missing $PROJECT_DIR/docker-list.sh${NC}" >&2
+        exit 1
+    fi
+
+    COMPOSE_ARGS_RAW="$($PROJECT_DIR/docker-list.sh --compose-args)"
+    # shellcheck disable=SC2206
+    COMPOSE_ARGS=( $COMPOSE_ARGS_RAW )
+
+    # determine DB service name (for logs/info)
+    if [ "${DB:-mariadb}" = "postgres" ]; then
+        DB_SERVICE=postgres
+    else
+        DB_SERVICE=mariadb
+    fi
+}
+
+# Ask for migrations if files exist
+# $1: command to execute php (e.g., "$PHP_BIN" or "docker compose ... exec ...")
+ask_and_run_migrations() {
+    local exec_cmd="$1"
+
+    # Check for migration files
+    if [ -d "migrations" ] && [ -n "$(find migrations -maxdepth 1 -type f -name '*.php' -print -quit 2>/dev/null)" ]; then
+        echo
+        echo -e "${YELLOW}Migrations found. Run them now? (y/N)${NC}"
+        read -r response
+        if [[ "$response" =~ ^[Yy]$ ]]; then
+            echo -e "${YELLOW}Running migrations...${NC}"
+            # shellcheck disable=2086
+            $exec_cmd bin/console doctrine:migrations:migrate --no-interaction
+        else
+            echo -e "${GREEN}Migrations skipped.${NC}"
+        fi
+    else
+        echo -e "${GREEN}No migrations found.${NC}"
+    fi
+}
+
+# Print generic service list with defaults from .env if possible
+print_service_info() {
+    if [ -f .env ]; then
+        set -o allexport
+        # shellcheck disable=SC1091
+        source .env
+        set +o allexport
+    fi
+
+    local app_url="http://localhost:${APP_PORT:-8000}"
+    local assets_url="http://localhost:${NODE_PORT:-8080}"
+
+    echo -e "${GREEN}Development environment is running and provides following endpoints:${NC}"
+    echo "${YELLOW} → App:        $app_url${NC}"
+    echo "${YELLOW} → Assets:     $assets_url (via Yarn)${NC}"
+}
+
 run_docker_stack() {
     require_docker
-    echo -e "${YELLOW}Starting Docker dev stack (PHP, Nginx, Node watcher, MariaDB, Mailer)...${NC}"
-    docker compose -p unisurf \
-        -f docker-compose.yaml \
-        -f docker-compose.dev.yaml \
-        -f docker-compose.mariadb.yml \
-        -f docker-compose.mariadb.dev.yml \
-        up -d --build
-    echo -e "${GREEN}Docker dev stack is running.${NC}"
-    echo -e "${YELLOW}Services:${NC}"
-    echo -e " - App: http://localhost:8000"
-    echo -e " - Encore dev server: http://localhost:8080"
-    echo -e " - Mailpit: http://localhost:8025"
-    echo -e " - MariaDB: localhost:3306"
-    exit 0
+    load_compose_args
+
+    echo -e "${YELLOW}Starting Docker dev stack (detached init)...${NC}"
+
+    # 1. Bring up stack in detached mode first to ensure services correspond
+    #    and to allow running migrations interactively.
+    docker compose "${COMPOSE_ARGS[@]}" up -d --build --remove-orphans
+
+    echo -e "${GREEN}Docker containers are up.${NC}"
+
+    # 2. Migration prompt
+    #    We use docker executable directly to ensure interactive input works if needed,
+    #    though 'migrate --no-interaction' is passed.
+    #    The 'ask_and_run_migrations' function handles the prompt logic.
+    ask_and_run_migrations "docker compose ${COMPOSE_ARGS[*]} exec php php"
+
+    # 3. Print Services using docker-test.sh for detailed health/endpoint info
+    if [ -x "./docker-test.sh" ]; then
+        ./docker-test.sh || true
+    else
+        print_service_info
+    fi
+
+    # 4. Handle Attached vs Detached
+    if [ "$DETACHED" = true ]; then
+        echo -e "${GREEN}Running in detached mode. Use './docker-stop.sh' to stop.${NC}"
+        exit 0
+    else
+        echo
+        echo -e "${YELLOW}Attaching to logs...${NC}"
+        echo -e "${YELLOW}Press Ctrl+C to stop the stack and clean up.${NC}"
+        echo
+
+        # We define a trap to catch Ctrl+C (SIGINT)
+        # When caught, we explicitly stop the containers to mimic 'docker compose up' behavior
+        trap 'echo -e "\n${YELLOW}Stopping stack...${NC}"; docker compose "${COMPOSE_ARGS[@]}" stop; exit 0' INT TERM
+
+        # Follow logs. This blocks until Ctrl+C.
+        docker compose "${COMPOSE_ARGS[@]}" logs -f
+    fi
 }
 
 run_local_stack() {
@@ -88,59 +185,42 @@ run_local_stack() {
     fi
 
     require_docker
+    load_compose_args
+
     echo -e "${GREEN}All dependencies are available.${NC}"
 
-    echo -e "${YELLOW}Starting MariaDB (Docker)...${NC}"
-    docker compose -p unisurf -f docker-compose.mariadb.yml -f docker-compose.mariadb.dev.yml up -d
+    echo -e "${YELLOW}Starting database (Docker)...${NC}"
+    docker compose "${COMPOSE_ARGS[@]}" up -d "$DB_SERVICE"
 
     echo -e "${YELLOW}Running Composer install...${NC}"
-    $COMPOSER_BIN install --working-dir="$PROJECT_DIR" --prefer-dist --no-progress --no-suggest
-    if [ $? -ne 0 ]; then
-        echo -e "${RED}Composer install failed.${NC}" >&2
-        exit 1
-    fi
+    $COMPOSER_BIN install --working-dir="$PROJECT_DIR" --prefer-dist --no-progress
 
     echo -e "${YELLOW}Running Yarn install...${NC}"
     $YARN_BIN install --cwd "$PROJECT_DIR"
-    if [ $? -ne 0 ]; then
-        echo -e "${RED}Yarn install failed.${NC}" >&2
-        exit 1
-    fi
 
     echo -e "${YELLOW}Clearing and warming up cache...${NC}"
     $PHP_BIN bin/console cache:clear --no-warmup
     $PHP_BIN bin/console cache:warmup
 
-    # Detect whether there are any migration files (handles filenames safely)
-    if [ -d "migrations" ] && [ -n "$(find migrations -maxdepth 1 -type f -name '*.php' -print -quit 2>/dev/null)" ]; then
-        echo
-        echo -e "${YELLOW}Migrations found. Run them now? (y/N)${NC}"
-        read -r response
-        if [[ "$response" =~ ^[Yy]$ ]]; then
-            echo -e "${YELLOW}Running migrations...${NC}"
-            $PHP_BIN bin/console doctrine:migrations:migrate --no-interaction
-        else
-            echo -e "${GREEN}Migrations skipped.${NC}"
-        fi
-    else
-        echo -e "${GREEN}No migrations found.${NC}"
-    fi
+    # Ask for migrations (local PHP)
+    ask_and_run_migrations "$PHP_BIN"
 
-    trap 'echo -e "${YELLOW}Stopping development environment...${NC}"; kill $YARN_PID $PHP_PID 2>/dev/null; exit 0' INT TERM
+    trap 'echo -e "${YELLOW}Stopping local development environment...${NC}"; kill $YARN_PID $PHP_PID 2>/dev/null; exit 0' INT TERM
 
     echo
     echo -e "${GREEN}Starting development servers...${NC}"
-    echo -e "${YELLOW}   → Yarn Encore: http://localhost:8080 (assets)${NC}"
-    echo -e "${YELLOW}   → PHP Server:  http://127.0.0.1:8000${NC}"
+    echo
+    print_service_info
+    echo
     echo -e "${YELLOW}Press Ctrl+C to stop.${NC}"
     echo
 
-    $YARN_BIN encore dev-server --host 0.0.0.0 --port 8080 --hot &
+    $YARN_BIN encore dev-server --port "${NODE_PORT:-8080}" --host 127.0.0.1 --hot &
     YARN_PID=$!
 
     sleep 2
 
-    $PHP_BIN -S 127.0.0.1:8000 -t public &
+    $PHP_BIN -S "127.0.0.1:${APP_PORT:-8000}" -t public &
     PHP_PID=$!
 
     wait

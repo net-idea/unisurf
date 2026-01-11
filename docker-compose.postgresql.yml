@@ -1,5 +1,5 @@
 services:
-  database:
+  postgres:
     image: postgres
     container_name: '${APP_NAME:-unisurf}_postgres'
     hostname: postgres

@@ -2,7 +2,7 @@
 
 This document lists common Symfony commands used in this project and troubleshooting tips.
 
-## Common commands (host)
+## Common commands (local / host)
 
 ```bash
 # Clear cache
@@ -14,17 +14,8 @@ php bin/console make:migration
 # Run migrations
 php bin/console doctrine:migrations:migrate
 
-# Create a new controller
-php bin/console make:controller
-
-# Create a new entity
-php bin/console make:entity
-
 # Validate database schema
 php bin/console doctrine:schema:validate
-
-# Show migration status
-php bin/console doctrine:migrations:status
 
 # Run tests
 php bin/phpunit
@@ -32,41 +23,50 @@ php bin/phpunit
 
 ## Common commands (Docker)
 
+Prefer the helper script `docker-php.sh` (it targets the `php` service of the current compose project):
+
 ```bash
 # Clear cache
-docker compose exec web php bin/console cache:clear
+./php.sh bin/console cache:clear
 
 # Create a new migration
-docker compose exec web php bin/console make:migration
+./php.sh bin/console make:migration
 
 # Run migrations
-docker compose exec web php bin/console doctrine:migrations:migrate --no-interaction
+./php.sh bin/console doctrine:migrations:migrate --no-interaction
 
 # Validate database schema
-docker compose exec web php bin/console doctrine:schema:validate
+./php.sh bin/console doctrine:schema:validate
 
 # Run tests
-docker compose exec web php bin/phpunit
+./php.sh bin/phpunit
 ```
 
-## Troubleshooting (Symfony)
+## Troubleshooting
 
-- Cache issues
-  - Clear cache: `php bin/console cache:clear`
-  - If using prod mode, add: `--env=prod --no-debug`
+### Cache issues
 
-- .env configuration
-  - Ensure correct `APP_ENV`, `DATABASE_URL`, and `APP_SECRET`.
-  - Use `.env.local` for local overrides.
+- Clear cache: `php bin/console cache:clear`
+- In prod mode: `php bin/console cache:clear --env=prod --no-debug`
 
-- Rate limiter configuration
-  - See: `config/packages/rate_limiter.yaml`
+### .env configuration
 
-- Asset build issues
-  - Reinstall node modules: `yarn install` (or `npm ci`)
-  - Rebuild: `yarn encore dev` or `yarn build`
+- Use `.env.local` for local overrides
+- Ensure `APP_ENV`, `DATABASE_URL`, and `APP_SECRET` are set correctly
 
-For Docker-specific or database-specific issues, see:
+### Asset build issues
 
-- Docker: `docs/docker.md`
+Local:
+
+- Reinstall node modules: `yarn install`
+- Rebuild: `yarn encore dev` / `yarn encore dev --watch` / `yarn encore production`
+
+Docker:
+
+- Use `./docker-yarn.sh …`
+
+## Related docs
+
+- Docker: `docs/development-docker.md`
+- Local dev: `docs/development-local.md`
 - Database: `docs/database.md`

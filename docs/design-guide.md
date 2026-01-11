@@ -1,274 +1,214 @@
-# Hütte9 - Page Features Guide
-
-## 🏠 Homepage (/)
-
-### Hero Section
-
-```
-┌─────────────────────────────────────────────────┐
-│                                                 │
-│     🏔️                                          │
-│     Welcome to Hütte9                          │
-│     Your exclusive mountain cabin              │
-│                                                 │
-│     [Book Now]  [Learn More]                   │
-│                                                 │
-│              ↓ scroll indicator                 │
-└─────────────────────────────────────────────────┘
-```
-
-- Full-screen gradient background (purple/blue)
-- Animated title and subtitle
-- Glowing call-to-action buttons
-- Smooth scroll indicator
-
-### Features Section
-
-```
-┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐
-│ 🏔️       │ │ ✨       │ │ 🎿       │ │ 🔥       │
-│ Mountain │ │ Modern   │ │Activities│ │  Cozy    │
-│  Views   │ │ Comfort  │ │          │ │ Ambiance │
-└──────────┘ └──────────┘ └──────────┘ └──────────┘
-```
-
-- 4 glass-effect feature cards
-- Icons with pulse animation
-- Hover lift effect
-
-### About Section
-
-```
-┌─────────────┐  ┌────────────────────────────┐
-│             │  │ Your Perfect Mountain      │
-│   [Image]   │  │ Getaway                    │
-│             │  │                            │
-│  ⭐Premium  │  │ Welcome to Hütte9...       │
-│   Property  │  │                            │
-└─────────────┘  │ [Get in Touch]             │
-                 └────────────────────────────┘
-```
-
-- Image showcase with badge
-- Detailed description
-- Call-to-action button
-
-### Amenities Section
-
-```
-┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-│ 📶 WiFi     │ │ 🍳 Kitchen  │ │ 🛏️ Bedrooms │
-└─────────────┘ └─────────────┘ └─────────────┘
-┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-│ 🅿️ Parking  │ │ 🌡️ Heating  │ │ 🧺 Laundry  │
-└─────────────┘ └─────────────┘ └─────────────┘
-```
-
-- 6 amenity cards in grid
-- Glass effect with icons
-- Slide animation on hover
-
-### CTA Section
-
-```
-┌─────────────────────────────────────────────────┐
-│                                                 │
-│   Ready to Experience Hütte9?                  │
-│   Book your mountain retreat today             │
-│                                                 │
-│          [Contact Us Now]                       │
-│                                                 │
-└─────────────────────────────────────────────────┘
-```
-
-- Full-width gradient section
-- Large glowing button
-
----
-
-## 📧 Contact Page (/contact)
-
-### Contact Hero
-
-```
-┌─────────────────────────────────────────────────┐
-│                                                 │
-│          Get in Touch                          │
-│   Let's plan your perfect mountain getaway     │
-│                                                 │
-└─────────────────────────────────────────────────┘
-```
-
-- Smaller hero with gradient
-- Clear messaging
+# UniSurf – Design & Pages Guide
 
-### Contact Form Layout
+This document describes the **actual** page structure and UI building blocks of this project.
 
-```
-┌──────────────────┐  ┌─────────────────────────┐
-│ Contact Info     │  │ Send us a Message       │
-│                  │  │                         │
-│ 📧 Email         │  │ [Name]      [Email]     │
-│ info@huette9.de  │  │                         │
-│                  │  │ [Subject (optional)]    │
-│ 📍 Location      │  │                         │
-│ Dormagen, DE     │  │ [Message]               │
-│                  │  │                         │
-│ ⏰ Response      │  │                         │
-│ Within 24h       │  │ [Send Message ✉️]       │
-│                  │  │                         │
-└──────────────────┘  └─────────────────────────┘
-```
+It is meant for:
 
-- Two-column responsive layout
-- Sticky contact info on scroll (desktop)
-- Glass-effect cards
-- Floating labels on inputs
-- Full-width submit button
+- Designers/Content editors: where texts live and how pages are structured
+- Developers: where to change layout, components, and styling
 
-### Stats Section
+## Where things live
 
-```
-┌────────────────────────────────────────────────┐
-│         Why Choose Hütte9?                     │
-│                                                │
-│   ⭐ 5.0        🏆 100%       💚 24/7          │
-│   Rating       Satisfaction   Support         │
-└────────────────────────────────────────────────┘
-```
+### Page templates
 
-- Trust indicators
-- Large numbers for impact
+- `templates/base.html.twig`: global HTML layout, SEO meta generation, shared masthead
+- `templates/_partials/navbar.html.twig`: navigation + theme dropdown
+- `templates/_partials/footer.html.twig`: footer
+- `templates/pages/*.html.twig`: individual marketing pages
+  - `index.html.twig`
+  - `services.html.twig`
+  - `hosting.html.twig`
+  - `entwicklung.html.twig`
+  - `kontakt.html.twig`
+- `templates/pages/content.html.twig`: generic template for CMS/Markdown pages (Impressum, Datenschutz)
 
----
+### Alternative contents (CMS pages)
 
-## 🎨 Theme Switcher
+- `content/_pages.php`: central metadata (title/description/keywords/canonical/nav items)
+- `content/*.md`: Markdown pages (e.g. `impressum.md`, `datenschutz.md`)
 
-Located in navigation bar:
+### Styles
 
-```
-┌─────────────────────────────────┐
-│ 🌓 Theme ▼                      │
-├─────────────────────────────────┤
-│ 💻 System                       │
-│ ☀️ Light                         │
-│ 🌙 Dark                          │
-└─────────────────────────────────┘
-```
+Entry:
 
-**Themes:**
+- `assets/styles/app.scss` imports Bootstrap + UniSurf modules.
 
-1. **System**: Follows your OS preference
-2. **Light**: Clean white/light gray with subtle shadows
-3. **Dark**: Deep blue/purple with enhanced glow effects
+Key modules:
 
-**Features:**
+- `assets/styles/_variables.scss`: design tokens (colors, spacing, font sizes)
+- `assets/styles/_theme.scss`: shared components (masthead, nav, footer, cards, typography helpers)
+- `assets/styles/_theme-dark.scss` / `_theme-light.scss`: overrides per theme
+- `assets/styles/_forms*.scss`: form styling + dark/light variants
 
-- Instant switching (no page reload)
-- Saved in localStorage
-- No flash on page load
-- Smooth transitions
+## Global UI / Layout
 
----
+### Base layout (`templates/base.html.twig`)
 
-## 🎯 Key Design Elements
+- Language: `de`
+- SEO:
+  - canonical URL computed from slug
+  - `pageMeta.*` values used when available
+  - OpenGraph + Twitter card tags
+- Assets: Webpack Encore entry `app` is loaded via `encore_entry_link_tags('app')` and `encore_entry_script_tags('app')`.
 
-### Glass Morphism
+### Navigation + theme switcher (`templates/_partials/navbar.html.twig`)
 
-- Semi-transparent backgrounds
-- Backdrop blur effect
-- Subtle borders
-- Layered depth
+- Sticky/fixed top navigation (`#main-nav`)
+- `navItems` are provided by the backend (based on `content/_pages.php`)
+- Theme switcher dropdown:
+  - `data-theme="light"|"dark"|"system"`
+  - styling is handled in `assets/styles/_theme*.scss`
 
-### Animations
+### Masthead (hero)
 
-- ✨ Fade-in on load
-- 🎭 Hover transformations
-- 💫 Pulsing icons
-- 🌊 Smooth transitions
+All major pages use the `.masthead` header.
 
-### Typography
+- Background image is set inline in Twig (currently: `images/header-bg.jpg`)
+- Overlay and typography are styled in `assets/styles/_theme.scss` under `header.masthead`
 
-- Bold, large headings
-- Clear hierarchy
-- Readable body text
-- Proper spacing
+## Pages (routes + sections)
 
-### Colors
+> Note: Routes are German slugs (e.g. `/kontakt`). Page meta/navigation config is in `content/_pages.php`.
 
-**Light Theme:**
+### Home (`/`) – `templates/pages/index.html.twig`
 
-- Background: White → Light Gray gradient
-- Primary: Blue (#0d6efd)
-- Text: Dark gray/black
-- Glass: White (80% opacity)
+Hero (`masthead` block):
 
-**Dark Theme:**
+- Subheading: "Ihr Partner für digitale Infrastruktur und Managed Hosting"
+- Heading: "Verlässlich. Persönlich. Kompetent."
+- CTA buttons:
+  - primary → `/kontakt`
+  - secondary → `/services`
 
-- Background: Dark Blue → Purple gradient
-- Primary: Same blue (consistency)
-- Text: White/light gray
-- Glass: White (5% opacity)
+Body sections:
 
----
+1. **Überblick / Value Proposition** (`#home-overview`)
+   - "Unser Angebot" kicker + H1
+   - feature list `.unisurf-feature-list` with check icons
+   - two feature cards `.page-section-card` (Managed Hosting / Infrastruktur & Vernetzung)
+   - right-side image (`images/webhosting.webp`) inside `.media-block`
 
-## 📱 Responsive Design
+2. **Kernleistung: Managed Hosting & Infrastruktur** (`#hosting`, background `bg-body-tertiary`)
+   - bullet list of hosting benefits
+   - supporting cards (`Unser Fokus`, `Wartung & Pflege`, `Skalierung`)
 
-### Desktop (>992px)
+3. **Zusatzleistungen / Leistungsübersicht** (`#extras`)
+   - grid of `.page-section-card` (Server & Cloud, Kommunikation & Daten, Vernetzung, IT-Sicherheit)
 
-- Two-column layouts
-- Full hero sections
-- Hover effects active
-- Sticky elements
+4. **Zielgruppe & Vertrauen** (`#target`, background `bg-body-tertiary`)
+   - target groups list
+   - advantages cards (Direkter Draht, Transparenz, Nachhaltigkeit, Flexibilität)
 
-### Tablet (768px-991px)
+5. **Final CTA** (`#cta`)
+   - centered card with CTA to `/kontakt` and `/services`
 
-- Stacked columns
-- Adjusted spacing
-- Touch-optimized
+### Services (`/services`) – `templates/pages/services.html.twig`
 
-### Mobile (<768px)
+- Intro section with kicker "Services" + H1
+- Main grid section (`#services`) containing service cards (`.page-section-card`):
+  - Managed Server & Administration
+  - Webhosting & Web-Umgebungen
+  - Vernetzung Haus Intern
+  - Datenbanken & Speicher
+  - Cloud-Integration & Beratung
+  - KI & Automatisierung
+  - IT-Sicherheit
+- Final consultation CTA card ("Technologie mit Augenmaß")
 
-- Single column
-- Hamburger menu
-- Larger touch targets
-- Simplified layouts
+### Hosting (`/hosting`) – `templates/pages/hosting.html.twig`
 
----
+- Intro section with kicker "Hosting" + H1
+- Content section with:
+  - target groups list
+  - large media block image (`images/webhosting-01.png`)
+  - feature cards (Managed Server, Webhosting, E-Mail Service, Datenbank-Management)
+- Closing quality CTA card
 
-## ⚡ Performance
+### Entwicklung (`/entwicklung`) – `templates/pages/entwicklung.html.twig`
 
-- **CSS**: Minified, optimized
-- **JS**: Bundle split, async
-- **Images**: Placeholders (ready for real images)
-- **Fonts**: System fonts (fast)
-- **Caching**: Browser cache headers
+- Intro section with kicker "Entwicklung" + H1
+- Sections implemented as stacked `.page-section-card` blocks:
+  - Webseiten & Unternehmensportale
+  - E-Commerce Lösungen
+  - Interne Vernetzung & Intranet
+  - Schnittstellen & Web-Applikationen
+  - Arbeitsweise (list)
+- Closing CTA cards:
+  - "Entwicklung und Betrieb aus einer Hand" → `/hosting`
+  - "Wir ergänzen Ihre Möglichkeiten" → `/kontakt`
 
----
+### Kontakt (`/kontakt`) – `templates/pages/kontakt.html.twig`
 
-## 🚀 Quick Start
+Hero (masthead block):
 
-```bash
-# Install and run
-./develop.sh
+- Subheading: "Kontakt"
+- Heading: "Wir sind für Sie da"
 
-# Or manually:
-yarn install
-composer install
-yarn build
-symfony server:start
+Body (`#contact`):
 
-# Visit:
-http://localhost:8000/          # Homepage
-http://localhost:8000/contact   # Contact
-```
+- Intro text "Nachricht senden"
+- Flash-/Query-parameter alert boxes (`#contact-success`, `#contact-error`, `#contact-success-redirect`, `#contact-error-redirect`)
+- Symfony Form rendering with Bootstrap form classes:
+  - name, email, phone, message
+  - consent checkbox
+  - honeypot fields: `website`, `emailrep`
+- Additional Datenschutz info card linking to `/datenschutz`
 
----
+Styling hints:
 
-## ✅ Browser Support
+- Form styles live in `assets/styles/_forms.scss` + theme overrides
+- Bootstrap validation classes (`is-invalid`, `.invalid-feedback`) are used
 
-- ✅ Chrome/Edge (latest)
-- ✅ Firefox (latest)
-- ✅ Safari (latest)
-- ✅ Mobile browsers
-- ⚠️ Backdrop-filter: IE not supported (graceful fallback)
+### CMS / Markdown pages (`/impressum`, `/datenschutz`)
+
+- Content is stored in `content/impressum.md` and `content/datenschutz.md`
+- Rendered via `templates/pages/content.html.twig`
+- Metadata is configured in `content/_pages.php` (`cms => true`)
+
+## Design system notes
+
+### Reusable building blocks
+
+- `.page-section-card`: main "card" container for content blocks
+- `.section-kicker`: small eyebrow heading used above titles
+- `.media-block`: image container used on marketing pages
+- `.btn-xl`: larger CTA button
+
+### Themes
+
+Theme switching is implemented via the navbar dropdown.
+
+Relevant SCSS files:
+
+- `assets/styles/_theme.scss` (base styling)
+- `assets/styles/_theme-dark.scss`
+- `assets/styles/_theme-light.scss`
+
+## How to change the site
+
+- Update copy/text:
+  - for marketing pages: edit `templates/pages/*.html.twig`
+  - for legal pages: edit `content/*.md`
+- Add/remove navigation entries:
+  - edit `content/_pages.php` (`nav`, `nav_label`, `nav_order`)
+- Change colors/spacing:
+  - start in `assets/styles/_variables.scss`
+- Change masthead overlay or typography:
+  - edit `assets/styles/_theme.scss` → `header.masthead`
+
+## Quick sanity check
+
+When you change templates or SCSS you can validate quickly:
+
+- Local mode: `./develop.sh` → option 1
+- Docker mode: `./develop.sh` → option 2
+
+Then open:
+
+- `/` (home)
+- `/services`
+- `/hosting`
+- `/entwicklung`
+- `/kontakt`
+- `/impressum`
+- `/datenschutz`

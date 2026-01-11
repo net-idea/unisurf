@@ -63,7 +63,7 @@ class FormContactType extends AbstractType
                     'rows'        => 6,
                     'minlength'   => 10,
                     'maxlength'   => 5000,
-                    'placeholder' => 'Nachricht...',
+                    'placeholder' => '',
                     'class'       => 'form-control',
                 ],
                 'label_attr' => ['class' => 'form-label'],

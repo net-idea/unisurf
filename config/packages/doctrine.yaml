@@ -34,7 +34,7 @@ when@test:
 when@prod:
   doctrine:
     orm:
-      proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
+      # Removed legacy proxy_dir override; Doctrine ORM 3 handles proxy path internally
       query_cache_driver:
         type: pool
         pool: doctrine.system_cache_pool

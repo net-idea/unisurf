@@ -1,24 +1,65 @@
-# Database troubleshooting
+# Database
 
-This document covers common database-related issues and tips.
+This doc covers database usage and troubleshooting.
 
-## MariaDB shell (Docker)
+## Which database is used?
+
+The project supports:
+
+- **MariaDB** (default): compose service `database`
+- **PostgreSQL**: compose service `postgres`
+
+The selection is controlled via:
+
+- `DB=mariadb|postgres` (used by the helper scripts)
+- `DATABASE_URL=...` (used by Symfony/Doctrine)
+
+Prefer setting overrides in `.env.local`.
+
+## Migrations
+
+Local:
 
 ```bash
-docker compose exec mariadb mysql -u huette9 -phuette9pass huette9
+php bin/console doctrine:migrations:migrate
 ```
 
-## Common issues
+Docker:
 
-- Cannot connect to database
-  - Ensure containers are running: `docker compose ps`
-  - Check database logs: `docker compose logs mariadb`
-  - Check health: `docker compose exec mariadb healthcheck.sh --connect`
+```bash
+./php.sh bin/console doctrine:migrations:migrate --no-interaction
+```
 
-- Schema validation fails
-  - Run: `php bin/console doctrine:schema:validate`
-  - Fix entity mappings and re-run migrations.
+## Troubleshooting
 
-- Migration problems
-  - Check status: `php bin/console doctrine:migrations:status`
-  - If a migration failed, you may need to fix it and re-run with `--no-interaction`.
+### `SQLSTATE[HY000] [2002] No such file or directory` (MariaDB/MySQL)
+
+This usually happens when your DSN uses `localhost` and PHP tries to connect via a unix socket.
+
+Fix by using `127.0.0.1` (TCP) or the compose hostname `database` (inside Docker).
+
+### Connection refused
+
+- Check stack health:
+
+```bash
+./docker-test.sh
+```
+
+- Inspect which services/compose files are expected:
+
+```bash
+./docker-list.sh
+```
+
+- View DB logs:
+
+```bash
+docker compose -p "${APP_NAME:-unisurf}" logs -f database
+```
+
+### Validate schema
+
+```bash
+./php.sh bin/console doctrine:schema:validate
+```

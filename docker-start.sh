@@ -10,7 +10,7 @@ fi
 # Dynamic container naming based on APP_NAME from .env
 APP_NAME="${APP_NAME:-unisurf}"
 PROJECT_NAME="$APP_NAME"
-DB_ENGINE="${DB_ENGINE:-mariadb}" # mariadb or postgres
+DB="${DB:-mariadb}" # mariadb or postgres
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -22,7 +22,7 @@ COMPOSE_FILES=(
   -f docker-compose.dev.yaml
 )
 
-if [ "$DB_ENGINE" = "postgres" ]; then
+if [ "$DB" = "postgres" ]; then
   COMPOSE_FILES+=(
     -f docker-compose.postgresql.yml
     -f docker-compose.postgresql.dev.yml
@@ -50,8 +50,8 @@ docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" up -d --build --force-re
 echo -e "${YELLOW}Waiting for database to be ready...${NC}"
 DB_WAIT_MAX=120
 DB_WAIT=0
-if [ "$DB_ENGINE" = "postgres" ]; then
-  TARGET_SERVICE=database
+if [ "$DB" = "postgres" ]; then
+  TARGET_SERVICE=postgres
   until docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" ps "$TARGET_SERVICE" --format json 2>/dev/null | grep -q '"State":"running"'; do
     echo -n "."
     sleep 1
@@ -61,7 +61,7 @@ if [ "$DB_ENGINE" = "postgres" ]; then
     fi
   done
 else
-  TARGET_SERVICE=database
+  TARGET_SERVICE=mariadb
   until [ "$(docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" ps "$TARGET_SERVICE" --format json 2>/dev/null | grep -o '"Health":"[^\"]*"' | cut -d'"' -f4)" = "healthy" ] || \
         [ "$(docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" ps "$TARGET_SERVICE" --format json 2>/dev/null | grep -o '"State":"[^\"]*"' | cut -d'"' -f4)" = "running" ]; do
       echo -n "."
@@ -104,13 +104,28 @@ fi
 echo -e "${GREEN}Starting Yarn Encore watch...${NC}"
 docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" up -d node
 
+# Endpoint summary from env defaults
+APP_PORT="${APP_PORT:-8000}"
+NODE_PORT="${NODE_PORT:-8080}"
+ADMINER_PORT="${ADMINER_PORT:-8091}"
+PHPMYADMIN_PORT="${PHPMYADMIN_PORT:-8092}"
+MAILER_WEB_PORT="${MAILER_WEB_PORT:-8025}"
+
+app_url="http://localhost:${APP_PORT:-8000}"
+assets_url="http://localhost:${NODE_PORT:-8080}"
+mail_url="http://localhost:${MAILER_WEB_PORT:-8025}"
+adminer_url="http://localhost:${ADMINER_PORT:-8091}"
+pma_url="http://localhost:${PHPMYADMIN_PORT:-8092}"
+
 echo
-echo -e "${GREEN}Development environment is running!${NC}"
-echo -e "${YELLOW}   → App:        http://localhost:8000${NC}"
-echo -e "${YELLOW}   → Assets:     http://localhost:8080 (via Yarn)${NC}"
-echo -e "${YELLOW}   → Mailer:     http://localhost:8025${NC}"
-echo -e "${YELLOW}   → Adminer:    http://localhost:8091${NC}"
-echo -e "${YELLOW}   → phpMyAdmin: http://localhost:8092${NC}"
+echo -e "${GREEN}Development environment is running and provides following endpoints:${NC}"
+echo -e "${YELLOW} → App:        $app_url${NC}"
+echo -e "${YELLOW} → Assets:     $assets_url (via Yarn)${NC}"
+echo -e "${YELLOW} → DB service: $DB_SERVICE (internal)${NC}"
+echo -e "${YELLOW} → Mailpit:    $mail_url${NC}"
+echo -e "${YELLOW} → Adminer:    $adminer_url${NC}"
+echo -e "${YELLOW} → phpMyAdmin: $pma_url${NC}"
+echo
 echo -e "${YELLOW}Press Ctrl+C to stop.${NC}"
 
 # Keep script alive

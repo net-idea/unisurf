@@ -10,7 +10,7 @@ fi
 # Dynamic container naming based on APP_NAME from .env
 APP_NAME="${APP_NAME:-unisurf}"
 PROJECT_NAME="$APP_NAME"
-ENGINE="${DB_ENGINE:-mariadb}" # mariadb or postgres
+ENGINE="${DB:-mariadb}"
 COMPOSE_FILES=()
 
 while [[ $# -gt 0 ]]; do
@@ -35,7 +35,7 @@ else
     -f docker-compose.mariadb.yml
     -f docker-compose.mariadb.dev.yml
   )
-  DB_SERVICE=database
+  DB_SERVICE=mariadb
 fi
 
 echo "Starting DB stack ($ENGINE)..."
