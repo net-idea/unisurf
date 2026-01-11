@@ -94,38 +94,27 @@
       return whatsappAnchor;
     };
 
-    fetch('/icons/whatsapp.svg')
-      .then((res: Response) => res.text())
-      .then((svg: string) => {
-        whatsappElements.forEach((whatsappElement) => {
-          const whatsappAnchor = createAnchor();
-          // preserve classes from placeholder (so btn styles remain)
-          whatsappAnchor.className = whatsappElement.className;
+    whatsappElements.forEach((whatsappElement) => {
+      const whatsappAnchor = createAnchor();
+      // preserve classes from placeholder (so btn styles remain)
+      whatsappAnchor.className = whatsappElement.className;
 
-          // if the placeholder had label text, keep it alongside the icon
-          const label = (whatsappElement.textContent || '').trim();
+      // if the placeholder had label text, keep it alongside the icon
+      const label = (whatsappElement.textContent || '').trim();
 
-          if (svg) {
-            whatsappAnchor.innerHTML = svg;
+      const img = d.createElement('img');
+      img.src = '/images/whatsapp.svg';
+      img.alt = 'WhatsApp';
+      img.style.height = '2em';
+      img.style.width = 'auto';
+      img.style.marginRight = '0.5em';
+      img.style.verticalAlign = 'middle';
 
-            if (label) whatsappAnchor.appendChild(d.createTextNode(' ' + label));
-          } else if (label) {
-            whatsappAnchor.textContent = label;
-          } else {
-            whatsappAnchor.textContent = 'WhatsApp';
-          }
+      whatsappAnchor.appendChild(img);
 
-          whatsappElement.replaceWith(whatsappAnchor);
-        });
-      })
-      .catch(() => {
-        whatsappElements.forEach((whatsappElement) => {
-          const whatsappLink = createAnchor();
-          whatsappLink.className = whatsappElement.className;
-          const label = (whatsappElement.textContent || '').trim();
-          whatsappLink.textContent = label || 'WhatsApp';
-          whatsappElement.replaceWith(whatsappLink);
-        });
-      });
+      if (label) whatsappAnchor.appendChild(d.createTextNode(' ' + label));
+
+      whatsappElement.replaceWith(whatsappAnchor);
+    });
   }
 })();

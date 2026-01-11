@@ -52,12 +52,8 @@
     {% block stylesheets %}
       {{ encore_entry_link_tags('app') }}
     {% endblock %}
-
-    {% block javascripts %}
-      {{ encore_entry_script_tags('app') }}
-    {% endblock %}
   </head>
-  <body id="page-top" data-turbo-suppress-warning>
+  <body id="page-top">
     {% include '_partials/navbar.html.twig' %}
 
     {% block masthead %}
@@ -87,4 +83,8 @@
 
     {% include '_partials/footer.html.twig' %}
   </body>
+
+  {% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+  {% endblock %}
 </html>

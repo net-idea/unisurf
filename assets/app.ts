@@ -24,3 +24,6 @@ import './bootstrap';
 import './scripts/contacts.ts';
 import './scripts/contact-form.ts';
 import './scripts/theme-toggle.ts';
+
+// Turbo removed
+//import '@hotwired/turbo';
