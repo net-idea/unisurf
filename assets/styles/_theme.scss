@@ -321,3 +321,68 @@ header.masthead {
   font-size: $footer-font-size;
   font-family: $font-family-primary;
 }
+
+// Mobile adjustments: reduce heading sizes and allow wrapping so long words don't get cut off
+@media (max-width: 767.98px) {
+  /* Reduce heading sizes for small screens */
+  h1,
+  .h1 {
+    font-size: 1.6rem;
+    line-height: 1.15;
+  }
+
+  h2,
+  .h2 {
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+
+  h3,
+  .h3 {
+    font-size: 1.125rem;
+    line-height: 1.2;
+  }
+
+  h4,
+  .h4 {
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+
+  /* Masthead specific adjustments */
+  header.masthead {
+    .masthead-heading {
+      font-size: 1.6rem;
+      line-height: 1.15;
+    }
+
+    .masthead-subheading {
+      font-size: 1rem;
+      line-height: 1.15;
+    }
+
+    .lead {
+      font-size: 0.95rem;
+    }
+  }
+
+  /* Ensure long words can wrap and hyphenate if supported */
+  h1,
+  h2,
+  h3,
+  h4,
+  .h1,
+  .h2,
+  .h3,
+  .h4,
+  .masthead-heading,
+  .masthead-subheading {
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  /* Slightly reduce navbar brand on very small screens to help space */
+  #main-nav .navbar-brand {
+    font-size: 1rem;
+  }
+}

@@ -17,7 +17,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-readonly class MailManService
+class MailManService
 {
     private const THEME_STORAGE_KEY = 'theme';
 
