@@ -136,6 +136,9 @@ a[href^='https://wa.me/'] svg {
   background-color: rgb(67 67 67 / 70%);
   border-bottom: 2px solid rgb(216 213 213 / 14%);
   backdrop-filter: blur(7px) saturate(180%);
+  position: sticky;
+  top: 0;
+  z-index: 1040;
 
   .navbar-toggler {
     padding: $nav-toggler-padding;
@@ -161,13 +164,36 @@ a[href^='https://wa.me/'] svg {
     font-family: $font-family-primary;
     font-size: $nav-link-font-size;
     letter-spacing: $nav-link-letter-spacing;
+    text-transform: uppercase;
+    padding: 0.65rem 0.9rem;
+    border-radius: 0.85rem;
+    position: relative;
+    transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 
-    // Theme dropdown in navigation
-    color: $navbar-color;
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0.9rem;
+      right: 0.9rem;
+      bottom: 0.4rem;
+      height: 2px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: left;
+      opacity: 0.55;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
 
     &.active,
     &:hover {
+      background-color: rgba(255, 255, 255, 0.07);
       color: $navbar-color-hover;
+    }
+
+    &.active::after,
+    &:hover::after {
+      transform: scaleX(1);
+      opacity: 1;
     }
   }
 }
@@ -189,13 +215,11 @@ a[href^='https://wa.me/'] svg {
     }
 
     &.navbar-shrink {
-      padding: $nav-padding-y 0;
-      background-color: $nav-bg;
-      opacity: $nav-opacity-shrink;
-      backdrop-filter: $nav-blur;
+      padding: $nav-padding-y-shrink 0;
+      margin: 0.35rem auto;
 
       .navbar-brand {
-        font-size: 2.5em;
+        font-size: 1.1em;
 
         svg,
         img {

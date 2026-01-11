@@ -23,6 +23,7 @@ import './bootstrap';
 // Import Navbar functionality (TypeScript)
 import './scripts/contacts.ts';
 import './scripts/contact-form.ts';
+import './scripts/navbar-shrink.ts';
 import './scripts/theme-toggle.ts';
 
 // Turbo removed
