@@ -26,59 +26,10 @@
             <h2 class="section-heading text-uppercase">Nachricht senden</h2>
             <h3 class="section-subheading text-muted">Erzählen Sie uns von Ihrem Vorhaben oder Ihrer aktuellen Situation. Wir hören zu und schauen gemeinsam, wie wir Sie unterstützen können.</h3>
           </div>
-          {# anchors used by redirects #}
-          {% set submit = app.request.query.get('submit') %}
-          {% set error = app.request.query.get('error') %}
 
-          {# Flash messages from controller #}
-          {% for message in app.flashes('success') %}
-            <div class="alert alert-success mb-3" role="alert" id="contact-success">
-              {{ message }}
-            </div>
-          {% endfor %}
-
-          {% for message in app.flashes('error') %}
-            <div class="alert alert-danger mb-3" role="alert" id="contact-error">
-              {{ message }}
-            </div>
-          {% endfor %}
-
-          {# Query parameter messages (for redirects) #}
-          {% if submit %}
-            <div id="contact-success-redirect" class="alert alert-success mb-3" role="alert">
-              Vielen Dank! Ihre Nachricht wurde erfolgreich versendet. Ich melde mich zeitnah bei Ihnen.
-            </div>
-          {% endif %}
-
-          {% if error %}
-            <div id="contact-error-redirect" class="alert alert-danger mb-3" role="alert">
-              {% if error == 'rate' %}
-                Bitte warten Sie einen Moment, bevor Sie das Formular erneut absenden.
-              {% elseif error == 'mail' %}
-                Leider konnte die E‑Mail nicht versendet werden. Bitte versuchen Sie es in Kürze erneut.
-              {% else %}
-                Es ist ein Fehler aufgetreten. Bitte prüfen Sie Ihre Eingaben und versuchen Sie es erneut.
-              {% endif %}
-            </div>
-          {% endif %}
-
-          {# Show validation errors only when form is submitted but invalid #}
-          {% if form.vars.submitted and not form.vars.valid %}
-            <div class="alert alert-danger" role="alert">
-              <p>
-                Bitte korrigieren Sie folgende Fehler:
-              </p>
-              <ul class="mb-0">
-                {% for child in form.children %}
-                  {% if (child.vars.errors|length) > 0 %}
-                    {% for error in child.vars.errors %}
-                      <li><strong>{{ child.vars.label }}:</strong> {{ error.message }}</li>
-                    {% endfor %}
-                  {% endif %}
-                {% endfor %}
-              </ul>
-            </div>
-          {% endif %}
+          {# Status alerts handled by JS #}
+          <div id="contact-success" class="alert alert-success mb-3 visually-hidden d-none" role="alert"></div>
+          <div id="contact-error" class="alert alert-danger mb-3 visually-hidden d-none" role="alert"></div>
 
           {{ form_start(form, { action: path('app_contact'), attr: { class: 'vstack gap-3 mt-3', novalidate: 'novalidate', 'data-turbo': 'false' } }) }}
 

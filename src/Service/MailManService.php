@@ -60,7 +60,7 @@ class MailManService
             $ownerText = $this->twig->render('email/contact_owner.txt.twig', $context);
             $ownerHtml = $this->twig->render('email/contact_owner.html.twig', $context);
 
-            $emailOwner = new Email()
+            $emailOwner = (new Email())
                 ->from($from)
                 ->to($to)
                 ->subject($ownerSubject)
@@ -76,7 +76,10 @@ class MailManService
                     $emailOwner->replyTo($replyTo);
                 }
             } catch (\Throwable $e) {
-                $this->logger->warning('Invalid visitor email for replyTo; skipping replyTo header', ['email' => $contact->getEmailAddress(), 'exception' => $e]);
+                $this->logger->warning('Invalid visitor email for replyTo; skipping replyTo header', [
+                    'email'     => $contact->getEmailAddress(),
+                    'exception' => $e,
+                ]);
             }
 
             $this->mailer->send($emailOwner);
@@ -90,6 +93,7 @@ class MailManService
             // Send copy to visitor with their preferred theme if email looks valid
             if ($contact->getCopy()) {
                 $visitorEmail = trim($contact->getEmailAddress());
+
                 if ('' !== $visitorEmail && filter_var($visitorEmail, FILTER_VALIDATE_EMAIL)) {
                     $visitorSubject = 'UniSurf — Ihre Kontaktanfrage';
                     $visitorText = $this->twig->render('email/contact_visitor.txt.twig', $context);
@@ -109,7 +113,9 @@ class MailManService
                         'theme' => $theme,
                     ]);
                 } else {
-                    $this->logger->warning('Skipping visitor copy: invalid or empty visitor email', ['email' => $contact->getEmailAddress()]);
+                    $this->logger->warning('Skipping visitor copy: invalid or empty visitor email', [
+                        'email' => $contact->getEmailAddress(),
+                    ]);
                 }
             }
         } catch (TransportExceptionInterface $e) {
@@ -125,10 +131,16 @@ class MailManService
      *
      * @throws TransportExceptionInterface|RuntimeError|LoaderError|SyntaxError
      */
-    public function sendBookingVisitorConfirmationRequest(FormBookingEntity $booking, string $confirmUrl): void
-    {
+    public function sendBookingVisitorConfirmationRequest(
+        FormBookingEntity $booking,
+        string $confirmUrl,
+    ): void {
         $from = $this->makeAddressOrFallback($this->fromAddress, $this->fromName, 'no-reply@localhost');
-        $toVisitor = $this->makeAddressOrFallback($booking->getEmail(), $booking->getName(), 'visitor@localhost');
+        $toVisitor = $this->makeAddressOrFallback(
+            $booking->getEmail(),
+            $booking->getName(),
+            'visitor@localhost',
+        );
 
         $context = [
             'booking'    => $booking,
@@ -136,14 +148,11 @@ class MailManService
         ];
 
         // Log before attempting to render or send
-        $this->logger->info(
-            'Preparing booking confirmation request',
-            [
-                'to'    => $toVisitor->getAddress(),
-                'name'  => $toVisitor->getName(),
-                'token' => substr($booking->getConfirmationToken(), 0, 6) . '…',
-            ]
-        );
+        $this->logger->info('Preparing booking confirmation request', [
+            'to'    => $toVisitor->getAddress(),
+            'name'  => $toVisitor->getName(),
+            'token' => substr($booking->getConfirmationToken(), 0, 6) . '…',
+        ]);
 
         try {
             $subject = 'UniSurf — Bitte bestätigen Sie Ihre Buchung';
@@ -198,7 +207,7 @@ class MailManService
         $text = $this->twig->render('email/booking_owner_confirmed.txt.twig', $context);
         $html = $this->twig->render('email/booking_owner_confirmed.html.twig', $context);
 
-        $email = new Email()
+        $email = (new Email())
             ->from($from)
             ->to($toOwner)
             ->replyTo(new Address($booking->getEmail(), $booking->getName()))
@@ -240,7 +249,10 @@ class MailManService
         try {
             return new Address($email, $name);
         } catch (\Throwable $e) {
-            $this->logger->warning(sprintf('Invalid email "%s", using fallback <%s>: %s', $email, $fallback, $e->getMessage()), ['exception' => $e]);
+            $this->logger->warning(
+                sprintf('Invalid email "%s", using fallback <%s>: %s', $email, $fallback, $e->getMessage()),
+                ['exception' => $e],
+            );
 
             return new Address($fallback, $name);
         }

@@ -26,12 +26,6 @@ abstract class AbstractFormService
     abstract public function getForm(): FormInterface;
 
     /**
-     * Persist a sanitized snapshot of the current form data for redirect restoration.
-     * Implement this in each concrete service.
-     */
-    abstract protected function storeFormDataForRedirect(mixed $data): void;
-
-    /**
      * Ensure the Symfony session is started; attempt to start it and throw if it remains inactive.
      */
     protected function assertSessionStarted(SessionInterface $session): void
@@ -78,19 +72,13 @@ abstract class AbstractFormService
     /**
      * Create a RedirectResponse to a route with optional hash suffix.
      */
-    protected function makeRedirect(UrlGeneratorInterface $urls, string $route, array $params = [], string $hash = ''): RedirectResponse
-    {
+    protected function makeRedirect(
+        UrlGeneratorInterface $urls,
+        string $route,
+        array $params = [],
+        string $hash = '',
+    ): RedirectResponse {
         return new RedirectResponse($urls->generate($route, $params) . $hash);
-    }
-
-    /**
-     * Convenience helper: store current form data, then create a redirect.
-     */
-    protected function makeErrorRedirectWithFormData(UrlGeneratorInterface $urls, FormInterface $form, string $route, array $params = [], string $hash = ''): RedirectResponse
-    {
-        $this->storeFormDataForRedirect($form->getData());
-
-        return $this->makeRedirect($urls, $route, $params, $hash);
     }
 
     /**
@@ -99,7 +87,7 @@ abstract class AbstractFormService
     protected function getHoneypotValue(FormInterface $form, string $field = 'website'): string
     {
         if ($form->has($field)) {
-            return (string)$form->get($field)->getData();
+            return (string) $form->get($field)->getData();
         }
 
         return '';
@@ -115,14 +103,15 @@ abstract class AbstractFormService
         string $key,
         int $minIntervalSeconds,
         int $maxPerWindow,
-        int $windowSeconds = 3600
+        int $windowSeconds = 3600,
     ): array {
         $now = time();
-        $stored = (array)$session->get($key, []);
-        $times = array_values(array_filter($stored, static fn ($t) => ($now - (int)$t) < $windowSeconds));
+        $stored = (array) $session->get($key, []);
+        $times = array_values(array_filter($stored, static fn ($t) => $now - (int) $t < $windowSeconds));
 
-        $lastTs = !empty($times) ? (int)end($times) : null;
-        $blocked = (null !== $lastTs && ($now - $lastTs) < $minIntervalSeconds) || count($times) >= $maxPerWindow;
+        $lastTs = !empty($times) ? (int) end($times) : null;
+        $blocked =
+          (null !== $lastTs && $now - $lastTs < $minIntervalSeconds) || count($times) >= $maxPerWindow;
 
         return [
             'blocked' => $blocked,
@@ -138,8 +127,12 @@ abstract class AbstractFormService
      * @param array<int,int> $times
      * @return array<int,int>
      */
-    protected function rateLimitTick(SessionInterface $session, string $key, array $times, int $now): array
-    {
+    protected function rateLimitTick(
+        SessionInterface $session,
+        string $key,
+        array $times,
+        int $now,
+    ): array {
         $times[] = $now;
         $session->set($key, $times);
 
@@ -147,36 +140,15 @@ abstract class AbstractFormService
     }
 
     /**
-     * Centralized rate-limit check. If blocked, stores form data and returns a RedirectResponse to the given route with error=rate.
-     * On success, returns null and the caller may proceed.
-     */
-    protected function enforceRateLimitOrRedirect(
-        SessionInterface $session,
-        string $rateKey,
-        int $minIntervalSeconds,
-        int $maxPerWindow,
-        int $windowSeconds,
-        FormInterface $form,
-        UrlGeneratorInterface $urls,
-        string $route,
-        string $hash
-    ): ?RedirectResponse {
-        $rl = $this->rateLimitCheck($session, $rateKey, $minIntervalSeconds, $maxPerWindow, $windowSeconds);
-
-        if ($rl['blocked']) {
-            return $this->makeErrorRedirectWithFormData($urls, $form, $route, ['error' => 'rate'], $hash);
-        }
-
-        return null;
-    }
-
-    /**
      * Centralized rate-limit tick using current time.
      *
      * @param string $rateKey The session key to store rate-limit timestamps under (must be provided by child service).
      */
-    protected function rateLimitTickNow(SessionInterface $session, string $rateKey, int $windowSeconds = self::RATE_WINDOW_SECONDS): void
-    {
+    protected function rateLimitTickNow(
+        SessionInterface $session,
+        string $rateKey,
+        int $windowSeconds = self::RATE_WINDOW_SECONDS,
+    ): void {
         $rl = $this->rateLimitCheck($session, $rateKey, 0, PHP_INT_MAX, $windowSeconds);
         $this->rateLimitTick($session, $rateKey, $rl['times'], time());
     }

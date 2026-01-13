@@ -1,0 +1,45 @@
+module.exports = {
+  root: true,
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
+  rules: {
+    'padding-line-between-statements': [
+      'error',
+      {
+        blankLine: 'always',
+        prev: '*',
+        next: [
+          'if',
+          'for',
+          'while',
+          'switch',
+          'try',
+          'return',
+          'break',
+          'continue',
+          'throw',
+          'case',
+          'default',
+        ],
+      },
+      {
+        blankLine: 'always',
+        prev: [
+          'if',
+          'for',
+          'while',
+          'switch',
+          'try',
+          'return',
+          'break',
+          'continue',
+          'throw',
+          'case',
+          'default',
+        ],
+        next: '*',
+      },
+    ],
+  },
+};

@@ -29,7 +29,9 @@ document.addEventListener('turbo:submit-end', function (event: any) {
 });
 
 export function generateCsrfToken(formElement: HTMLFormElement): void {
-  const csrfField = formElement.querySelector<HTMLInputElement>('input[data-controller="csrf-protection"], input[name="_csrf_token"]');
+  const csrfField = formElement.querySelector<HTMLInputElement>(
+    'input[data-controller="csrf-protection"], input[name="_csrf_token"]'
+  );
 
   if (!csrfField) {
     return;
@@ -55,7 +57,9 @@ export function generateCsrfToken(formElement: HTMLFormElement): void {
 
 export function generateCsrfHeaders(formElement: HTMLFormElement): HeadersMap {
   const headers: HeadersMap = {};
-  const csrfField = formElement.querySelector<HTMLInputElement>('input[data-controller="csrf-protection"], input[name="_csrf_token"]');
+  const csrfField = formElement.querySelector<HTMLInputElement>(
+    'input[data-controller="csrf-protection"], input[name="_csrf_token"]'
+  );
 
   if (!csrfField) {
     return headers;
@@ -71,7 +75,9 @@ export function generateCsrfHeaders(formElement: HTMLFormElement): HeadersMap {
 }
 
 export function removeCsrfToken(formElement: HTMLFormElement): void {
-  const csrfField = formElement.querySelector<HTMLInputElement>('input[data-controller="csrf-protection"], input[name="_csrf_token"]');
+  const csrfField = formElement.querySelector<HTMLInputElement>(
+    'input[data-controller="csrf-protection"], input[name="_csrf_token"]'
+  );
 
   if (!csrfField) {
     return;

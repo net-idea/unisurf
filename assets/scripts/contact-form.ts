@@ -1,65 +1,112 @@
 (function () {
-  // Handle query params for success/error alerts
-  const params = new URLSearchParams(window.location.search);
-  const hash = window.location.hash;
+  const form = document.querySelector<HTMLFormElement>('form[name="form_contact"]');
   const successEl = document.getElementById('contact-success');
   const errorEl = document.getElementById('contact-error');
+  const submitBtn = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
 
-  function showAlert(el: HTMLElement | null, message: string, cls: string): void {
+  if (!form || !successEl || !errorEl) {
+    return;
+  }
+
+  function showAlert(el: HTMLElement, message: string, cls: string): void {
     if (!el) return;
-    el.classList.remove('visually-hidden');
+
+    el.classList.remove('visually-hidden', 'd-none');
     el.setAttribute('aria-hidden', 'false');
     el.classList.add('alert', cls, 'mb-3');
-    el.setAttribute('role', 'alert');
     el.innerHTML = message;
-    // Improve visibility/accessibility
-    el.setAttribute('tabindex', '-1');
-    setTimeout(() => {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Hide the other alert if visible
+    const otherEl = el === successEl ? errorEl : successEl;
+
+    if (otherEl) {
+      otherEl.classList.add('visually-hidden', 'd-none');
+      otherEl.classList.remove('alert', 'alert-success', 'alert-danger');
+      otherEl.innerHTML = '';
+    }
+
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function clearAlerts(): void {
+    successEl?.classList.add('visually-hidden', 'd-none');
+    errorEl?.classList.add('visually-hidden', 'd-none');
+    document.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
+    document.querySelectorAll('.invalid-feedback').forEach((el) => el.remove());
+  }
+
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    // Reset previous state
+    clearAlerts();
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Wird gesendet...';
+
+      // Restore button after delay or finish
+      const restoreBtn = () => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      };
+
+      const formData = new FormData(form);
+
       try {
-        (el as HTMLElement).focus({ preventScroll: true });
-      } catch {
-        /* noop */
-      }
-    }, 0);
-  }
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            Accept: 'application/json',
+          },
+        });
 
-  const hasSent = params.has('sent') || hash === '#contact-success';
-  const hasError = params.has('error') || hash === '#contact-error';
+        const data = await response.json();
 
-  if (hasSent) {
-    showAlert(successEl, 'Vielen Dank! Ihre Nachricht wurde erfolgreich versendet. Ich melde mich zeitnah bei Ihnen.', 'alert-success');
-  } else if (hasError) {
-    const e = params.get('error');
-    let msg = 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es in Kürze erneut.';
-    if (e === 'invalid') msg = 'Bitte füllen Sie die erforderlichen Felder korrekt aus.';
-    else if (e === 'email') msg = 'Bitte geben Sie eine gültige E‑Mail‑Adresse an.';
-    else if (e === 'short') msg = 'Die Nachricht ist zu kurz. Bitte eine Nachricht formulieren, damit ich weiß was das Anliegen ist.';
-    else if (e === 'rate') msg = 'Bitte einen Moment warten, bevor das Formular erneut abgesendet wird.';
-    else if (e === 'mail') msg = 'Der Versand der E‑Mail ist fehlgeschlagen. Ein erneuter Versuch lohnt sich.';
-    showAlert(errorEl, msg, 'alert-danger');
-  }
+        if (response.ok && data.status === 'success') {
+          showAlert(successEl!, data.message, 'alert-success');
+          form.reset();
+          form.classList.remove('was-validated');
+        } else {
+          // Error handling
+          let msg = data.message || 'Ein unbekannter Fehler ist aufgetreten.';
 
-  // Clean query params but keep anchor for scrolling
-  if (params.has('sent') || params.has('error')) {
-    const newHash = hash || (params.has('sent') ? '#contact-success' : '#contact-error');
-    window.history.replaceState({}, '', window.location.pathname + newHash);
-  }
+          // Prevent duplicate error output
+          if (!errorEl!.innerHTML.includes(msg)) {
+            showAlert(errorEl!, msg, 'alert-danger');
+          }
 
-  // Client-side validation feedback (support multiple forms with the class)
-  const forms = Array.from(document.querySelectorAll<HTMLFormElement>('form.needs-validation'));
+          // Handle field errors
+          if (data.errors) {
+            Object.entries(data.errors).forEach(([field, messages]) => {
+              if (field === 'global') return;
 
-  forms.forEach((form) => {
-    form.addEventListener(
-      'submit',
-      (ev) => {
-        if (!form.checkValidity()) {
-          ev.preventDefault();
-          ev.stopPropagation();
+              // Field name in form is form_contact[field]
+              const input = form.querySelector(`[name="form_contact[${field}]"]`);
+
+              if (input) {
+                input.classList.add('is-invalid');
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'invalid-feedback d-block';
+                errorDiv.innerText = (messages as string[]).join(' ');
+                input.parentElement?.appendChild(errorDiv);
+              }
+            });
+          }
         }
-        form.classList.add('was-validated');
-      },
-      false
-    );
+      } catch (e) {
+        showAlert(
+          errorEl!,
+          'Verbindungsfehler. Bitte versuchen Sie es später erneut.',
+          'alert-danger'
+        );
+      } finally {
+        restoreBtn();
+      }
+    }
   });
 })();

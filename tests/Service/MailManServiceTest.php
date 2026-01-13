@@ -22,15 +22,12 @@ class MailManServiceTest extends TestCase
         $mailer = $this->createMock(MailerInterface::class);
 
         // Only owner email => exactly 1 send
-        $mailer->expects($this->exactly(1))
-            ->method('send');
+        $mailer->expects($this->exactly(1))->method('send');
 
         $twig = $this->createMock(Twig::class);
 
         // Only owner templates are rendered (text + HTML) => 2 times
-        $twig->expects($this->exactly(2))
-            ->method('render')
-            ->willReturn('x');
+        $twig->expects($this->exactly(2))->method('render')->willReturn('x');
 
         $service = $this->makeService($mailer, $twig);
         $service->sendContactForm($this->makeContact(false));
@@ -41,15 +38,12 @@ class MailManServiceTest extends TestCase
         $mailer = $this->createMock(MailerInterface::class);
 
         // Owner + Visitor => 2 sends
-        $mailer->expects($this->exactly(2))
-            ->method('send');
+        $mailer->expects($this->exactly(2))->method('send');
 
         $twig = $this->createMock(Twig::class);
 
         // Owner (2) + Visitor (2) => 4 renders
-        $twig->expects($this->exactly(4))
-            ->method('render')
-            ->willReturn('x');
+        $twig->expects($this->exactly(4))->method('render')->willReturn('x');
 
         $service = $this->makeService($mailer, $twig);
         $service->sendContactForm($this->makeContact(true));
@@ -63,13 +57,14 @@ class MailManServiceTest extends TestCase
         $twig = $this->createMock(Twig::class);
 
         // Verify that theme 'light' is passed in context
-        $twig->expects($this->exactly(2))
+        $twig
+            ->expects($this->exactly(2))
             ->method('render')
             ->with(
                 $this->anything(),
                 $this->callback(function ($context) {
                     return isset($context['theme']) && 'light' === $context['theme'];
-                })
+                }),
             )
             ->willReturn('rendered template');
 
@@ -85,13 +80,14 @@ class MailManServiceTest extends TestCase
         $twig = $this->createMock(Twig::class);
 
         // Verify that theme 'dark' is passed in context
-        $twig->expects($this->exactly(2))
+        $twig
+            ->expects($this->exactly(2))
             ->method('render')
             ->with(
                 $this->anything(),
                 $this->callback(function ($context) {
                     return isset($context['theme']) && 'dark' === $context['theme'];
-                })
+                }),
             )
             ->willReturn('rendered template');
 
@@ -107,13 +103,14 @@ class MailManServiceTest extends TestCase
         $twig = $this->createMock(Twig::class);
 
         // When no request is available, should default to light theme
-        $twig->expects($this->exactly(2))
+        $twig
+            ->expects($this->exactly(2))
             ->method('render')
             ->with(
                 $this->anything(),
                 $this->callback(function ($context) {
                     return isset($context['theme']) && 'light' === $context['theme'];
-                })
+                }),
             )
             ->willReturn('rendered template');
 
@@ -137,7 +134,7 @@ class MailManServiceTest extends TestCase
     private function makeService(
         MailerInterface $mailer,
         Twig $twig,
-        string $theme = 'light'
+        string $theme = 'light',
     ): MailManService {
         $requestStack = $this->createRequestStackWithTheme($theme);
 

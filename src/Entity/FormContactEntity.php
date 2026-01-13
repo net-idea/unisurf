@@ -36,7 +36,14 @@ class FormContactEntity
 
     #[ORM\Column(type: 'text')]
     #[Assert\NotBlank(message: 'Bitte geben Sie eine Nachricht ein.')]
-    #[Assert\Length(min: 10, max: 5000, minMessage: 'Bitte geben Sie mindestens {{ limit }} Zeichen ein.', maxMessage: 'Bitte verwenden Sie höchstens {{ limit }} Zeichen.')]
+    #[
+        Assert\Length(
+            min: 10,
+            max: 5000,
+            minMessage: 'Bitte geben Sie mindestens {{ limit }} Zeichen ein.',
+            maxMessage: 'Bitte verwenden Sie höchstens {{ limit }} Zeichen.',
+        ),
+    ]
     protected string $message = '';
 
     #[ORM\Column(type: 'boolean')]
@@ -52,8 +59,21 @@ class FormContactEntity
     #[ORM\Column(type: 'datetime_immutable')]
     private DateTimeImmutable $createdAt;
 
-    #[ORM\OneToOne(targetEntity: FormSubmissionMetaEntity::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[ORM\JoinColumn(name: 'meta_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[
+        ORM\OneToOne(
+            targetEntity: FormSubmissionMetaEntity::class,
+            cascade: ['persist', 'remove'],
+            orphanRemoval: true,
+        ),
+    ]
+    #[
+        ORM\JoinColumn(
+            name: 'meta_id',
+            referencedColumnName: 'id',
+            nullable: true,
+            onDelete: 'SET NULL',
+        ),
+    ]
     private ?FormSubmissionMetaEntity $meta = null;
 
     public function __construct()
@@ -105,10 +125,7 @@ class FormContactEntity
     public function getEmail(): Address
     {
         if (!$this->email) {
-            $this->email = new Address(
-                $this->emailAddress,
-                $this->name
-            );
+            $this->email = new Address($this->emailAddress, $this->name);
         }
 
         return $this->email;

@@ -33,8 +33,9 @@ abstract class DatabaseTestCase extends WebTestCase
      * Boot kernel and setup database schema + fixtures.
      * Ensure schema is created on every boot, which is necessary for :memory: SQLite.
      */
-    protected static function bootKernel(array $options = []): \Symfony\Component\HttpKernel\KernelInterface
-    {
+    protected static function bootKernel(
+        array $options = [],
+    ): \Symfony\Component\HttpKernel\KernelInterface {
         $kernel = parent::bootKernel($options);
 
         self::setUpDatabaseSchema();

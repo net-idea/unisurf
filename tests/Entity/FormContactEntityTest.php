@@ -150,7 +150,10 @@ class FormContactEntityTest extends TestCase
         $violations = $this->validator->validate($entity);
 
         $this->assertGreaterThan(0, count($violations));
-        $this->assertStringContainsString('Datenverarbeitung', (string) $violations->get(0)->getMessage());
+        $this->assertStringContainsString(
+            'Datenverarbeitung',
+            (string) $violations->get(0)->getMessage(),
+        );
     }
 
     public function testValidationPassesForValidEntity(): void

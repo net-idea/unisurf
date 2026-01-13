@@ -5,3 +5,4 @@ chdir(__DIR__);
 $cmd = __DIR__ . '/vendor/bin/phpunit';
 $testsDir = __DIR__ . '/tests';
 passthru(escapeshellcmd($cmd) . ' ' . escapeshellarg($testsDir));
+

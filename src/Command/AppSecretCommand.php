@@ -9,10 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[AsCommand(
-    name: 'app:secret',
-    description: 'Regenerate the APP_SECRET in the project env file',
-)]
+#[AsCommand(name: 'app:secret', description: 'Regenerate the APP_SECRET in the project env file')]
 class AppSecretCommand extends Command
 {
     // keep the default name aligned with the attribute

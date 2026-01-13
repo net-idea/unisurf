@@ -24,6 +24,7 @@ readonly class NavigationService
         $pagesFile = $projectDir . '/content/_pages.php';
 
         $items = [];
+
         if (is_file($pagesFile)) {
             /** @var array<string, array<string, mixed>> $pages */
             $pages = require $pagesFile;
@@ -35,7 +36,7 @@ readonly class NavigationService
                     continue;
                 }
 
-                $label = (string) ($meta['nav_label'] ?? $meta['title'] ?? $slug);
+                $label = (string) ($meta['nav_label'] ?? ($meta['title'] ?? $slug));
                 $order = (int) ($meta['nav_order'] ?? 0);
                 $url = '/' . ('start' === $slug ? '' : $slug);
                 $items[] = [

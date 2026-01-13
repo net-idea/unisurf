@@ -1,12 +1,13 @@
 #!/bin/bash
 
-# Lint all files
-yarn run lint:fix
+# Lint Twig files
+php bin/console lint:twig templates
 
 # Type check TypeScript files
 yarn run tsc:check
 
-# Lint Twig files
-php bin/console lint:twig templates
+# Lint all files
+yarn run lint:fix
 
+# Lint PHP files
 ./php-cs-fixer.sh

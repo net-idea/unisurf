@@ -17,8 +17,8 @@ abstract class AbstractBaseController extends AbstractController
 
         // Load page metadata from content/_pages.php
         $pagesFile = $projectDir . '/content/_pages.php';
-        $pages = is_file($pagesFile) ? (require $pagesFile) : [];
-        $metaSlug = ('' === $slug || 'main' === $slug) ? 'start' : $slug;
+        $pages = is_file($pagesFile) ? require $pagesFile : [];
+        $metaSlug = '' === $slug || 'main' === $slug ? 'start' : $slug;
 
         /** @var array<string,mixed> $pageMeta */
         $pageMeta = $pages[$metaSlug] ?? [

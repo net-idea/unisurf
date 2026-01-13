@@ -68,7 +68,7 @@ class FormContactType extends AbstractType
                 ],
                 'label_attr' => ['class' => 'form-label'],
             ])
-            // consent must be true
+          // consent must be true
             ->add('consent', CheckboxType::class, [
                 'label'          => 'Ich willige in die Verarbeitung meiner Angaben zum Zweck der Kontaktaufnahme ein.',
                 'required'       => true,
@@ -83,7 +83,7 @@ class FormContactType extends AbstractType
                 'attr'       => ['class' => 'form-check-input'],
                 'label_attr' => ['class' => 'form-check-label'],
             ])
-            // spam traps
+          // spam traps
             ->add('emailrep', TextType::class, [
                 'label'      => false,
                 'required'   => false,

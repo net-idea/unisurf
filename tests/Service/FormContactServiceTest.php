@@ -17,65 +17,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Symfony\Component\Validator\Validation;
 
 class FormContactServiceTest extends TestCase
 {
-    public function testFormDataIsRestoredFromSession(): void
-    {
-        // Seed session with previously entered data
-        $session = new Session(new MockArraySessionStorage());
-        $session->start();
-        $session->set('cf_data', [
-            'name'         => 'Alice',
-            'emailAddress' => 'alice@example.com',
-            'phone'        => '123',
-            'message'      => 'Hi there',
-            'consent'      => true,
-            'copy'         => true,
-        ]);
-
-        $request = new Request();
-        $request->setSession($session);
-        $stack = new RequestStack();
-        $stack->push($request);
-
-        $svc = $this->makeService($stack);
-
-        $form = $svc->getForm();
-        $data = $form->getData();
-        $this->assertInstanceOf(FormContactEntity::class, $data);
-        $this->assertSame('Alice', $data->getName());
-        $this->assertSame('alice@example.com', $data->getEmailAddress());
-        $this->assertSame('123', $data->getPhone());
-        $this->assertSame('Hi there', $data->getMessage());
-        $this->assertTrue($data->getConsent());
-        $this->assertTrue($data->getCopy());
-
-        // Ensure data is one-time restored (removed after build)
-        $form2 = $svc->getForm();
-        $this->assertSame($form, $form2, 'Form instance is cached for the request lifecycle');
-    }
-
-    public function testHandleReturnsNullForGetRequest(): void
+    public function testGetFormReturnsInterface(): void
     {
         $stack = new RequestStack();
-        $request = new Request();  // This is a GET request by default
-        $session = new Session(new MockArraySessionStorage());
-        $session->start();
-        $request->setSession($session);
-        $stack->push($request);
-
         $svc = $this->makeService($stack);
-
-        // For GET requests, the form should be available but not submitted
         $form = $svc->getForm();
-        $this->assertFalse($form->isSubmitted(), 'Form should not be submitted for GET request');
-
-        // Since we can't reliably test handle() with mock requests in Symfony 7.3+,
-        // we verify the form behavior instead
         $this->assertInstanceOf(\Symfony\Component\Form\FormInterface::class, $form);
     }
 
@@ -119,7 +70,10 @@ class FormContactServiceTest extends TestCase
 
         // Check that honeypot fields exist in the form
         $this->assertTrue($form->has('website'), 'Form should have website honeypot field');
-        $this->assertTrue($form->has('emailrep'), 'Form should have emailrep honeypot field (via entity)');
+        $this->assertTrue(
+            $form->has('emailrep'),
+            'Form should have emailrep honeypot field (via entity)',
+        );
 
         // Submit with honeypot filled
         $form->submit([
@@ -158,7 +112,10 @@ class FormContactServiceTest extends TestCase
 
         // Form should be valid
         $this->assertTrue($form->isSubmitted());
-        $this->assertTrue($form->isValid(), 'Form should be valid with correct data. Errors: ' . (string)$form->getErrors(true, false));
+        $this->assertTrue(
+            $form->isValid(),
+            'Form should be valid with correct data. Errors: ' . (string) $form->getErrors(true, false),
+        );
     }
 
     public function testFormWithOptionalPhoneField(): void
@@ -246,13 +203,18 @@ class FormContactServiceTest extends TestCase
         // Count errors only for required fields (name, email, message, consent)
         // Don't count honeypot fields (website, emailrep)
         $errorCount = 0;
+
         foreach (['name', 'email', 'message', 'consent'] as $field) {
             if ($form->has($field) && count($form->get($field)->getErrors()) > 0) {
                 $errorCount++;
             }
         }
 
-        $this->assertSame(4, $errorCount, 'Should have exactly 4 validation errors for required fields');
+        $this->assertSame(
+            4,
+            $errorCount,
+            'Should have exactly 4 validation errors for required fields',
+        );
     }
 
     public function testFormValidationForInvalidEmail(): void
@@ -310,7 +272,7 @@ class FormContactServiceTest extends TestCase
         $validator = Validation::createValidatorBuilder()->enableAttributeMapping()->getValidator();
 
         return Forms::createFormFactoryBuilder()
-            // ->addExtension(new CsrfExtension($csrf))  // Disabled for unit tests
+          // ->addExtension(new CsrfExtension($csrf))  // Disabled for unit tests
             ->addExtension(new ValidatorExtension($validator))
             ->getFormFactory();
     }
@@ -319,28 +281,20 @@ class FormContactServiceTest extends TestCase
     {
         $forms = $this->makeFormFactory();
         $mailMan = $this->createMock(MailManService::class);
-        $urls = $this->createMock(UrlGeneratorInterface::class);
         $em = $this->createMock(EntityManagerInterface::class);
 
-        return new FormContactService($forms, $stack, $mailMan, $urls, $em);
+        return new FormContactService($forms, $stack, $mailMan, $em);
     }
 
-    private function makeServiceWithUrls(RequestStack $stack, UrlGeneratorInterface $urls): FormContactService
-    {
-        $forms = $this->makeFormFactory();
-        $mailMan = $this->createMock(MailManService::class);
-        $em = $this->createMock(EntityManagerInterface::class);
-
-        return new FormContactService($forms, $stack, $mailMan, $urls, $em);
-    }
-
-    private function makeServiceWithMocks(RequestStack $stack, UrlGeneratorInterface $urls, MailManService $mailMan): FormContactService
-    {
+    private function makeServiceWithMocks(
+        RequestStack $stack,
+        MailManService $mailMan,
+    ): FormContactService {
         $forms = $this->makeFormFactory();
         $em = $this->createMock(EntityManagerInterface::class);
         $em->method('persist');
         $em->method('flush');
 
-        return new FormContactService($forms, $stack, $mailMan, $urls, $em);
+        return new FormContactService($forms, $stack, $mailMan, $em);
     }
 }

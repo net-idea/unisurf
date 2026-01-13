@@ -16,7 +16,7 @@ final class DatabaseSetupExtension implements BeforeFirstTestHook
 {
     public function executeBeforeFirstTest(): void
     {
-        if ('test' !== ($_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? null)) {
+        if ('test' !== ($_ENV['APP_ENV'] ?? ($_SERVER['APP_ENV'] ?? null))) {
             return;
         }
 
@@ -28,19 +28,28 @@ final class DatabaseSetupExtension implements BeforeFirstTestHook
         $output = new NullOutput();
 
         // Drop and recreate database schema
-        $application->run(new ArrayInput([
-            'command'     => 'doctrine:database:drop',
-            '--if-exists' => true,
-            '--force'     => true,
-        ]), $output);
+        $application->run(
+            new ArrayInput([
+                'command'     => 'doctrine:database:drop',
+                '--if-exists' => true,
+                '--force'     => true,
+            ]),
+            $output,
+        );
 
-        $application->run(new ArrayInput([
-            'command' => 'doctrine:database:create',
-        ]), $output);
+        $application->run(
+            new ArrayInput([
+                'command' => 'doctrine:database:create',
+            ]),
+            $output,
+        );
 
-        $application->run(new ArrayInput([
-            'command' => 'doctrine:schema:create',
-        ]), $output);
+        $application->run(
+            new ArrayInput([
+                'command' => 'doctrine:schema:create',
+            ]),
+            $output,
+        );
 
         $kernel->shutdown();
     }

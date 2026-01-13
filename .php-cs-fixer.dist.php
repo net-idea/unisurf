@@ -32,8 +32,6 @@ $config
     ],
     // There MUST be one blank line after the namespace declaration.
     'blank_line_after_namespace' => true,
-    // An empty line feed must precede any configured statement.
-    'blank_line_before_statement' => true,
     // The body of each structure MUST be enclosed by braces. Braces should be properly placed. Body of braces should be properly indented.
     'single_space_around_construct' => true,
     'control_structure_braces' => true,
@@ -222,6 +220,14 @@ $config
     'ternary_to_null_coalescing' => true,
     // PHP multi-line arrays should have a trailing comma.
     'trailing_comma_in_multiline' => ['elements' => ['arrays']],
+    // An empty line feed must precede any configured statement.
+    //'blank_line_before_statement' => true,
+    // Ensure blank lines before and after logical/control statements to improve readability
+    'blank_line_before_statement' => [
+      'statements' => [
+          'break', 'case', 'continue', 'declare', 'default', 'do', 'exit', 'for', 'foreach', 'goto', 'if', 'include', 'include_once', 'phpdoc', 'require', 'require_once', 'return', 'switch', 'throw', 'try', 'while', 'yield', 'yield_from'
+      ]
+    ],
     // Arrays should be formatted like function/method arguments, without leading or trailing single line space.
     'trim_array_spaces' => true,
     // Visibility MUST be declared on all properties and methods; `abstract` and `final` MUST be declared before the visibility; `static` MUST be declared after the visibility.
@@ -238,7 +244,7 @@ $config
       ->exclude('vendor')
       ->exclude('node_modules')
       ->in(__DIR__ . '/src')
-      ->in(__DIR__ . '/tests')
+      ->in(__DIR__ . '/tests'),
   );
 
 return $config;

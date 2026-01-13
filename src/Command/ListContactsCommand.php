@@ -11,10 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[AsCommand(
-    name: 'app:list:contacts',
-    description: 'List stored contact form submissions'
-)]
+#[AsCommand(name: 'app:list:contacts', description: 'List stored contact form submissions')]
 class ListContactsCommand extends Command
 {
     public function __construct(private readonly FormContactRepository $contacts)
@@ -24,18 +21,23 @@ class ListContactsCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'Limit number of rows', '100')
-            ->addOption('csv', null, InputOption::VALUE_NONE, 'Output CSV instead of a table');
+        $this->addOption(
+            'limit',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Limit number of rows',
+            '100',
+        )->addOption('csv', null, InputOption::VALUE_NONE, 'Output CSV instead of a table');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $limit = (int)($input->getOption('limit') ?? 100);
-        $csv = (bool)$input->getOption('csv');
+        $limit = (int) ($input->getOption('limit') ?? 100);
+        $csv = (bool) $input->getOption('csv');
 
-        $rows = $this->contacts->createQueryBuilder('c')
+        $rows = $this->contacts
+            ->createQueryBuilder('c')
             ->orderBy('c.createdAt', 'DESC')
             ->setMaxResults(max(1, $limit))
             ->getQuery()
@@ -43,6 +45,7 @@ class ListContactsCommand extends Command
 
         $headers = ['ID', 'Created At', 'Name', 'Email', 'Phone', 'Consent', 'Copy'];
         $data = [];
+
         foreach ($rows as $r) {
             $data[] = [
                 $r->getId(),
@@ -58,6 +61,7 @@ class ListContactsCommand extends Command
         if ($csv) {
             $out = fopen('php://temp', 'r+');
             fputcsv($out, $headers);
+
             foreach ($data as $row) {
                 fputcsv($out, $row);
             }
