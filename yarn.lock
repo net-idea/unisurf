@@ -1503,10 +1503,10 @@
     loader-utils "^2.0.0 || ^3.0.0"
     schema-utils "^3.0.0 || ^4.0.0"
 
-"@symfony/ux-turbo@^2.31.0":
-  version "2.31.0"
-  resolved "https://registry.yarnpkg.com/@symfony/ux-turbo/-/ux-turbo-2.31.0.tgz#b9f053bdf47734731278984971a8c3997d030dd8"
-  integrity sha512-Nr08xK8CSObJ9ZVELv4Gehe1PkIjC6tr4UTcPQZ2Lvx+wsOc1LRiHA5nWqBZi+puVf5UaJI78wi8LqgwYQ7Zdg==
+"@symfony/ux-turbo@^2.32.0":
+  version "2.32.0"
+  resolved "https://registry.yarnpkg.com/@symfony/ux-turbo/-/ux-turbo-2.32.0.tgz#82c047285f9ec684041889129357dd443e0b984d"
+  integrity sha512-uWidS6yHdG9+ipoYH4N5t32QgNjk30RQFOctcWCy0VfIY9siBh5RWHg3J8sqsdNGAe59aMWW9m+oVllL4WF3cA==
 
 "@symfony/webpack-encore@^5.0.1":
   version "5.3.1"
