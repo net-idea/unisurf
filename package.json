@@ -33,7 +33,7 @@
     "@symfony/stimulus-bridge": "^4.0.1",
     "@symfony/ux-turbo": "^2.32.0",
     "@symfony/webpack-encore": "^5.0.1",
-    "core-js": "^3.39.0"
+    "core-js": "^3.48.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.6",
