@@ -39,7 +39,7 @@
     "@babel/core": "^7.28.6",
     "@babel/preset-env": "^7.28.6",
     "@popperjs/core": "^2.11.8",
-    "@typescript-eslint/eslint-plugin": "^8.53.0",
+    "@typescript-eslint/eslint-plugin": "^8.53.1",
     "@typescript-eslint/parser": "^8.53.1",
     "@zackad/prettier-plugin-twig": "^0.16.0",
     "babel-loader": "^10.0.0",
