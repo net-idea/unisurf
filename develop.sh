@@ -3,6 +3,7 @@
 ### Development environment helper
 # This script helps starting a development environment in two modes:
 # 1) Local mode (default): uses host PHP/Node/Composer/Yarn. It:
+#    - clones web-base bundle if not present (dev mode)
 #    - starts MariaDB via Docker compose (dev DB compose files)
 #    - installs Composer and Yarn dependencies on host
 #    - clears and warms Symfony cache
@@ -34,6 +35,67 @@ while [[ $# -gt 0 ]]; do
 done
 
 PROJECT_DIR=$(pwd)
+
+# Setup web-base bundle for development
+setup_webbase_bundle() {
+    local PACKAGES_DIR="$PROJECT_DIR/packages"
+    local WEBBASE_DIR="$PACKAGES_DIR/web-base"
+    local COMPOSER_LOCAL="$PROJECT_DIR/composer.local.json"
+
+    echo -e "${GREEN}[Dev Setup] Checking web-base bundle...${NC}"
+
+    # Create packages directory if it doesn't exist
+    if [ ! -d "$PACKAGES_DIR" ]; then
+        echo -e "${YELLOW}Creating packages directory...${NC}"
+        mkdir -p "$PACKAGES_DIR"
+    fi
+
+    # Clone web-base bundle if not present
+    if [ ! -d "$WEBBASE_DIR" ]; then
+        echo -e "${YELLOW}Cloning web-base bundle for development...${NC}"
+        if ! git clone git@github.com:net-idea/web-base.git "$WEBBASE_DIR"; then
+            echo -e "${RED}Failed to clone web-base bundle. Ensure you have SSH access to the repository.${NC}" >&2
+            exit 1
+        fi
+        echo -e "${GREEN}✓ web-base bundle cloned${NC}"
+    else
+        echo -e "${GREEN}✓ web-base bundle already present${NC}"
+
+        # Pull latest changes if it's a git repo
+        if [ -d "$WEBBASE_DIR/.git" ]; then
+            echo -e "${YELLOW}Pulling latest changes from web-base...${NC}"
+            (cd "$WEBBASE_DIR" && git pull origin main 2>/dev/null || git pull origin master 2>/dev/null || true)
+        fi
+    fi
+
+    # Create composer.local.json if it doesn't exist
+    if [ ! -f "$COMPOSER_LOCAL" ]; then
+        echo -e "${YELLOW}Creating composer.local.json for local development...${NC}"
+        cat > "$COMPOSER_LOCAL" <<EOF
+{
+  "repositories": [
+    {
+      "type": "path",
+      "url": "packages/web-base",
+      "options": {
+        "symlink": true
+      }
+    }
+  ]
+}
+EOF
+        echo -e "${GREEN}✓ composer.local.json created${NC}"
+    else
+        echo -e "${GREEN}✓ composer.local.json already exists${NC}"
+    fi
+
+    echo -e "${GREEN}[Dev Setup] web-base bundle setup complete${NC}"
+    echo ""
+}
+
+# Run web-base bundle setup
+setup_webbase_bundle
+
 PHP_BIN=$(which php 2>/dev/null || echo "")
 COMPOSER_BIN=$(which composer 2>/dev/null || echo "")
 SYMFONY_BIN=$(which symfony 2>/dev/null || echo "")

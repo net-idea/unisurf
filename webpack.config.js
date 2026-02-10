@@ -1,4 +1,8 @@
 import Encore from '@symfony/webpack-encore';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -15,6 +19,11 @@ Encore
 
   // only needed for CDN's or subdirectory deploy
   //.setManifestKeyPrefix('build/')
+
+  // Configure webpack aliases for bundle assets
+  .addAliases({
+    '@web-base': path.resolve(__dirname, 'packages/web-base/frontend'),
+  })
 
   /*
    * ENTRY CONFIG
@@ -95,8 +104,9 @@ Encore
 
   // dev-server: enable HMR/live reload and watch Twig/PHP changes
   .configureDevServerOptions((options) => {
-    options.host = '127.0.0.1';
+    options.host = '0.0.0.0';
     options.port = 8080;
+    options.allowedHosts = 'all';
     options.hot = true;
     options.liveReload = true;
     options.client = { overlay: true, progress: true };

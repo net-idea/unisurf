@@ -16,12 +16,12 @@ doctrine:
       Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
     auto_mapping: true
     mappings:
-      App:
+      NetIdeaWebBase:
         type: attribute
         is_bundle: false
-        dir: '%kernel.project_dir%/src/Entity'
-        prefix: 'App\Entity'
-        alias: App
+        dir: '%kernel.project_dir%/packages/web-base/backend/src/Entity'
+        prefix: 'NetIdea\WebBase\Entity'
+        alias: WebBase
     # remove the deprecated key below if present
     # controller_resolver:
     #   auto_mapping: false

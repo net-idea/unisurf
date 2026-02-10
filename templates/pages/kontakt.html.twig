@@ -31,7 +31,7 @@
           <div id="contact-success" class="alert alert-success mb-3 visually-hidden d-none" role="alert"></div>
           <div id="contact-error" class="alert alert-danger mb-3 visually-hidden d-none" role="alert"></div>
 
-          {{ form_start(form, { action: path('app_contact'), attr: { class: 'vstack gap-3 mt-3', novalidate: 'novalidate', 'data-turbo': 'false' } }) }}
+          {{ form_start(form, { action: path('web_base_api_contact'), attr: { class: 'vstack gap-3 mt-3', novalidate: 'novalidate', 'data-turbo': 'false' } }) }}
 
           <div class="mb-3">
             {{ form_label(form.name, null, { label_attr: { class: 'form-label' } }) }}
@@ -106,7 +106,7 @@
             <div class="card-body">
               <h4 class="card-title"><i class="fas fa-info-circle me-2"></i>Datenschutz</h4>
               <p class="card-text">
-                Ihre Angaben werden ausschließlich zur Bearbeitung Ihrer Anfrage verwendet und anschließend gelöscht. Weitere Informationen finden Sie in unserer <a href="{{ path('app_page', { slug: 'datenschutz' }) }}">Datenschutzerklärung</a>.
+                Ihre Angaben werden ausschließlich zur Bearbeitung Ihrer Anfrage verwendet und anschließend gelöscht. Weitere Informationen finden Sie in unserer <a href="{{ path('web_base_page', { slug: 'datenschutz' }) }}">Datenschutzerklärung</a>.
               </p>
             </div>
           </div>

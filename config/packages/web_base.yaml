@@ -1,0 +1,53 @@
+# Configuration for NetIdeaWebBaseBundle
+# See packages/web-base/usage.md for full documentation
+
+net_idea_web_base:
+  # Company/Business Information (used in imprint, footer, contact, etc.)
+  company:
+    name: 'UniSurf'
+    legal_name: 'UniSurf - Unique Surfing'
+    tagline: 'Wir bieten den Service für einzigartige Ideen'
+    email: 'info@unisurf.de'
+    phone: null  # Add your phone number
+    fax: null
+    street: null  # Add your street address
+    zip: null
+    city: 'Dormagen'
+    country: 'Deutschland'
+    vat_id: null  # USt-IdNr.
+    tax_number: null
+    register_court: null  # e.g., 'Amtsgericht Neuss'
+    register_number: null  # e.g., 'HRB 12345'
+    ceo: null  # Geschäftsführer
+    responsible_person: null  # Verantwortlich i.S.d. § 55 Abs. 2 RStV
+
+  # Website/Brand Information
+  site:
+    base_url: 'https://unisurf.de'
+    brand_name: 'UniSurf'
+    site_name: 'UniSurf - Unique Surfing'
+    default_description: 'UniSurf bietet Services für einzigartige Ideen'
+    default_keywords: 'UniSurf, Webentwicklung, Hosting, Dormagen'
+    locale: 'de_DE'
+    language: 'de'
+
+  # Social Media Links (null = not shown)
+  social:
+    facebook: null
+    instagram: null
+    twitter: null
+    linkedin: null
+    youtube: null
+    github: null
+
+  # Mail Configuration (uses env vars by default)
+  mail:
+    from_address: '%env(string:MAIL_FROM_ADDRESS)%'
+    from_name: '%env(default::string:MAIL_FROM_NAME)%'
+    to_address: '%env(string:MAIL_TO_ADDRESS)%'
+    to_name: '%env(string:MAIL_TO_NAME)%'
+
+  # Content Configuration
+  content:
+    pages_file: '%kernel.project_dir%/content/_pages.php'
+    content_dir: '%kernel.project_dir%/content'

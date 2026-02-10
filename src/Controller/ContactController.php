@@ -1,37 +1,29 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Service\FormContactService;
-use App\Service\NavigationService;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use NetIdea\WebBase\Controller\ContactController as BaseContactController;
 
-class ContactController extends AbstractBaseController
+/**
+ * ContactController for the UniSurf website.
+ *
+ * Extends the base ContactController from the web-base bundle.
+ * Override methods here to customize contact form behavior.
+ *
+ * Routes defined here have higher priority than bundle routes (priority: 0 vs -100).
+ */
+class ContactController extends BaseContactController
 {
-    public function __construct(
-        private readonly NavigationService $navigation,
-        private readonly FormContactService $formContactService,
-    ) {
-    }
-
-    #[Route(path: '/kontakt', name: 'app_contact', methods: ['GET'])]
-    public function contact(): Response
-    {
-        // Get form for rendering
-        $form = $this->formContactService->getForm();
-
-        return $this->render('pages/kontakt.html.twig', [
-            'slug'     => 'kontakt',
-            'navItems' => $this->navigation->getItems(),
-            'form'     => $form->createView(),
-        ]);
-    }
-
-    #[Route(path: '/api/contact', name: 'api_contact', methods: ['POST'])]
-    public function contactApi(): Response
-    {
-        return $this->formContactService->handleAjax();
-    }
+    // All functionality is inherited from the bundle.
+    // Override methods here to customize behavior for this project.
+    //
+    // Example: Override the contact() method to add project-specific fields:
+    //
+    // public function contact(): Response
+    // {
+    //     // Add custom logic before rendering
+    //     return parent::contact();
+    // }
 }

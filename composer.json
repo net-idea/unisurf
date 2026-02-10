@@ -10,7 +10,14 @@
   "homepage": "https://unisurf.de/",
   "type": "project",
   "license": "MIT",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:net-idea/web-base.git"
+    }
+  ],
   "require": {
+    "net-idea/web-base": "dev-main",
     "php": ">=8.4",
     "ext-ctype": "*",
     "ext-iconv": "*",

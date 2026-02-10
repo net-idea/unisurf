@@ -1465,6 +1465,53 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     script_attributes?: array<string, scalar|null|Param>,
  *     link_attributes?: array<string, scalar|null|Param>,
  * }
+ * @psalm-type NetIdeaWebBaseConfig = array{
+ *     company?: array{
+ *         name?: scalar|null|Param, // Default: "Your Company"
+ *         legal_name?: scalar|null|Param, // Default: null
+ *         tagline?: scalar|null|Param, // Default: null
+ *         email?: scalar|null|Param, // Default: null
+ *         phone?: scalar|null|Param, // Default: null
+ *         fax?: scalar|null|Param, // Default: null
+ *         street?: scalar|null|Param, // Default: null
+ *         zip?: scalar|null|Param, // Default: null
+ *         city?: scalar|null|Param, // Default: null
+ *         country?: scalar|null|Param, // Default: "Deutschland"
+ *         vat_id?: scalar|null|Param, // Default: null
+ *         tax_number?: scalar|null|Param, // Default: null
+ *         register_court?: scalar|null|Param, // Default: null
+ *         register_number?: scalar|null|Param, // Default: null
+ *         ceo?: scalar|null|Param, // Default: null
+ *         responsible_person?: scalar|null|Param, // Default: null
+ *     },
+ *     site?: array{
+ *         base_url?: scalar|null|Param, // Default: "https://example.com"
+ *         brand_name?: scalar|null|Param, // Default: "Your Brand"
+ *         site_name?: scalar|null|Param, // Default: "Your Site Name"
+ *         default_description?: scalar|null|Param, // Default: "Your default site description"
+ *         default_keywords?: scalar|null|Param, // Default: "your, keywords, here"
+ *         locale?: scalar|null|Param, // Default: "de_DE"
+ *         language?: scalar|null|Param, // Default: "de"
+ *     },
+ *     social?: array{
+ *         facebook?: scalar|null|Param, // Default: null
+ *         instagram?: scalar|null|Param, // Default: null
+ *         twitter?: scalar|null|Param, // Default: null
+ *         linkedin?: scalar|null|Param, // Default: null
+ *         youtube?: scalar|null|Param, // Default: null
+ *         github?: scalar|null|Param, // Default: null
+ *     },
+ *     mail?: array{
+ *         from_address?: scalar|null|Param, // Default: "%env(string:MAIL_FROM_ADDRESS)%"
+ *         from_name?: scalar|null|Param, // Default: "%env(default::string:MAIL_FROM_NAME)%"
+ *         to_address?: scalar|null|Param, // Default: "%env(string:MAIL_TO_ADDRESS)%"
+ *         to_name?: scalar|null|Param, // Default: "%env(string:MAIL_TO_NAME)%"
+ *     },
+ *     content?: array{
+ *         pages_file?: scalar|null|Param, // Default: "%kernel.project_dir%/content/_pages.php"
+ *         content_dir?: scalar|null|Param, // Default: "%kernel.project_dir%/content"
+ *     },
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1479,6 +1526,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     security?: SecurityConfig,
  *     monolog?: MonologConfig,
  *     webpack_encore?: WebpackEncoreConfig,
+ *     net_idea_web_base?: NetIdeaWebBaseConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1496,6 +1544,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         monolog?: MonologConfig,
  *         maker?: MakerConfig,
  *         webpack_encore?: WebpackEncoreConfig,
+ *         net_idea_web_base?: NetIdeaWebBaseConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1511,6 +1560,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         monolog?: MonologConfig,
  *         webpack_encore?: WebpackEncoreConfig,
+ *         net_idea_web_base?: NetIdeaWebBaseConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1527,6 +1577,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         monolog?: MonologConfig,
  *         webpack_encore?: WebpackEncoreConfig,
+ *         net_idea_web_base?: NetIdeaWebBaseConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

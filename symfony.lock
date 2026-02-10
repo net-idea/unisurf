@@ -35,6 +35,9 @@
             "migrations/.gitignore"
         ]
     },
+    "net-idea/web-base": {
+        "version": "dev-main"
+    },
     "phpstan/phpstan": {
         "version": "2.0",
         "recipe": {

@@ -1,0 +1,4 @@
+# Load routes from NetIdeaWebBaseBundle
+# These routes have priority: -100 so project routes can override them
+net_idea_web_base:
+  resource: '@NetIdeaWebBaseBundle/config/routes.yaml'
