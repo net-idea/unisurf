@@ -2000,10 +2000,10 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@zackad/prettier-plugin-twig@^0.16.0":
-  version "0.16.2"
-  resolved "https://registry.yarnpkg.com/@zackad/prettier-plugin-twig/-/prettier-plugin-twig-0.16.2.tgz#b2be3914a5bdaed7e849fd82c0340e40b80e0349"
-  integrity sha512-ZOqdhtfyHbUAbjAZelYlQVdpMbTIL0D13RLUAd0vr6Aeq6em34ptcMsHfZiNxRPrtgYSRWUy4BKcPZYfBN4xHw==
+"@zackad/prettier-plugin-twig@^0.16.3":
+  version "0.16.3"
+  resolved "https://registry.yarnpkg.com/@zackad/prettier-plugin-twig/-/prettier-plugin-twig-0.16.3.tgz#f5bc4952ae797a8f4bcfa70f70800e50dff303b0"
+  integrity sha512-CMacuv9pgdgfxVxWa2VX3TmOvXERgPsD8LWuBo9xKeVzRsVQzNCoxsH/7eELGogiYz2E44ete4vLL2tQy6DhIw==
   dependencies:
     "@babel/template" "^7.24.7"
     "@babel/types" "^7.24.9"
