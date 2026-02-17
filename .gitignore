@@ -12,6 +12,11 @@
 composer.phar
 composer.local.json
 
+###> DevTools (centralized development environment) ###
+# Project-specific Docker Compose overrides (optional, keep if you want to commit them)
+docker-compose.override.yml
+###< DevTools ###
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -78,6 +83,8 @@ phpstan.neon
 !/postgresql/backup/.gitkeep
 /postgresql/data/*
 !/postgresql/data/.gitkeep
+/postgresql/log/*
+!/postgresql/log/.gitkeep
 
 ## Redis
 /redis/data/*
@@ -95,6 +102,3 @@ phpstan.neon
 adminer.php
 adminer.css
 adminer*.*
-
-# UniSurf Web Base Bundle development
-/packages
